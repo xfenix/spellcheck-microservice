@@ -1,4 +1,5 @@
 # Spellcheck microservice
+![Docker Pulls](https://img.shields.io/docker/pulls/xfenix/xfenix-ru-front-v2)
 
 ### Quickstart
 * Clone this repo
