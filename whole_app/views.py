@@ -20,7 +20,7 @@ if SETTINGS.debug:
 
 
 @SPELL_APP.post(f"{SETTINGS.api_prefix}/check/", summary="Check spelling")
-async def spell_check_main_endpoint(request_payload: models.SpellCheckRequest) -> list[list[str]]:
+def spell_check_main_endpoint(request_payload: models.SpellCheckRequest) -> list[list[str]]:
     """Check spelling of text for exact language."""
     return models.SpellCheckResponse(
         **request_payload.dict(),

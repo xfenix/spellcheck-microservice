@@ -18,6 +18,9 @@ pytest-cov = "^3.0.0"
 pytest-xdist = "^2.5.0"
 pylint = "^2.14.0"
 mypy = "^0.960"
+requests = "^2.27.1"
+types-requests = "^2.27.30"
+Faker = "^13.12.0"
 
 [tool.isort]
 line_length = 120
@@ -28,16 +31,16 @@ lexicographical = true
 sections = ["FUTURE", "STDLIB", "FIRSTPARTY", "THIRDPARTY", "LOCALFOLDER"]
 no_lines_before = ["STDLIB", "THIRDPARTY"]
 known_third_party = []
-known_local_folder = ["whole-app",]
+known_local_folder = ["whole_app",]
 
 [tool.black]
-line-length = 100
+line-length = 120
 
 [tool.pytest.ini_options]
 addopts = "--cov . --cov-report term-missing"
 
 [tool.pylint.format]
-max-line-length=100
+max-line-length = 120
 
 [tool.pylint.messages_control]
 disable=["logging-fstring-interpolation"]

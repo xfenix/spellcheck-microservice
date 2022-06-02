@@ -14,11 +14,7 @@ def _make_one_correction_and_append_to_list(
 ) -> NoneType:
     ready_word: str = "".join(one_word_buf)
     possible_candidates: set[str] = spellcheck_engine.candidates(ready_word)
-    if (
-        len(possible_candidates) == 0
-        or len(possible_candidates) == 1
-        and ready_word in possible_candidates
-    ):
+    if len(possible_candidates) == 0 or len(possible_candidates) == 1 and ready_word in possible_candidates:
         return
     mutable_result.append(
         models.OneCorrection(
@@ -32,9 +28,7 @@ def _make_one_correction_and_append_to_list(
 
 def run_spellcheck(input_text: str, desired_language: str) -> list[models.OneCorrection]:
     """Main spellcheck procedure."""
-    spellcheck_engine: spellchecker.SpellChecker = spellchecker.SpellChecker(
-        language=desired_language
-    )
+    spellcheck_engine: spellchecker.SpellChecker = spellchecker.SpellChecker(language=desired_language)
     user_corrections: list[models.OneCorrection] = []
     one_char: str
     one_word_buf: list[str] = []
@@ -42,12 +36,8 @@ def run_spellcheck(input_text: str, desired_language: str) -> list[models.OneCor
         if one_char.isalpha():
             one_word_buf.append(one_char)
         elif one_word_buf:
-            _make_one_correction_and_append_to_list(
-                user_corrections, spellcheck_engine, index, one_word_buf
-            )
+            _make_one_correction_and_append_to_list(user_corrections, spellcheck_engine, index, one_word_buf)
             one_word_buf = []
     if one_word_buf:
-        _make_one_correction_and_append_to_list(
-            user_corrections, spellcheck_engine, len(input_text), one_word_buf
-        )
+        _make_one_correction_and_append_to_list(user_corrections, spellcheck_engine, len(input_text), one_word_buf)
     return user_corrections
