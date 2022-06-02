@@ -28,7 +28,7 @@ lexicographical = true
 sections = ["FUTURE", "STDLIB", "FIRSTPARTY", "THIRDPARTY", "LOCALFOLDER"]
 no_lines_before = ["STDLIB", "THIRDPARTY"]
 known_third_party = []
-known_local_folder = ["envcast",]
+known_local_folder = ["whole-app",]
 
 [tool.black]
 line-length = 100
