@@ -4,9 +4,6 @@ import typing
 import pydantic
 
 
-LANGUGAGE_TYPE: typing.Literal = typing.Literal["ru", "en", "de", "es", "fr", "pt"]
-
-
 class OneCorrection(pydantic.BaseModel):
     """This model is one correction for one word."""
 
@@ -19,8 +16,8 @@ class OneCorrection(pydantic.BaseModel):
 class SpellCheckRequest(pydantic.BaseModel):
     """Request model for spell check request."""
 
-    text: str
-    language: LANGUGAGE_TYPE
+    text: str = pydantic.Field(..., example="Привед как дила")
+    language: typing.Literal["ru", "en", "de", "es", "fr", "pt"]
 
 
 class SpellCheckResponse(SpellCheckRequest):
