@@ -11,7 +11,7 @@ class _SettingsWrapperWhoseNameNobodyCaresAbout(pydantic.BaseSettings):
     api_prefix: str = "/api/"
 
     @pydantic.validator("api_prefix")
-    def api_prefix_must_be_with_slash_for_left_part_and_without_it_for_right(cls, possible_value: str) -> str:
+    def api_prefix_must_be_with_slash_for_left_part_and_without_it_for_right(self, possible_value: str) -> str:
         """Helps not mess up the API prefix in the application.."""
         return f"/{possible_value.strip('/')}"
 

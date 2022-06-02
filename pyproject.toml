@@ -43,7 +43,7 @@ addopts = "--cov . --cov-report term-missing"
 max-line-length = 120
 
 [tool.pylint.messages_control]
-disable=["logging-fstring-interpolation"]
+disable=["logging-fstring-interpolation", "too-few-public-methods"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
