@@ -1,7 +1,6 @@
 """Spellcheck service functions."""
-from types import NoneType
 
-import spellchecker
+import spellchecker  # type: ignore
 
 from . import models
 
@@ -11,7 +10,7 @@ def _make_one_correction_and_append_to_list(
     spellcheck_engine: spellchecker.SpellChecker,
     index: int,
     one_word_buf: list[str],
-) -> NoneType:
+) -> None:
     ready_word: str = "".join(one_word_buf)
     possible_candidates: set[str] = spellcheck_engine.candidates(ready_word)
     if len(possible_candidates) == 0 or len(possible_candidates) == 1 and ready_word in possible_candidates:
