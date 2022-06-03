@@ -11,7 +11,7 @@ jobs:
     container:
       image: docker:20.10.16
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: |
           docker build -t spellcheck-microservice .
           docker run -it spellcheck-microservice bash -c "make lint && make test"
