@@ -1,3 +1,4 @@
+# pylint: disable=no-member
 """Models for input/output."""
 import typing
 

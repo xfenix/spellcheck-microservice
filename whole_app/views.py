@@ -8,7 +8,7 @@ from . import models, spell
 from .settings import SETTINGS
 
 
-SPELL_APP: typing.Final[fastapi.FastAPI] = fastapi.FastAPI(docs_url="/docs/")
+SPELL_APP: typing.Final[fastapi.FastAPI] = fastapi.FastAPI(docs_url=SETTINGS.docs_url)
 if SETTINGS.debug:
     SPELL_APP.add_middleware(
         CORSMiddleware,
@@ -20,7 +20,7 @@ if SETTINGS.debug:
 
 
 @SPELL_APP.post(f"{SETTINGS.api_prefix}/check/", summary="Check spelling")
-def spell_check_main_endpoint(request_payload: models.SpellCheckRequest) -> list[list[str]]:
+def spell_check_main_endpoint(request_payload: models.SpellCheckRequest) -> models.SpellCheckResponse:
     """Check spelling of text for exact language."""
     return models.SpellCheckResponse(
         **request_payload.dict(),

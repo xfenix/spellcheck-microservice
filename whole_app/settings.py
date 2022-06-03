@@ -9,6 +9,7 @@ class _SettingsWrapperWhoseNameNobodyCaresAbout(pydantic.BaseSettings):
     workers: int = 4
     port: int = 10113
     api_prefix: str = "/api/"
+    docs_url: str = "/docs/"
 
     @pydantic.validator("api_prefix")
     # pylint: disable=no-self-argument
