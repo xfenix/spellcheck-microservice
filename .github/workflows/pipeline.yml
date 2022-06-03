@@ -14,6 +14,7 @@ jobs:
       - run:
           - docker build -t spellcheck-microservice .
           - docker run -it spellcheck-microservice bash -c "make lint && make test"
+          - ls -la
 
   build:
     needs: [lint-and-test]
