@@ -8,9 +8,12 @@ on:
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
-    run: |
-      - docker build -t spellcheck-microservice .
-      - docker run -it spellcheck-microservice bash -c "make lint && make test"
+    container:
+      image: docker:20.10.16
+    steps:
+      - run: |
+        - docker build -t spellcheck-microservice .
+        - docker run -it spellcheck-microservice bash -c "make lint && make test"
 
   build:
     needs: [lint-and-test]
