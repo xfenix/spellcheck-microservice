@@ -7,7 +7,7 @@ exec:
 run-prod:
 	docker run -it spellcheck-microservice
 test:
-	pytest .
+	pytest . -n3
 lint:
 	pylint whole_app
 	mypy .

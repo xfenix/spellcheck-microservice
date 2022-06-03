@@ -41,3 +41,19 @@ def test_failed_texts(fake_client, random_seed: int):
         f"{SETTINGS.api_prefix}/check/", json=models.SpellCheckRequest(text=wannabe_user_input, language="ru").dict()
     )
     assert server_response.status_code == 200
+
+
+def test_healthcheck_api_good(monkeypatch, fake_client):
+    """We need to do it too."""
+    server_response: RequestsResponse = fake_client.get(f"{SETTINGS.api_prefix}/health/")
+    assert server_response.status_code == 200
+    assert server_response.json()["version"] == "1.0.0"
+
+
+def test_healthcheck_api_bad(monkeypatch, fake_client):
+    """We need to do it too."""
+    monkeypatch.setattr("functools.cache", lambda: "")
+    monkeypatch.setattr("pathlib.Path.read_text", lambda _: "version === fucked == up == totally == 666.13.13")
+    server_response: RequestsResponse = fake_client.get(f"{SETTINGS.api_prefix}/health/")
+    assert server_response.status_code == 200
+    assert server_response.json()["version"] == ""
