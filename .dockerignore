@@ -2,6 +2,5 @@ __pycache__/
 .mypy_cache/
 .DS_Store
 .git
-Makefile
 Dockerfile
 README.md

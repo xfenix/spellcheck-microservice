@@ -4,10 +4,10 @@ build:
 	docker build -t spellcheck-microservice .
 exec:
 	docker run -it spellcheck-microservice bash
-run-prod:
-	docker run -it spellcheck-microservice
+run:
+	docker run -it spellcheck-microservice ${ARGS}
 test:
 	pytest . -n3
 lint:
-	pylint whole_app
+	pylint whole_app tests
 	mypy .
