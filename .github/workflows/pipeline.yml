@@ -1,4 +1,4 @@
-name: My single and only CI/CD pipe
+name: Main pipeline
 on:
   push:
     branches: [master]
