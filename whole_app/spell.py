@@ -1,6 +1,6 @@
 """Spellcheck service functions."""
 
-import spellchecker  # type: ignore
+import spellchecker
 
 from . import models
 
