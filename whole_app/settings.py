@@ -1,15 +1,20 @@
 """Core settings of whole project."""
+import pathlib
+
 import pydantic
 
 
 class _SettingsWrapperWhoseNameNobodyCaresAbout(pydantic.BaseSettings):
     """Literally no one cares."""
 
+    service_name: str = "spellcheck-microservice"
     debug: bool = True
+    structured_logging: bool = True
     workers: int = 4
     port: int = 10113
     api_prefix: str = "/api/"
     docs_url: str = "/docs/"
+    path_to_version_file = pathlib.Path(".").parent.parent / "pyproject.toml"
 
     @pydantic.validator("api_prefix")
     # pylint: disable=no-self-argument

@@ -4,6 +4,8 @@ import typing
 
 import pydantic
 
+from .settings import SETTINGS
+
 
 class OneCorrection(pydantic.BaseModel):
     """This model is one correction for one word."""
@@ -25,3 +27,11 @@ class SpellCheckResponse(SpellCheckRequest):
     """This model for check response."""
 
     corrections: list[OneCorrection]
+
+
+class HealthCheckResponse(pydantic.BaseModel):
+    """This model for health check response."""
+
+    service_name: str = SETTINGS.service_name
+    version: str
+    status: typing.Literal["ok", "notok"] = "ok"
