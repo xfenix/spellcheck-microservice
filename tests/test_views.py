@@ -43,7 +43,7 @@ def test_failed_texts(fake_client, random_seed: int):
     assert server_response.status_code == 200
 
 
-def test_healthcheck_api_good(monkeypatch, fake_client):
+def test_healthcheck_api_good(fake_client):
     """We need to do it too."""
     server_response: RequestsResponse = fake_client.get(f"{SETTINGS.api_prefix}/health/")
     assert server_response.status_code == 200

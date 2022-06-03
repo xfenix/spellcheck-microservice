@@ -22,8 +22,6 @@ def parse_version_from_local_file() -> str:
             version_parts = one_line.split("=")
             break
     if len(version_parts) == 2:
-        print(version_parts)
         return version_parts[1].strip().strip('"')
-    else:
-        logger.warning("Can't parse version from pyproject.toml")
+    logger.warning("Can't parse version from pyproject.toml")
     return ""
