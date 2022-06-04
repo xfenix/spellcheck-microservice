@@ -4,10 +4,12 @@ build:
 	docker build -t spellcheck-microservice .
 exec:
 	docker run -it spellcheck-microservice bash
-run:
-	docker run -it spellcheck-microservice ${ARGS}
 test:
 	pytest . -n3
+test-in-docker:
+	docker run -it spellcheck-microservice bash -c "COVERAGE_FILE=/tmp/junk.coverage pytest . -n3"
 lint:
 	pylint whole_app tests
 	mypy .
+lint-in-docker:
+	docker run -it spellcheck-microservice bash -c "pylint whole_app tests && mypy ."

@@ -13,8 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          docker build -t spellcheck-microservice .
-          docker run -t spellcheck-microservice bash -c "make lint && make test"
+          make build
+          make lint-in-docker
+          make test-in-docker
 
   build:
     needs: [lint-and-test]

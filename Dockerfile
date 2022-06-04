@@ -3,7 +3,7 @@ ARG USER_UID=2000
 ARG USER_GID=$USER_UID
 ARG WORKDIR=/srv/www/
 
-FROM python:3.11-rc-bullseye as builder
+FROM python:3.10.4-slim as builder
 ARG USERNAME
 ARG USER_UID
 ARG USER_GID
@@ -20,7 +20,7 @@ RUN poetry install
 RUN rm poetry.lock
 RUN pip uninstall -y poetry
 
-FROM python:3.11-rc-bullseye as runtime
+FROM python:3.10.4-slim as runtime
 ARG USERNAME
 ARG WORKDIR
 WORKDIR $WORKDIR
