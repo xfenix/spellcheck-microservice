@@ -13,11 +13,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
+          apk add make
           make build
           make lint-in-docker
           make test-in-docker
 
-  build:
+  build-and-publish:
     needs: [lint-and-test]
     runs-on: ubuntu-latest
     steps:
