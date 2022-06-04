@@ -7,9 +7,9 @@ exec:
 test:
 	pytest . -n3
 test-in-docker:
-	docker run -it spellcheck-microservice bash -c "COVERAGE_FILE=/tmp/junk.coverage pytest . -n3"
+	docker run -t spellcheck-microservice bash -c "COVERAGE_FILE=/tmp/junk.coverage pytest . -n3"
 lint:
 	pylint whole_app tests
 	mypy .
 lint-in-docker:
-	docker run -it spellcheck-microservice bash -c "pylint whole_app tests && mypy ."
+	docker run -t spellcheck-microservice bash -c "pylint whole_app tests && mypy ."
