@@ -14,7 +14,7 @@ RUN useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
 COPY poetry.lock .
 COPY pyproject.toml .
 COPY . $WORKDIR
-RUN pip install --no-cache-dir install poetry
+RUN pip install --no-cache-dir install "poetry==1.1.13"
 RUN poetry config virtualenvs.create false
 RUN poetry install
 RUN rm poetry.lock
