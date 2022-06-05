@@ -39,11 +39,11 @@ jobs:
       - run: |
           pip install poetry
           poetry install
-          poetry run pytest -n3 --cov-report=xml:${{ GITHUB_ACTION_PATH }}/coverage.xml
+          poetry run pytest -n3 --cov-report=xml:${{ github.action_path }}/coverage.xml
           ls -la
       - uses: codecov/codecov-action@v3
         with:
-          files: ${{ GITHUB_ACTION_PATH }}/coverage.xml
+          files: ${{ github.action_path }}/coverage.xml
 
   sumbit-coverage-really:
     runs-on: ubuntu-latest
