@@ -10,33 +10,18 @@ on:
       - v1.**
 
 jobs:
-  # lint-and-test:
-  #   runs-on: ubuntu-latest
-  #   container:
-  #     image: docker:20.10.16
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - run: |
-  #         apk add make
-  #         make build
-  #         make lint-in-docker
-  #         make test-in-docker
+  lint-and-test:
+    runs-on: ubuntu-latest
+    container:
+      image: docker:20.10.16
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          apk add make
+          make build
+          make lint-in-docker
+          make test-in-docker
 
-  # build-and-publish:
-  #   needs: [lint-and-test]
-  #   runs-on: ubuntu-latest
-  #   if: startsWith(github.ref, 'refs/tags/v')
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - run: |
-  #         export LAST_TAG=$(echo $(git describe --tags --abbrev=0))
-  #         docker build -t $CONTAINER_BASE_NAME:latest .
-  #         docker tag $CONTAINER_BASE_NAME:latest $CONTAINER_BASE_NAME:$LAST_TAG
-  #         echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login --username ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-  #         docker push $CONTAINER_BASE_NAME:latest
-  #         docker push $CONTAINER_BASE_NAME:$LAST_TAG
-  #         docker tag
-  #         docker logout
   build-and-publish:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
