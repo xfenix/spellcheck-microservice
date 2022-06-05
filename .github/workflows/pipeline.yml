@@ -39,11 +39,11 @@ jobs:
       - run: |
           pip install poetry
           poetry install
-          poetry run pytest -n3 --cov-report=xml
+          poetry run pytest -n3 --cov-report=xml:${{ GITHUB_ACTION_PATH }}/coverage.xml
           ls -la
       - uses: codecov/codecov-action@v3
         with:
-          files: ./coverage.xml
+          files: ${{ GITHUB_ACTION_PATH }}/coverage.xml
 
   # build stage with auto-versioning based on git tags like vX.Y.Z (example: v3.1.2)
   build-and-publish:
