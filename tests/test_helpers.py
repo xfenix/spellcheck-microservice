@@ -1,12 +1,6 @@
 # pylint: disable=redefined-outer-name
 """Additional tests."""
-
-import faker
-
 from whole_app.misc_helpers import parse_version_from_local_file
-
-
-FAKER_OBJ: faker.Faker = faker.Faker("ru_RU")
 
 
 def test_bad_parse_version_from_local_file(monkeypatch):
