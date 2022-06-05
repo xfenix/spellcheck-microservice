@@ -1,5 +1,5 @@
 name: Main pipeline
-on: [create]
+on: [push, create]
 
 jobs:
   lint-and-test:
