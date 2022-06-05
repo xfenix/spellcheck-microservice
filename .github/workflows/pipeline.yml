@@ -6,7 +6,8 @@ on:
       - "feature/**"
       - "hotfix/**"
       - "bugfix/**"
-    tags: *
+    tags:
+      - v*
 
 jobs:
   py-lint-and-test:
