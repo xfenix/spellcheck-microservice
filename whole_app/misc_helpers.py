@@ -1,5 +1,4 @@
 """Helper for parsing cache version."""
-import functools
 import sys
 
 from loguru import logger
@@ -12,7 +11,6 @@ def setup_logger() -> None:
     logger.add(sys.stdout, serialize=SETTINGS.structured_logging)
 
 
-@functools.cache
 def parse_version_from_local_file() -> str:
     """Parse version from version file."""
     pyproject_lines: list[str] = SETTINGS.path_to_version_file.read_text().split("\n")

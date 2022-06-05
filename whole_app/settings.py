@@ -14,7 +14,7 @@ class _SettingsWrapperWhoseNameNobodyCaresAbout(pydantic.BaseSettings):
     port: int = 10113
     api_prefix: str = "/api/"
     docs_url: str = "/docs/"
-    path_to_version_file = pathlib.Path(".").parent.parent / "pyproject.toml"
+    path_to_version_file = pathlib.Path(__file__).parent.parent / "pyproject.toml"
 
     @pydantic.validator("api_prefix")
     # pylint: disable=no-self-argument
