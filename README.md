@@ -6,7 +6,9 @@
 This is a microservice designed to check the spelling of words. Based on [pyspellcheker](https://pypi.org/project/pyspellchecker/). Exposes a REST API.
 
 ## Quickstart
-`docker run -t xfenix/spellcheck-microservice:latest -p 10113:10113`
+* `docker run -t xfenix/spellcheck-microservice:latest -p 10113:10113`
+* open http://localhost:10113/docs/ for more information about REST API
+* main REST endpoint you will be needed is http://localhost:10113/api/check/
 
 ## Development quickstart
 * Clone this repo
