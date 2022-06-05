@@ -13,7 +13,7 @@ jobs:
           make build
           make lint-in-docker
           make test-in-docker
-          echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login --username foo --password-stdin
+          echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login --username ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
   # build-and-publish:
   #   needs: [lint-and-test]
