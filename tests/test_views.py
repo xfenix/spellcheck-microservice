@@ -54,8 +54,7 @@ def test_healthcheck_api_good(fake_client):
 
 def test_healthcheck_api_bad(monkeypatch, fake_client):
     """We need to do it too."""
-    monkeypatch.setattr("functools.cache", lambda: "")
-    monkeypatch.setattr("pathlib.Path.read_text", lambda _: "version === fucked == up == totally == 666.13.13")
+    monkeypatch.setattr("whole_app.misc_helpers.parse_version_from_local_file", lambda: "")
     server_response: RequestsResponse = fake_client.get(f"{SETTINGS.api_prefix}/health/")
     assert server_response.status_code == 200
     assert server_response.json()["version"] == ""
