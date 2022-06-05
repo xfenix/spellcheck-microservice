@@ -22,7 +22,23 @@ jobs:
           make lint-in-docker
           make test-in-docker
 
+  submit-coverage:
+    runs-on: ubuntu-latest
+    container:
+      image: python:3.10.4-slim
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          pip install poetry
+          poetry install
+          poetry run pytest -n3 --cov-report=xml
+      - uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+
   build-and-publish:
+    needs: [lint-and-test]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
