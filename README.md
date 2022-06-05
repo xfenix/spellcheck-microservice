@@ -7,8 +7,8 @@ This is a microservice designed to check the spelling of words. Based on [pyspel
 
 ## Quickstart
 * `docker run -t xfenix/spellcheck-microservice:latest -p 10113:10113`
-* open [http://localhost:10113/docs/](http://localhost:10113/docs/){:target="_blank"} for more information about REST API
-* main REST endpoint you will be needed is [http://localhost:10113/api/check/](http://localhost:10113/api/check/){:target="_blank"}
+* open http://localhost:10113/docs/ for more information about REST API
+* main REST endpoint you will be needed is http://localhost:10113/api/check/
 
 ## Development quickstart
 * Clone this repo
