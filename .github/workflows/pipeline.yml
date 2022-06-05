@@ -30,26 +30,11 @@ jobs:
         with:
           failure-threshold: warning
 
-  submit-coverage:
+  sumbit-coverage:
     runs-on: ubuntu-latest
     container:
       image: python:3.10.4-slim
     steps:
-      - uses: actions/checkout@v3
-      - run: |
-          pip install poetry
-          poetry install
-          poetry run pytest -n3 --cov-report=xml:${{ github.action_path }}/coverage.xml
-      - uses: codecov/codecov-action@v3
-        with:
-          files: ${{ github.action_path }}/coverage.xml
-
-  sumbit-coverage-really:
-    runs-on: ubuntu-latest
-    container:
-      image: python:3.10.4-slim
-    steps:
-      # - run: bash <(curl -Ls https://coverage.codacy.com/get.sh)
       - uses: actions/checkout@v3
       - run: |
           pip install poetry
