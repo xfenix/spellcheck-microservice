@@ -34,10 +34,6 @@ jobs:
           poetry run pytest -n3 --cov-report=xml
           ls -la
       - uses: codecov/codecov-action@v2
-        with:
-          version: "v0.1.15"
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
 
   build-and-publish:
     needs: [lint-and-test]
