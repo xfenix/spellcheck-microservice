@@ -30,7 +30,7 @@ jobs:
         with:
           failure-threshold: warning
 
-  sumbit-coverage:
+  submit-coverage:
     runs-on: ubuntu-latest
     container:
       image: python:3.10.4-slim
