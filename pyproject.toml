@@ -22,6 +22,7 @@ mypy = "^0.960"
 requests = "^2.27.1"
 types-requests = "^2.27.30"
 Faker = "^13.12.0"
+vulture = "^2.4"
 
 [tool.isort]
 line_length = 120
@@ -46,6 +47,9 @@ disable=["logging-fstring-interpolation", "too-few-public-methods"]
 
 [tool.mypy]
 ignore_missing_imports = true
+
+[tool.vulture]
+exclude = ["whole_app/settings.py"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
