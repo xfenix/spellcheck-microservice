@@ -35,7 +35,7 @@ jobs:
     container:
       image: python:3.10.4-slim
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
       - run: |
           pip install poetry
           poetry install
