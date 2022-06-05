@@ -55,7 +55,7 @@ jobs:
           pip install poetry
           poetry install
           poetry run pytest -n3 --cov-report=xml
-          apk add curl
+          apt-get install curl
       - uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
