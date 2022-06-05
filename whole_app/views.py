@@ -8,9 +8,6 @@ from . import misc_helpers, models, spell
 from .settings import SETTINGS
 
 
-misc_helpers.setup_logger()
-
-
 SPELL_APP: typing.Final[fastapi.FastAPI] = fastapi.FastAPI(docs_url=SETTINGS.docs_url)
 CURRENT_APP_VERSION: typing.Final[str] = misc_helpers.parse_version_from_local_file()
 if SETTINGS.debug:
