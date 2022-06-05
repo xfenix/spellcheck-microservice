@@ -32,6 +32,7 @@ jobs:
           pip install poetry
           poetry install
           poetry run pytest -n3 --cov-report=xml
+          ls -la
       - uses: codecov/codecov-action@v2
         with:
           version: "v0.1.15"
