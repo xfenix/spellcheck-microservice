@@ -1,5 +1,13 @@
 name: Main pipeline
-on: [push, create]
+on:
+  push:
+    branches:
+      - "main"
+      - "feature/**"
+      - "hotfix/**"
+      - "bugfix/**"
+    tags:
+      - v1.**
 env:
   CONTAINER_BASE_NAME: spellcheck-microservice
 
