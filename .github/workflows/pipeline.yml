@@ -43,7 +43,7 @@ jobs:
 
   # build stage with auto-versioning based on git tags like vX.Y.Z (example: v3.1.2)
   build-and-publish:
-    needs: [lint-and-test, docker-lint, submit-coverage]
+    needs: [py-lint-and-test, docker-lint, submit-coverage]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
