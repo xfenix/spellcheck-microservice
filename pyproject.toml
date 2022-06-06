@@ -43,7 +43,7 @@ addopts = "--cov . --cov-report term-missing"
 
 [tool.pylint.settings]
 max-line-length = 120
-disable=["logging-fstring-interpolation", "too-few-public-methods"]
+disable=["logging-fstring-interpolation", "too-few-public-methods", "no-name-in-module"]
 
 [tool.mypy]
 ignore_missing_imports = true

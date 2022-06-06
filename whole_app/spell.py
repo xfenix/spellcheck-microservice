@@ -1,8 +1,10 @@
 """Spellcheck service functions."""
 
+
 import spellchecker
 
 from . import models
+from .settings import SETTINGS
 
 
 def _make_one_correction_and_append_to_list(
@@ -20,7 +22,9 @@ def _make_one_correction_and_append_to_list(
             first_position=index - len(one_word_buf),
             last_position=index - 1,
             word=ready_word,
-            replacements=possible_candidates,
+            suggestions=set(tuple(possible_candidates)[: SETTINGS.max_suggestions])
+            if SETTINGS.max_suggestions
+            else possible_candidates,
         )
     )
 

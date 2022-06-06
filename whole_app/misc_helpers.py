@@ -6,9 +6,7 @@ from loguru import logger
 from .settings import SETTINGS
 
 
-def setup_logger() -> None:
-    """Config logger."""
-    logger.add(sys.stdout, serialize=SETTINGS.structured_logging)
+logger.add(sys.stdout, serialize=SETTINGS.structured_logging)
 
 
 def parse_version_from_local_file() -> str:

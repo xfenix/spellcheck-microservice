@@ -10,12 +10,25 @@ from .settings import SETTINGS
 from .views import SPELL_APP
 
 
-if __name__ == "__main__":
-    BaseApplication(
-        SPELL_APP,
-        {
-            "worker_class": UvicornWorker,
+# pylint: disable=abstract-method
+class GunicornCustomApplication(BaseApplication):
+    """Our easing wrapper around gunicorn."""
+
+    def load_config(self):
+        """Load configuration from memory."""
+        _options: dict = {
+            "worker_class_str": UvicornWorker,
             "bind": f"0.0.0.0:{SETTINGS.port}",
             "workers": SETTINGS.workers,
-        },
-    ).run()
+        }
+        for key, value in _options.items():
+            if key in self.cfg.settings and value is not None:
+                self.cfg.set(key.lower(), value)
+
+    def load(self):
+        """Just return application."""
+        return SPELL_APP
+
+
+if __name__ == "__main__":
+    GunicornCustomApplication().run()

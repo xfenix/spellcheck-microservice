@@ -13,7 +13,7 @@ class OneCorrection(pydantic.BaseModel):
     first_position: int
     last_position: int
     word: str
-    replacements: set[str]
+    suggestions: set[str]
 
 
 class SpellCheckRequest(pydantic.BaseModel):

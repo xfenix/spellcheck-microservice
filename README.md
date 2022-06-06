@@ -11,6 +11,14 @@ This is a microservice designed to check the spelling of words. Based on [pyspel
 * open http://localhost:10113/docs/ for more information about REST API
 * main REST endpoint you will be needed is http://localhost:10113/api/check/
 
+## Configuration
+You can change config of the service by changing the environment variables. Here is a list of them:
+* `SPELLCHECK_MICROSERVICE_WORKERS` define application server workers count (default `4`)
+* `SPELLCHECK_MICROSERVICE_PORT` binding port (default `10113`)
+* `SPELLCHECK_MICROSERVICE_API_PREFIX` define all API's prefix (default `/api/`)
+* `SPELLCHECK_MICROSERVICE_DOC_PREFIX` define swagger/documentation prefix (default `/docs/`)
+* `SPELLCHECK_MICROSERVICE_MAX_SUGGESTIONS` defines how many maximum suggestions for each word will be available (default `None`, can be any valid integer)
+
 ## Development quickstart
 * Clone this repo
 * `poetry install`

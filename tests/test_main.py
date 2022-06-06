@@ -1,3 +1,4 @@
+# pylint: disable=no-member
 """Test __main__.py."""
 import runpy
 
@@ -8,8 +9,26 @@ class FakeGunicorn:
     def __init__(self, *_, **__):
         """Init."""
 
+    @property
+    def cfg(self):
+        """Fake config object."""
+        return self
+
+    @property
+    def settings(self):
+        """Fake settings object."""
+        return {
+            "bind": None,
+            "workers": 666_13,
+        }
+
+    def set(self, _, __):
+        """Fake setter for «config» object."""
+
     def run(self, *_, **__):
-        """Run."""
+        """Faky run."""
+        self.load_config()
+        self.load()
 
 
 def test_main_py(monkeypatch):
