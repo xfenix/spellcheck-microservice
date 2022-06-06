@@ -14,3 +14,5 @@ lint:
 	vulture whole_app --min-confidence 100
 lint-in-docker:
 	docker run -t spellcheck-microservice bash -c "pylint whole_app tests && mypy . && vulture whole_app --min-confidence 100"
+run-prod:
+	docker run  -p 10113:10113 -t spellcheck-microservice:latest

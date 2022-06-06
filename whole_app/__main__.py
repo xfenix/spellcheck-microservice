@@ -4,7 +4,6 @@ This file meant only for basic workers wrappers and fastapi exposure.
 For end-points look in views.py
 """
 from gunicorn.app.base import BaseApplication
-from uvicorn.workers import UvicornWorker
 
 from .settings import SETTINGS
 from .views import SPELL_APP
@@ -17,7 +16,7 @@ class GunicornCustomApplication(BaseApplication):
     def load_config(self):
         """Load configuration from memory."""
         _options: dict = {
-            "worker_class_str": UvicornWorker,
+            "worker_class": "uvicorn.workers.UvicornWorker",
             "bind": f"0.0.0.0:{SETTINGS.port}",
             "workers": SETTINGS.workers,
         }
