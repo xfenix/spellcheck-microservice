@@ -21,10 +21,14 @@ You can change config of the service by changing the environment variables. Here
 * `SPELLCHECK_MICROSERVICE_MAX_SUGGESTIONS` defines how many maximum suggestions for each word will be available (default `None`, can be any valid integer)
 * `SPELLCHECK_MICROSERVICE_MINIMUM_LENGTH_FOR_CORRECTION` if the word length is less than this option, the word will not be checked (default `3`)
 
-## Development quickstart
+## Development
+### Quickstart
 * Clone this repo
+* For MacOS X `brew install pyenchant`
 * `poetry install`
 * `poetry shell`
 * And `make` will run local development server
-
 Please check [./Makefile](./Makefile) for more details
+
+### Troubleshooting
+For MacOS X on Apple Silicon add `PYENCHANT_LIBRARY_PATH=/opt/homebrew/lib/libenchant-2.dylib` to your `.zprofile`
