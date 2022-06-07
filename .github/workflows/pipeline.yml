@@ -28,7 +28,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: hadolint/hadolint-action@v2.0.0
         with:
-          failure-threshold: warning
+          failure-threshold: error
 
   submit-coverage:
     runs-on: ubuntu-latest
@@ -37,11 +37,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
+          apt-get update -y
+          apt-get install -y enchant-2 hunspell-ru hunspell-es hunspell-de-de hunspell-fr hunspell-pt-pt curl
           pip install poetry
           poetry install
           poetry run pytest -n3 --cov-report=xml
-          apt-get update -y
-          apt-get install -y curl
       - uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
