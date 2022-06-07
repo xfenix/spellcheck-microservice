@@ -27,7 +27,8 @@ You can change config of the service by changing the environment variables. Here
 * For MacOS X `brew install pyenchant`
 * `poetry install`
 * `poetry shell`
-* And `make` will run local development server<br>
+* And `make` will run local development server
+
 Please check [./Makefile](./Makefile) for more details
 
 ### Troubleshooting
