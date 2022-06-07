@@ -1,55 +1,57 @@
 """Spellcheck service functions."""
-import pymorphy2
-import spellchecker
+import enchant
 
 from . import models
 from .settings import SETTINGS
 
 
-def _make_one_correction_and_append_to_list(
-    mutable_result: list[models.OneCorrection],
-    index: int,
-    one_word_buf: list[str],
-    spellcheck_engine: spellchecker.SpellChecker,
-    morph_engine: pymorphy2.MorphAnalyzer,
-) -> None:
-    ready_word: str = "".join(one_word_buf)
-    if len(ready_word) < SETTINGS.minimum_length_for_correction:
-        return
-    if spellcheck_engine.word_probability(morph_engine.parse(ready_word)[0].normal_form) > 0:
-        return
-    possible_candidates: set[str] = spellcheck_engine.candidates(ready_word)
-    if len(possible_candidates) == 0 or len(possible_candidates) == 1 and ready_word in possible_candidates:
-        return
-    mutable_result.append(
-        models.OneCorrection(
-            first_position=index - len(one_word_buf),
-            last_position=index - 1,
-            word=ready_word,
-            suggestions=set(tuple(possible_candidates)[: SETTINGS.max_suggestions])
-            if SETTINGS.max_suggestions
-            else possible_candidates,
-        )
-    )
+class SpellCheckService:
+    """Spellcheck service class."""
 
+    _language: models.AvailableLanguagesType
+    _spellcheck_engine: enchant.Dict
+    _user_corrections: list[models.OneCorrection]
 
-def run_spellcheck(input_text: str, desired_language: str) -> list[models.OneCorrection]:
-    """Main spellcheck procedure."""
-    spellcheck_engine: spellchecker.SpellChecker = spellchecker.SpellChecker(language=desired_language)
-    morph_engine: pymorphy2.MorphAnalyzer = pymorphy2.MorphAnalyzer(lang=desired_language)
-    user_corrections: list[models.OneCorrection] = []
-    one_char: str
-    one_word_buf: list[str] = []
-    for index, one_char in enumerate(input_text):
-        if one_char.isalpha():
-            one_word_buf.append(one_char)
-        elif one_word_buf:
-            _make_one_correction_and_append_to_list(
-                user_corrections, index, one_word_buf, spellcheck_engine, morph_engine
+    def __init__(self, desired_language: models.AvailableLanguagesType) -> None:
+        """Initialize spellchecker."""
+        self._language = desired_language
+        self._user_corrections = []
+
+    def prepare(self) -> "SpellCheckService":
+        """Initialize machinery."""
+        self._spellcheck_engine: enchant.Dict = enchant.Dict(self._language)
+        return self
+
+    def _make_one_correction_and_append_to_output(self, index: int, one_word_buf: list[str]) -> None:
+        ready_word: str = "".join(one_word_buf)
+        # skip to short words
+        if len(ready_word) < SETTINGS.minimum_length_for_correction:
+            return
+        # skip correct words
+        if self._spellcheck_engine.check(ready_word):
+            return
+        possible_candidates: list[str] = self._spellcheck_engine.suggest(ready_word)
+        self._user_corrections.append(
+            models.OneCorrection(
+                first_position=index - len(one_word_buf),
+                last_position=index - 1,
+                word=ready_word,
+                suggestions=possible_candidates[: SETTINGS.max_suggestions]
+                if SETTINGS.max_suggestions
+                else possible_candidates,
             )
-            one_word_buf = []
-    if one_word_buf:
-        _make_one_correction_and_append_to_list(
-            user_corrections, len(input_text), one_word_buf, spellcheck_engine, morph_engine
         )
-    return user_corrections
+
+    def run_check(self, input_text: str) -> list[models.OneCorrection]:
+        """Main spellcheck procedure."""
+        one_char: str
+        one_word_buf: list[str] = []
+        for index, one_char in enumerate(input_text):
+            if one_char.isalpha():
+                one_word_buf.append(one_char)
+            elif one_word_buf:
+                self._make_one_correction_and_append_to_output(index, one_word_buf)
+                one_word_buf = []
+        if one_word_buf:
+            self._make_one_correction_and_append_to_output(len(input_text), one_word_buf)
+        return self._user_corrections

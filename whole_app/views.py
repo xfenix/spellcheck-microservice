@@ -25,7 +25,7 @@ def spell_check_main_endpoint(request_payload: models.SpellCheckRequest) -> mode
     """Check spelling of text for exact language."""
     return models.SpellCheckResponse(
         **request_payload.dict(),
-        corrections=spell.run_spellcheck(request_payload.text, request_payload.language),
+        corrections=spell.SpellCheckService(request_payload.language).prepare().run_check(request_payload.text),
     )
 
 

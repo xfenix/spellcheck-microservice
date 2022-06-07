@@ -7,6 +7,9 @@ import pydantic
 from .settings import SETTINGS
 
 
+AvailableLanguagesType = typing.Literal["ru_RU", "en_US", "es_ES", "fr_FR", "de_DE", "pt_PT"]
+
+
 class OneCorrection(pydantic.BaseModel):
     """This model is one correction for one word."""
 
@@ -20,7 +23,7 @@ class SpellCheckRequest(pydantic.BaseModel):
     """Request model for spell check request."""
 
     text: str = pydantic.Field(..., example="Привед как дила")
-    language: typing.Literal["ru", "en", "de", "es", "fr", "pt"]
+    language: AvailableLanguagesType
 
 
 class SpellCheckResponse(SpellCheckRequest):
@@ -33,5 +36,6 @@ class HealthCheckResponse(pydantic.BaseModel):
     """This model for health check response."""
 
     service_name: str = SETTINGS.service_name
+    supported_languages: tuple[str, ...] = typing.get_args(AvailableLanguagesType)
     version: str
     status: typing.Literal["ok", "notok"] = "ok"

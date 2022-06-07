@@ -14,6 +14,7 @@ from whole_app.settings import SETTINGS
 
 FAKER_OBJ: faker.Faker = faker.Faker("ru_RU")
 RUSSIAN_LETTERS: typing.Final[str] = "абвгдежзийклмнопрстуфхцчшщъыьэюяё"
+RU_LANG: str = "ru_RU"
 
 
 @pytest.fixture
@@ -26,7 +27,7 @@ def fake_client():
 def test_no_corrections(fake_client, wannabe_user_input: str):
     """Dead simple test."""
     server_response: RequestsResponse = fake_client.post(
-        f"{SETTINGS.api_prefix}/check/", json=models.SpellCheckRequest(text=wannabe_user_input, language="ru").dict()
+        f"{SETTINGS.api_prefix}/check/", json=models.SpellCheckRequest(text=wannabe_user_input, language=RU_LANG).dict()
     )
     assert server_response.status_code == 200
 
@@ -40,7 +41,7 @@ def test_failed_texts(fake_client, random_seed: int):
         FAKER_OBJ.text().lower().replace(generated_letter, random.choice(RUSSIAN_LETTERS.replace(generated_letter, "")))
     )
     server_response: RequestsResponse = fake_client.post(
-        f"{SETTINGS.api_prefix}/check/", json=models.SpellCheckRequest(text=wannabe_user_input, language="ru").dict()
+        f"{SETTINGS.api_prefix}/check/", json=models.SpellCheckRequest(text=wannabe_user_input, language=RU_LANG).dict()
     )
     assert server_response.status_code == 200
 

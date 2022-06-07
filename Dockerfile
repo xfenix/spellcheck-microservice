@@ -14,6 +14,8 @@ RUN useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
 COPY poetry.lock .
 COPY pyproject.toml .
 COPY . $WORKDIR
+RUN apt-get update -y
+RUN apt-get install -y enchant-2 hunspell-ru hunspell-es hunspell-de-de hunspell-fr hunspell-pt-pt
 RUN pip install --no-cache-dir install "poetry==1.1.13"
 RUN poetry config virtualenvs.create false
 RUN poetry install
