@@ -52,4 +52,4 @@ def test_healthcheck_api_good(fake_client, random_seed: int):
     """We need to do it too."""
     server_response: RequestsResponse = fake_client.get(f"{SETTINGS.api_prefix}/health/")
     assert server_response.status_code == 200
-    assert server_response.json()["version"] == "1.0.0"
+    assert server_response.json()["version"] == "1.2.0"
