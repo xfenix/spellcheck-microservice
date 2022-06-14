@@ -3,7 +3,7 @@ ARG USER_UID=2000
 ARG USER_GID=$USER_UID
 ARG WORKDIR=/srv/www/
 
-FROM python:3.10.4-slim as builder
+FROM python:3.10.5-slim as builder
 ARG USERNAME
 ARG USER_UID
 ARG USER_GID
