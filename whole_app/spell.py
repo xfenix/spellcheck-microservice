@@ -31,16 +31,17 @@ class SpellCheckService:
         if self._spellcheck_engine.check(ready_word):
             return
         possible_candidates: list[str] = self._spellcheck_engine.suggest(ready_word)
-        self._user_corrections.append(
-            models.OneCorrection(
-                first_position=index - len(one_word_buf),
-                last_position=index - 1,
-                word=ready_word,
-                suggestions=possible_candidates[: SETTINGS.max_suggestions]
-                if SETTINGS.max_suggestions
-                else possible_candidates,
+        if len(possible_candidates) > 0:
+            self._user_corrections.append(
+                models.OneCorrection(
+                    first_position=index - len(one_word_buf),
+                    last_position=index - 1,
+                    word=ready_word,
+                    suggestions=possible_candidates[: SETTINGS.max_suggestions]
+                    if SETTINGS.max_suggestions
+                    else possible_candidates,
+                )
             )
-        )
 
     def run_check(self, input_text: str) -> list[models.OneCorrection]:
         """Main spellcheck procedure."""
