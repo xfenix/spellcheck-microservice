@@ -8,6 +8,17 @@ from . import models
 from .settings import SETTINGS
 
 
+@functools.lru_cache(maxsize=SETTINGS.cache_size)
+def _made_suggestions(engine: enchant.Dict, ready_word: str) -> list[str] | None:
+    # skip to short words
+    if len(ready_word) < SETTINGS.minimum_length_for_correction:
+        return None
+    # skip correct words
+    if engine.check(ready_word):
+        return None
+    return engine.suggest(ready_word)
+
+
 class SpellCheckService:
     """Spellcheck service class."""
 
@@ -24,24 +35,14 @@ class SpellCheckService:
         self._spellcheck_engine: enchant.Dict = enchant.Dict(self._language)
         return self
 
-    @functools.lru_cache(maxsize=SETTINGS.cache_size)
-    def _made_suggestions(self, ready_word: str) -> list[str] | None:
-        # skip to short words
-        if len(ready_word) < SETTINGS.minimum_length_for_correction:
-            return None
-        # skip correct words
-        if self._spellcheck_engine.check(ready_word):
-            return None
-        return self._spellcheck_engine.suggest(ready_word)
-
     def _make_one_correction_and_append_to_output(self, index: int, one_word_buf: list[str]) -> None:
         ready_word: str = "".join(one_word_buf)
-        possible_candidates: list[str] | None = self._made_suggestions(ready_word)
+        possible_candidates: list[str] | None = _made_suggestions(self._spellcheck_engine, ready_word)
         if not possible_candidates:
             return
         self._user_corrections.append(
             models.OneCorrection(
-                first_position=index - len(one_word_buf),
+                first_position=index - len(ready_word),
                 last_position=index - 1,
                 word=ready_word,
                 suggestions=possible_candidates[: SETTINGS.max_suggestions]
