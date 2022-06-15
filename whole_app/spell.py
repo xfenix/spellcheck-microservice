@@ -8,9 +8,6 @@ from . import models
 from .settings import SETTINGS
 
 
-_GLOBAL_SUGGESTIONS_CACHE: dict[str, list[str]] = {}
-
-
 class SpellCheckService:
     """Spellcheck service class."""
 
