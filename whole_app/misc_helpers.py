@@ -15,6 +15,6 @@ def parse_version_from_local_file() -> str:
     try:
         pyproject_obj: dict = toml.loads(SETTINGS.path_to_version_file.read_text())
         return pyproject_obj["tool"]["poetry"]["version"]
-    except toml.TomlDecodeError:
-        logger.warning("Cant parse version from pyproject")
+    except (toml.TomlDecodeError, KeyError) as exc:
+        logger.warning(f"Cant parse version from pyproject. Trouble {exc}")
         return ""

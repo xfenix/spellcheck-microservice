@@ -12,6 +12,8 @@ lint:
 	pylint whole_app tests
 	mypy .
 	vulture whole_app --min-confidence 100
+	isort -c .
+	black . --check
 lint-in-docker:
 	docker run -t spellcheck-microservice bash -c "pylint whole_app tests && mypy . && vulture whole_app --min-confidence 100"
 run-prod:

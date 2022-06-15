@@ -13,6 +13,7 @@ class _SettingsWrapperWhoseNameNobodyCaresAbout(pydantic.BaseSettings):
     structured_logging: bool = True
     workers: int = 8
     port: int = 10113
+    cache_size: int = 10000
     api_prefix: str = "/api/"
     docs_url: str = "/docs/"
     minimum_length_for_correction: int = 3

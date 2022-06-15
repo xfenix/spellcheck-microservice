@@ -22,7 +22,7 @@ RUN poetry install
 RUN rm poetry.lock
 RUN pip uninstall -y poetry
 
-FROM python:3.10.4-slim as runtime
+FROM python:3.10.5-slim as runtime
 ARG USERNAME
 ARG WORKDIR
 WORKDIR $WORKDIR
