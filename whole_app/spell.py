@@ -24,7 +24,7 @@ class SpellCheckService:
 
     _language: models.AvailableLanguagesType
     _spellcheck_engine: enchant.Dict
-    _user_corrections: list[models.OneCorrection] = []
+    _user_corrections: list[models.OneCorrection]
 
     def __init__(self, desired_language: models.AvailableLanguagesType) -> None:
         """Initialize spellchecker."""
@@ -32,7 +32,8 @@ class SpellCheckService:
 
     def prepare(self) -> "SpellCheckService":
         """Initialize machinery."""
-        self._spellcheck_engine: enchant.Dict = enchant.Dict(self._language)
+        self._user_corrections = []
+        self._spellcheck_engine = enchant.Dict(self._language)
         return self
 
     def _make_one_correction_and_append_to_output(self, index: int, one_word_buf: list[str]) -> None:
