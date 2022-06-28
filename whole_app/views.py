@@ -8,7 +8,7 @@ from . import misc_helpers, models, spell
 from .settings import SETTINGS
 
 
-SPELL_APP: typing.Final[fastapi.FastAPI] = fastapi.FastAPI(docs_url=SETTINGS.docs_url, openapi_url=SETTINGS.api_prefix)
+SPELL_APP: typing.Final[fastapi.FastAPI] = fastapi.FastAPI(docs_url=SETTINGS.docs_url, openapi_url=f"{SETTINGS.api_prefix}/openapi.json")
 CURRENT_APP_VERSION: typing.Final[str] = misc_helpers.parse_version_from_local_file()
 if SETTINGS.debug:
     SPELL_APP.add_middleware(
