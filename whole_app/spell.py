@@ -15,21 +15,21 @@ class SpellCheckService:
 
     _language: models.AvailableLanguagesType
     _spellcheck_engine: SpellChecker
-    _user_corrections: list[models.OneCorrection]
 
-    def __init__(self, desired_language: models.AvailableLanguagesType) -> None:
-        """Initialize spellchecker."""
-        self._language = desired_language
+    def __init__(self, request_payload: models.SpellCheckRequest) -> None:
+        """Initialize class from user request."""
+        self._language = request_payload.language
+        self._input_text = request_payload.text
 
     def prepare(self) -> "SpellCheckService":
         """Initialize machinery."""
-        self._user_corrections = []
         self._spellcheck_engine = SpellChecker(self._language)
         return self
 
-    def run_check(self, input_text: str) -> list[models.OneCorrection]:
+    def run_check(self) -> list[models.OneCorrection]:
         """Main spellcheck procedure."""
-        self._spellcheck_engine.set_text(input_text)
+        corrections_output: list[models.OneCorrection] = []
+        self._spellcheck_engine.set_text(self._input_text)
         for one_result in self._spellcheck_engine:
             misspeled_suggestions: list[str]
             if one_result.word in _CACHE_STORAGE:
@@ -37,7 +37,7 @@ class SpellCheckService:
             else:
                 misspeled_suggestions = one_result.suggest()
                 _CACHE_STORAGE[one_result.word] = misspeled_suggestions
-            self._user_corrections.append(
+            corrections_output.append(
                 models.OneCorrection(
                     first_position=one_result.wordpos,
                     last_position=one_result.wordpos + len(one_result.word),
@@ -47,4 +47,4 @@ class SpellCheckService:
                     else misspeled_suggestions,
                 )
             )
-        return self._user_corrections
+        return corrections_output

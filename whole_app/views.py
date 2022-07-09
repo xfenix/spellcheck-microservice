@@ -23,11 +23,13 @@ if SETTINGS.debug:
 
 
 @SPELL_APP.post(f"{SETTINGS.api_prefix}/check/", summary="Check spelling")
-def spell_check_main_endpoint(request_payload: models.SpellCheckRequest) -> models.SpellCheckResponse:
+def spell_check_main_endpoint(
+    request_payload: models.SpellCheckRequest, spell_service: spell.SpellCheckService = fastapi.Depends()
+) -> models.SpellCheckResponse:
     """Check spelling of text for exact language."""
     return models.SpellCheckResponse(
         **request_payload.dict(),
-        corrections=spell.SpellCheckService(request_payload.language).prepare().run_check(request_payload.text),
+        corrections=spell_service.prepare().run_check(),
     )
 
 
