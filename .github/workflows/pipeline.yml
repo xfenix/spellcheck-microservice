@@ -86,5 +86,5 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          repository: peterevans/dockerhub-description
+          repository: ${{ secrets.DOCKER_HUB_USERNAME }}/spellcheck-microservice
           short-description: ${{ github.event.repository.description }}

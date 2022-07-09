@@ -14,7 +14,7 @@ Current available languages are: ru_RU, en_US, es_ES, fr_FR, de_DE, pt_PT
 
 ## Configuration
 You can change config of the service by changing the environment variables. Here is a list of them:
-* `SPELLCHECK_MICROSERVICE_WORKERS` define application server workers count (default `8`)
+* `SPELLCHECK_MICROSERVICE_WORKERS` define application server workers count (default `8`). If you plan to use k8s and only scale with replica sets, you might want to reduce this value to 1.
 * `SPELLCHECK_MICROSERVICE_PORT` binding port (default `10113`)
 * `SPELLCHECK_MICROSERVICE_API_PREFIX` define all API's prefix (default `/api/`)
 * `SPELLCHECK_MICROSERVICE_DOCS_URL` define swagger/documentation prefix (default `/docs/`)
