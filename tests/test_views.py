@@ -34,7 +34,7 @@ def test_no_corrections(fake_client, wannabe_user_input: str):
 
 @pytest.mark.parametrize("random_seed", range(10))
 # pylint: disable=unused-argument
-def test_failed_texts(fake_client, random_seed: int):
+def test_with_corrections(fake_client, random_seed: int):
     """Not so dead simple test."""
     generated_letter: typing.Final[str] = random.choice(RUSSIAN_LETTERS)
     wannabe_user_input: str = (

@@ -9,7 +9,7 @@ class _SettingsWrapperWhoseNameNobodyCaresAbout(pydantic.BaseSettings):
     """Literally no one cares."""
 
     service_name: str = "spellcheck-microservice"
-    debug: bool = True
+    enable_cors: bool = True
     structured_logging: bool = True
     workers: int = 8
     port: int = 10_113
@@ -17,6 +17,8 @@ class _SettingsWrapperWhoseNameNobodyCaresAbout(pydantic.BaseSettings):
     api_prefix: str = "/api/"
     docs_url: str = "/docs/"
     max_suggestions: pydantic.conint(gt=0) | None = None  # type: ignore
+    # version from this file will be available in the health check response
+    # and version in the file itself will be updated in the CI through poetry version command
     path_to_version_file = pathlib.Path(__file__).parent.parent / "pyproject.toml"
 
     @pydantic.validator("api_prefix")

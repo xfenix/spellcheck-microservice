@@ -1,7 +1,9 @@
 run-dev:
 	uvicorn whole_app.__main__:SPELL_APP --reload
-build:
-	docker build -t spellcheck-microservice .
+prepare-buildx:
+	docker buildx create --use --name newbuilder
+build-image:
+	docker buildx build --platform linux/amd64,linux/arm64 -t spellcheck-microservice .
 exec:
 	docker run -it spellcheck-microservice bash
 test:

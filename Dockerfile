@@ -28,5 +28,5 @@ ARG WORKDIR
 WORKDIR $WORKDIR
 COPY --from=builder / /
 USER $USERNAME
-ENV DEBUG=False
+ENV SPELLCHECK_MICROSERVICE_ENABLE_CORS=false
 CMD ["python", "-m", "whole_app"]

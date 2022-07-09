@@ -3,6 +3,7 @@
 This file meant only for basic workers wrappers and fastapi exposure.
 For end-points look in views.py
 """
+import fastapi
 from gunicorn.app.base import BaseApplication
 
 from .settings import SETTINGS
@@ -13,7 +14,7 @@ from .views import SPELL_APP
 class GunicornCustomApplication(BaseApplication):
     """Our easing wrapper around gunicorn."""
 
-    def load_config(self):
+    def load_config(self) -> None:
         """Load configuration from memory."""
         _options: dict = {
             "worker_class": "uvicorn.workers.UvicornWorker",
@@ -24,7 +25,7 @@ class GunicornCustomApplication(BaseApplication):
             if key in self.cfg.settings and value is not None:
                 self.cfg.set(key.lower(), value)
 
-    def load(self):
+    def load(self) -> fastapi.FastAPI:
         """Just return application."""
         return SPELL_APP
 
