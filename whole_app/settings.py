@@ -16,7 +16,6 @@ class _SettingsWrapperWhoseNameNobodyCaresAbout(pydantic.BaseSettings):
     cache_size: int = 10_000
     api_prefix: str = "/api/"
     docs_url: str = "/docs/"
-    minimum_length_for_correction: int = 3
     max_suggestions: pydantic.conint(gt=0) | None = None  # type: ignore
     path_to_version_file = pathlib.Path(__file__).parent.parent / "pyproject.toml"
 

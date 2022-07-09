@@ -1,29 +1,20 @@
 """Spellcheck service functions."""
 
-import functools
-
-import enchant
+import pylru
+from enchant.checker import SpellChecker
 
 from . import models
 from .settings import SETTINGS
 
 
-@functools.lru_cache(maxsize=SETTINGS.cache_size)
-def _made_suggestions(engine: enchant.Dict, ready_word: str) -> list[str] | None:
-    # skip to short words
-    if len(ready_word) < SETTINGS.minimum_length_for_correction:
-        return None
-    # skip correct words
-    if engine.check(ready_word):
-        return None
-    return engine.suggest(ready_word)
+_CACHE_STORAGE: dict[str, list[str]] = pylru.lrucache(SETTINGS.cache_size)
 
 
 class SpellCheckService:
     """Spellcheck service class."""
 
     _language: models.AvailableLanguagesType
-    _spellcheck_engine: enchant.Dict
+    _spellcheck_engine: SpellChecker
     _user_corrections: list[models.OneCorrection]
 
     def __init__(self, desired_language: models.AvailableLanguagesType) -> None:
@@ -33,35 +24,25 @@ class SpellCheckService:
     def prepare(self) -> "SpellCheckService":
         """Initialize machinery."""
         self._user_corrections = []
-        self._spellcheck_engine = enchant.Dict(self._language)
+        self._spellcheck_engine = SpellChecker(self._language)
         return self
-
-    def _make_one_correction_and_append_to_output(self, index: int, one_word_buf: list[str]) -> None:
-        ready_word: str = "".join(one_word_buf)
-        possible_candidates: list[str] | None = _made_suggestions(self._spellcheck_engine, ready_word)
-        if not possible_candidates:
-            return
-        self._user_corrections.append(
-            models.OneCorrection(
-                first_position=index - len(ready_word),
-                last_position=index - 1,
-                word=ready_word,
-                suggestions=possible_candidates[: SETTINGS.max_suggestions]
-                if SETTINGS.max_suggestions
-                else possible_candidates,
-            )
-        )
 
     def run_check(self, input_text: str) -> list[models.OneCorrection]:
         """Main spellcheck procedure."""
-        one_char: str
-        one_word_buf: list[str] = []
-        for index, one_char in enumerate(input_text):
-            if one_char.isalpha():
-                one_word_buf.append(one_char)
-            elif one_word_buf:
-                self._make_one_correction_and_append_to_output(index, one_word_buf)
-                one_word_buf = []
-        if one_word_buf:
-            self._make_one_correction_and_append_to_output(len(input_text), one_word_buf)
+        self._spellcheck_engine.set_text(input_text)
+        for one_result in self._spellcheck_engine:
+            misspeled_suggestions: list[str]
+            if one_result.word in _CACHE_STORAGE:
+                misspeled_suggestions = _CACHE_STORAGE[one_result.word]
+            else:
+                misspeled_suggestions = one_result.suggest()
+                _CACHE_STORAGE[one_result.word] = misspeled_suggestions
+            self._user_corrections.append(
+                models.OneCorrection(
+                    first_position=one_result.wordpos,
+                    last_position=one_result.wordpos + len(one_result.word),
+                    word=one_result.word,
+                    suggestions=misspeled_suggestions,
+                )
+            )
         return self._user_corrections
