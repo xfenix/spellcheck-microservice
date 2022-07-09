@@ -42,7 +42,9 @@ class SpellCheckService:
                     first_position=one_result.wordpos,
                     last_position=one_result.wordpos + len(one_result.word),
                     word=one_result.word,
-                    suggestions=misspeled_suggestions,
+                    suggestions=misspeled_suggestions[: SETTINGS.max_suggestions]
+                    if SETTINGS.max_suggestions
+                    else misspeled_suggestions,
                 )
             )
         return self._user_corrections
