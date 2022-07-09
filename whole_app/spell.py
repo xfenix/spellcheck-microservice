@@ -1,5 +1,4 @@
 """Spellcheck service functions."""
-
 import pylru
 from enchant.checker import SpellChecker
 
