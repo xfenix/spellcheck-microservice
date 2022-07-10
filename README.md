@@ -20,7 +20,7 @@ You can change config of the service by changing the environment variables. Here
 * `SPELLCHECK_MICROSERVICE_DOCS_URL` define swagger/documentation prefix (default `/docs/`)
 * `SPELLCHECK_MICROSERVICE_MAX_SUGGESTIONS` defines how many maximum suggestions for each word will be available (default is `None` means unlimited, can be any valid integer)
 * `SPELLCHECK_MICROSERVICE_MINIMUM_LENGTH_FOR_CORRECTION` if the word length is less than this option, the word will not be checked (default `3`)
-* `SPELLCHECK_MICROSERVICE_CACHE_SIZE` define LRU cache size for misspeled word/suggestions cache (default `10000`)
+* `SPELLCHECK_MICROSERVICE_CACHE_SIZE` define LRU cache size for misspelled word/suggestions cache (default `10000`)
 * `SPELLCHECK_MICROSERVICE_ENABLE_CORS` defines if CORS is enabled (default `True`, in docker container is `False`)
 
 ## Development

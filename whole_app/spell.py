@@ -30,20 +30,20 @@ class SpellCheckService:
         corrections_output: list[models.OneCorrection] = []
         self._spellcheck_engine.set_text(self._input_text)
         for one_result in self._spellcheck_engine:
-            misspeled_suggestions: list[str]
+            misspelled_suggestions: list[str]
             if one_result.word in _CACHE_STORAGE:
-                misspeled_suggestions = _CACHE_STORAGE[one_result.word]
+                misspelled_suggestions = _CACHE_STORAGE[one_result.word]
             else:
-                misspeled_suggestions = one_result.suggest()
-                _CACHE_STORAGE[one_result.word] = misspeled_suggestions
+                misspelled_suggestions = one_result.suggest()
+                _CACHE_STORAGE[one_result.word] = misspelled_suggestions
             corrections_output.append(
                 models.OneCorrection(
                     first_position=one_result.wordpos,
                     last_position=one_result.wordpos + len(one_result.word),
                     word=one_result.word,
-                    suggestions=misspeled_suggestions[: SETTINGS.max_suggestions]
+                    suggestions=misspelled_suggestions[: SETTINGS.max_suggestions]
                     if SETTINGS.max_suggestions
-                    else misspeled_suggestions,
+                    else misspelled_suggestions,
                 )
             )
         return corrections_output
