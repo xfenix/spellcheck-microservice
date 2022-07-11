@@ -41,12 +41,12 @@ def test_with_corrections_simple(app_client, faker_obj):
     assert server_response.status_code == 200
 
 
-@pytest.repeat(3)
+# @pytest.mark.repeat(3)
 @pytest.mark.parametrize("wannabe_user_input", BAD_PAYLOAD)
 def test_with_exception_word_in_dictionary(monkeypatch, app_client, faker_obj, wannabe_user_input):
     """Complex tests, where we add word to dictionary and tests that it really
     excluded from the output."""
-    tested_word: typing.Final[str] = random.choice(wannabe_user_input.split())
+    tested_word: typing.Final[str] = random.choice(tuple(filter(lambda x: len(x) > 4, wannabe_user_input.split())))
     monkeypatch.setattr(SETTINGS, "dictionaries_storage_provider", StorageProviders.FILE)
     run_request: typing.Callable = lambda: app_client.post(
         f"{SETTINGS.api_prefix}/check/",
