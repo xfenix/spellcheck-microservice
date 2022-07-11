@@ -42,11 +42,17 @@ def test_with_corrections_simple(app_client, faker_obj):
 
 
 # @pytest.mark.repeat(3)
-@pytest.mark.parametrize("wannabe_user_input", BAD_PAYLOAD)
-def test_with_exception_word_in_dictionary(monkeypatch, app_client, faker_obj, wannabe_user_input):
+@pytest.mark.parametrize(
+    "wannabe_user_input, tested_word",
+    (
+        (BAD_PAYLOAD[0], "Капиталисиическая"),
+        (BAD_PAYLOAD[1], "блохера"),
+    ),
+)
+def test_with_exception_word_in_dictionary(monkeypatch, app_client, faker_obj, wannabe_user_input, tested_word):
     """Complex tests, where we add word to dictionary and tests that it really
     excluded from the output."""
-    tested_word: typing.Final[str] = random.choice(tuple(filter(lambda x: len(x) > 4, wannabe_user_input.split())))
+    # replace all symbols from wannabe_user_input except letters and numbers
     monkeypatch.setattr(SETTINGS, "dictionaries_storage_provider", StorageProviders.FILE)
     run_request: typing.Callable = lambda: app_client.post(
         f"{SETTINGS.api_prefix}/check/",
