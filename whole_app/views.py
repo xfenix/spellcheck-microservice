@@ -39,7 +39,7 @@ async def spell_check_main_endpoint(
 ) -> models.SpellCheckResponse:
     """Check spelling of text for exact language."""
     exclusion_words: list[str] = []
-    if request_payload.user_name:
+    if request_payload.user_name and not SETTINGS.dictionaries_disabled:
         exclusion_words = await storage_engine.prepare(request_payload.user_name).fetch_records()
     return models.SpellCheckResponse(
         **request_payload.dict(),
