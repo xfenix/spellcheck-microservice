@@ -65,5 +65,4 @@ def test_with_exception_word_in_dictionary(monkeypatch, app_client, faker_obj, w
     )
     # and than check that excepted word not in the check output
     server_response = run_request()
-    print(excepted_word, parse_words(server_response))
     assert excepted_word not in parse_words(server_response)
