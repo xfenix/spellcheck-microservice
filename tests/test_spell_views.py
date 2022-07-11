@@ -41,7 +41,6 @@ def test_with_corrections_simple(app_client, faker_obj):
     assert server_response.status_code == 200
 
 
-# @pytest.mark.repeat(3)
 @pytest.mark.parametrize(
     "wannabe_user_input, tested_word",
     (

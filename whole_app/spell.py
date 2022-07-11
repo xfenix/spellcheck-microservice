@@ -16,10 +16,12 @@ class SpellCheckService:
     _spellcheck_engine: SpellChecker
     _exclusion_words: list[str]
 
-    def prepare(self, request_payload: models.SpellCheckRequest, exclusion_words: list[str]) -> "SpellCheckService":
+    def prepare(
+        self, request_payload: models.SpellCheckRequest, exclusion_words: list[str] | None = None
+    ) -> "SpellCheckService":
         """Initialize machinery."""
         self._input_text = request_payload.text
-        self._exclusion_words = exclusion_words
+        self._exclusion_words = exclusion_words if exclusion_words else []
         self._spellcheck_engine = SpellChecker(request_payload.language)
         return self
 
