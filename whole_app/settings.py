@@ -59,6 +59,8 @@ class SettingsOfMicroservice(pydantic.BaseSettings):
 
     @pydantic.root_validator
     def parse_version_from_local_file(cls, values: dict) -> dict:
+        """Parse version from pyproject (this file will be updated in the CI
+        pipeline)."""
         try:
             pyproject_obj: dict = toml.loads(values["path_to_version_file"].read_text())
             values["current_version"] = pyproject_obj["tool"]["poetry"]["version"]
