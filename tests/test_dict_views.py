@@ -1,11 +1,13 @@
 # pylint: disable=redefined-outer-name, unspecified-encoding
 """Basic test for views."""
+import importlib
 import typing
 
 import pytest
+from fastapi.testclient import TestClient
 from requests.models import Response as RequestsResponse
 
-from whole_app import models
+from whole_app import models, views
 from whole_app.settings import SETTINGS, StorageProviders
 
 
@@ -63,3 +65,20 @@ class TestFileAndDummyBasedDicts:
             ).dict(),
         )
         assert server_response.status_code == 201
+
+
+class TestVarious:
+    """Various things."""
+
+    def test_disabled_dictionary_views(self, monkeypatch):
+        """Test views with dictionaries_disabled SETTINGS option."""
+        with monkeypatch.context() as patcher:
+            patcher.setattr(SETTINGS, "dictionaries_disabled", True)
+            importlib.reload(views)
+            server_response: RequestsResponse = TestClient(views.SPELL_APP).post(
+                DICT_ENDPOINT,
+                json=models.UserDictionaryRequestWithWord(user_name="test", exception_word="test").dict(),
+            )
+            assert server_response.status_code == 404
+        # restore back api state to ensure other tests wont break
+        importlib.reload(views)
