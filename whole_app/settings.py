@@ -5,6 +5,7 @@ import pathlib
 import typing
 
 import pydantic
+import toml
 from loguru import logger
 
 
@@ -38,6 +39,7 @@ class SettingsOfMicroservice(pydantic.BaseSettings):
     dictionaries_path: pathlib.Path = pathlib.Path("/data/")
     dictionaries_storage_provider: StorageProviders = StorageProviders.FILE
     dictionaries_disabled: bool = False
+    current_version: str = ""
 
     @pydantic.validator("api_prefix")
     def api_prefix_must_be_with_slash_for_left_part_and_without_it_for_right(cls, possible_value: str) -> str:
@@ -53,6 +55,15 @@ class SettingsOfMicroservice(pydantic.BaseSettings):
             )
             return 0
         return possible_value
+
+    @pydantic.root_validator
+    def parse_version_from_local_file(cls, values: dict) -> dict:
+        try:
+            pyproject_obj: dict = toml.loads(values["path_to_version_file"].read_text())
+            values["current_version"] = pyproject_obj["tool"]["poetry"]["version"]
+        except (toml.TomlDecodeError, KeyError, FileNotFoundError) as exc:
+            logger.warning(f"Cant parse version from pyproject. Trouble {exc}")
+        return values
 
     class Config:
         """I hate this config classes in classes."""

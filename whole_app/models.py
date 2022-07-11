@@ -55,5 +55,5 @@ class HealthCheckResponse(pydantic.BaseModel):
 
     service_name: str = SETTINGS.service_name
     supported_languages: tuple[str, ...] = AvailableLanguages
-    version: str
+    version: str = SETTINGS.current_version
     status: typing.Literal["ok", "notok"] = "ok"

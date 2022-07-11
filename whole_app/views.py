@@ -11,9 +11,11 @@ from .settings import SETTINGS
 
 
 SPELL_APP: typing.Final[fastapi.FastAPI] = fastapi.FastAPI(
-    docs_url=SETTINGS.docs_url, openapi_url=f"{SETTINGS.api_prefix}/openapi.json"
+    title="Spellcheck API",
+    version=SETTINGS.current_version,
+    docs_url=SETTINGS.docs_url,
+    openapi_url=f"{SETTINGS.api_prefix}/openapi.json",
 )
-CURRENT_APP_VERSION: typing.Final[str] = misc_helpers.parse_version_from_local_file()
 if SETTINGS.enable_cors:
     SPELL_APP.add_middleware(
         CORSMiddleware,
@@ -50,7 +52,7 @@ async def spell_check_main_endpoint(
 @SPELL_APP.get(f"{SETTINGS.api_prefix}/health/", summary="Regular healthcheck api")
 async def check_health_of_service() -> models.HealthCheckResponse:
     """Check health of service."""
-    return models.HealthCheckResponse(version=misc_helpers.parse_version_from_local_file())
+    return models.HealthCheckResponse()
 
 
 if not SETTINGS.dictionaries_disabled:
