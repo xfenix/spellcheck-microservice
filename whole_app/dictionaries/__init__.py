@@ -15,7 +15,7 @@ misc_helpers.init_logger()
 
 def init_storage() -> typing.Any:
     """Generic storage initializer."""
-    match SETTINGS.storage_provider:
+    match SETTINGS.dictionaries_storage_provider:
         case StorageProviders.FILE:
             return file_storage.init_storage()
         case StorageProviders.DUMMY:
@@ -28,7 +28,7 @@ def init_storage() -> typing.Any:
 
 def prepare_storage_engine() -> protocol.UserDictProtocol:
     """Storage engine factory."""
-    match SETTINGS.storage_provider:
+    match SETTINGS.dictionaries_storage_provider:
         case StorageProviders.FILE:
             return file_storage.FileProvider()
         case StorageProviders.DUMMY:

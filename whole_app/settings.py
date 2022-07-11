@@ -35,8 +35,8 @@ class SettingsOfMicroservice(pydantic.BaseSettings):
     # version from this file will be available in the health check response
     # and version in the file itself will be updated in the CI through poetry version command
     path_to_version_file: pathlib.Path = pathlib.Path(__file__).parent.parent / "pyproject.toml"
-    path_to_dictionaries: pathlib.Path = pathlib.Path("/data/")
-    storage_provider: StorageProviders = StorageProviders.FILE
+    dictionaries_path: pathlib.Path = pathlib.Path("/data/")
+    dictionaries_storage_provider: StorageProviders = StorageProviders.FILE
     dictionaries_disabled: bool = False
 
     @pydantic.validator("api_prefix")

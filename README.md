@@ -22,6 +22,9 @@ You can change config of the service by changing the environment variables. Here
 * `SPELLCHECK_MINIMUM_LENGTH_FOR_CORRECTION` if the word length is less than this option, the word will not be checked (default `3`)
 * `SPELLCHECK_CACHE_SIZE` define LRU cache size for misspelled word/suggestions cache (default `10000`, any value less than `1` makes the cache size unlimited, so be careful with this option)
 * `SPELLCHECK_ENABLE_CORS` defines if CORS is enabled (default `True`, in docker container is `False`)
+* `SPELLCHECK_DICTIONARIES_DISABLED` switches off user dictionaries API (default `False`)
+* `SPELLCHECK_DICTIONARIES_PROVIDER` define user dicts storage provider (default `file`, available: `file`, `dummy`)
+* `SPELLCHECK_DICTIONARIES_PATH` define directory where user dicts is stored (default `/data/`)
 
 ## Development
 ### Quickstart

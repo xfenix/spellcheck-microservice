@@ -20,7 +20,7 @@ def faker_obj():
 def patch_file_provider_for_temp(monkeypatch):
     """Patch settings, to rewrite dict path to temporary directory."""
     with monkeypatch.context() as patcher, tempfile.TemporaryDirectory() as tmp_dir_name:
-        yield patcher.setattr(SETTINGS, "path_to_dictionaries", pathlib.Path(tmp_dir_name))
+        yield patcher.setattr(SETTINGS, "dictionaries_path", pathlib.Path(tmp_dir_name))
 
 
 @pytest.fixture
@@ -31,5 +31,5 @@ def app_client(monkeypatch):
     on every test.
     """
     with TestClient(views.SPELL_APP) as local_client, monkeypatch.context() as patcher:
-        patcher.setattr(SETTINGS, "storage_provider", StorageProviders.DUMMY)
+        patcher.setattr(SETTINGS, "dictionaries_storage_provider", StorageProviders.DUMMY)
         yield local_client

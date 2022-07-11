@@ -6,7 +6,7 @@ from whole_app.settings import SETTINGS
 
 def init_storage() -> None:
     """Initialize dictionaries storage helper."""
-    SETTINGS.path_to_dictionaries.mkdir(parents=True, exist_ok=True)
+    SETTINGS.dictionaries_path.mkdir(parents=True, exist_ok=True)
 
 
 class FileProvider:
@@ -16,7 +16,7 @@ class FileProvider:
 
     def prepare(self, user_name: str) -> "FileProvider":
         """Prepare class for user name."""
-        self._user_dict_path = aiopath.AsyncPath(SETTINGS.path_to_dictionaries / user_name)
+        self._user_dict_path = aiopath.AsyncPath(SETTINGS.dictionaries_path / user_name)
         return self
 
     async def _store_lines(self, lines: list[str]) -> None:
