@@ -2,6 +2,7 @@
 import typing
 
 import fastapi
+from anyio import to_thread
 from fastapi.middleware.cors import CORSMiddleware
 
 from . import dictionaries, misc_helpers, models, spell
@@ -31,13 +32,18 @@ def startup() -> None:
 
 
 @SPELL_APP.post(f"{SETTINGS.api_prefix}/check/", summary="Check spelling")
-def spell_check_main_endpoint(
-    request_payload: models.SpellCheckRequest, spell_service: spell.SpellCheckService = fastapi.Depends()
+async def spell_check_main_endpoint(
+    request_payload: models.SpellCheckRequest,
+    spell_service: spell.SpellCheckService = fastapi.Depends(),
+    storage_engine: UserDictProtocol = fastapi.Depends(dictionaries.prepare_storage_engine),
 ) -> models.SpellCheckResponse:
     """Check spelling of text for exact language."""
+    exclusion_words: list[str] = []
+    if request_payload.user_name:
+        exclusion_words = await storage_engine.prepare(request_payload.user_name).fetch_records()
     return models.SpellCheckResponse(
         **request_payload.dict(),
-        corrections=spell_service.prepare(request_payload).run_check(),
+        corrections=await to_thread.run_sync(spell_service.prepare(request_payload, exclusion_words).run_check),
     )
 
 

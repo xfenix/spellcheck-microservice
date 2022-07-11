@@ -26,7 +26,7 @@ class FileProvider:
     async def save_record(self, exception_word: str) -> None:
         """Save record to user dictionary."""
         await self._user_dict_path.touch()
-        clean_word: str = exception_word.strip()
+        clean_word: str = exception_word.strip().lower()
         file_content: list[str] = await self.fetch_records()
         if clean_word not in file_content:
             file_content.append(exception_word.strip())

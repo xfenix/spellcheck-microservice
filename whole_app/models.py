@@ -7,6 +7,12 @@ import pydantic
 from .settings import SETTINGS, AvailableLanguages, AvailableLanguagesType
 
 
+# any because mypy & pydantic cant cope with proper typing
+USER_NAME_FIELDS_RESTRICTIONS: typing.Final[typing.Any] = dict(
+    example="username", regex=r"^[a-zA-Z0-9-_]*$", min_length=3, max_length=60
+)
+
+
 class OneCorrection(pydantic.BaseModel):
     """This model is one correction for one word."""
 
@@ -21,26 +27,27 @@ class SpellCheckRequest(pydantic.BaseModel):
 
     text: str = pydantic.Field(..., example="Привед как дила")
     language: AvailableLanguagesType
+    user_name: str | None = pydantic.Field(**USER_NAME_FIELDS_RESTRICTIONS)
 
 
-class SpellCheckResponse(SpellCheckRequest):
+class SpellCheckResponse(pydantic.BaseModel):
     """This model for check response."""
 
+    text: str
+    language: str
     corrections: list[OneCorrection]
 
 
 class UserDictionaryRequest(pydantic.BaseModel):
     """Request model for user dictionary request."""
 
-    user_name: pydantic.constr(regex="^[a-zA-Z0-9-_]*$", min_length=3, max_length=60) = pydantic.Field(  # type: ignore
-        ..., example="username"
-    )
+    user_name: str = pydantic.Field(..., **USER_NAME_FIELDS_RESTRICTIONS)
 
 
 class UserDictionaryRequestWithWord(UserDictionaryRequest):
     """Request model for user dictionary request with word."""
 
-    exception_word: str
+    exception_word: str = pydantic.Field(..., example="привед")
 
 
 class HealthCheckResponse(pydantic.BaseModel):

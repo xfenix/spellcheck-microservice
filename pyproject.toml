@@ -16,6 +16,7 @@ pyenchant = "*"
 toml = "*"
 pylru = "*"
 aiopath = "*"
+anyio = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"

@@ -14,10 +14,12 @@ class SpellCheckService:
 
     _input_text: str
     _spellcheck_engine: SpellChecker
+    _exclusion_words: list[str]
 
-    def prepare(self, request_payload: models.SpellCheckRequest) -> "SpellCheckService":
+    def prepare(self, request_payload: models.SpellCheckRequest, exclusion_words: list[str]) -> "SpellCheckService":
         """Initialize machinery."""
         self._input_text = request_payload.text
+        self._exclusion_words = exclusion_words
         self._spellcheck_engine = SpellChecker(request_payload.language)
         return self
 
@@ -26,6 +28,8 @@ class SpellCheckService:
         corrections_output: list[models.OneCorrection] = []
         self._spellcheck_engine.set_text(self._input_text)
         for one_result in self._spellcheck_engine:
+            if one_result.word.lower() in self._exclusion_words:
+                continue
             misspelled_suggestions: list[str]
             if one_result.word in _CACHE_STORAGE:
                 misspelled_suggestions = _CACHE_STORAGE[one_result.word]
