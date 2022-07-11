@@ -14,4 +14,5 @@ def test_correct_spell():
     ).run_check()
     # а тут надо проверять, что first_position и last_position корректные, что word соответствует слову из text
     # что в corrections есть правильные варианты (в рандомизированном случае можно такое не проверять)
+    # важно: нужно ВРУЧНУЮ подбирать first_position, last_position и правильные слова и вручную вносить сюда
     print(results)
