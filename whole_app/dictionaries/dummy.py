@@ -2,7 +2,11 @@
 
 
 class DummyProvider:
-    """Dummy provider."""
+    """Dummy provider for user dictionaries.
+
+    In case if you want to use dcitionaries API, but don't want to do
+    actual work.
+    """
 
     def prepare(self, _: str) -> "DummyProvider":
         """Initialize class from user id."""

@@ -10,7 +10,7 @@ def init_storage() -> None:
 
 
 class FileProvider:
-    """Provider of user dictonaries based on the protocol UserDictProtocol."""
+    """File based storage provider for user dictionaries."""
 
     _user_dict_path: aiopath.AsyncPath
 

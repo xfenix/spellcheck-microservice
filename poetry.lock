@@ -1,4 +1,30 @@
 [[package]]
+name = "aiofile"
+version = "3.7.4"
+description = "Asynchronous file operations."
+category = "main"
+optional = false
+python-versions = ">3.4.*, <4"
+
+[package.dependencies]
+caio = ">=0.9.0,<0.10.0"
+
+[package.extras]
+develop = ["aiomisc", "asynctest", "pytest", "pytest-cov"]
+
+[[package]]
+name = "aiopath"
+version = "0.6.10"
+description = "📁 Async pathlib for Python"
+category = "main"
+optional = false
+python-versions = ">=3.10"
+
+[package.dependencies]
+aiofile = ">=3.5.0,<4"
+anyio = ">=3.2.0,<4"
+
+[[package]]
 name = "anyio"
 version = "3.6.1"
 description = "High level compatibility layer for multiple asynchronous event loop implementations"
@@ -48,6 +74,17 @@ dev = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", 
 docs = ["furo", "sphinx", "zope.interface", "sphinx-notfound-page"]
 tests = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "zope.interface", "cloudpickle"]
 tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "cloudpickle"]
+
+[[package]]
+name = "caio"
+version = "0.9.6"
+description = "Asynchronous file IO for Linux MacOS or Windows."
+category = "main"
+optional = false
+python-versions = ">=3.5, <4"
+
+[package.extras]
+develop = ["aiomisc", "pytest", "pytest-cov"]
 
 [[package]]
 name = "certifi"
@@ -664,9 +701,11 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "4846291d6b240c6aaf1613730e4d78e1f6a4a940d2849ec65a5c2ca273290992"
+content-hash = "96f06c096085cb4abea63b8c3a6fc8727d7c5176bc09a5eba8bd4d391a57c7ab"
 
 [metadata.files]
+aiofile = []
+aiopath = []
 anyio = [
     {file = "anyio-3.6.1-py3-none-any.whl", hash = "sha256:cb29b9c70620506a9a8f87a309591713446953302d7d995344d0d7c6c0c9a7be"},
     {file = "anyio-3.6.1.tar.gz", hash = "sha256:413adf95f93886e442aea925f3ee43baa5a765a64a0f52c6081894f9992fdd0b"},
@@ -677,6 +716,7 @@ attrs = [
     {file = "attrs-21.4.0-py2.py3-none-any.whl", hash = "sha256:2d27e3784d7a565d36ab851fe94887c5eccd6a463168875832a1be79c82828b4"},
     {file = "attrs-21.4.0.tar.gz", hash = "sha256:626ba8234211db98e869df76230a137c4c40a12d72445c45d5f5b716f076e2fd"},
 ]
+caio = []
 certifi = []
 charset-normalizer = []
 click = [

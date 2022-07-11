@@ -20,12 +20,10 @@ def init_storage() -> typing.Any:
             return file_storage.init_storage()
         case StorageProviders.DUMMY:
             logger.warning(
-                "Storage provider set to None mode. Currently all user dictionary requests will be thrown away."
-                "We worn you"
+                "Storage provider set to dummy mode. "
+                "Currently all user dictionary requests will be thrown away. We worn you."
             )
             return None
-        case _:
-            raise NotImplementedError("Storage provider is not implemented")
 
 
 def prepare_storage_engine() -> protocol.UserDictProtocol:
@@ -35,5 +33,3 @@ def prepare_storage_engine() -> protocol.UserDictProtocol:
             return file_storage.FileProvider()
         case StorageProviders.DUMMY:
             return dummy_storage.DummyProvider()
-        case _:
-            raise NotImplementedError("Storage provider is not implemented")
