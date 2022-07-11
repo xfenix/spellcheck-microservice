@@ -11,7 +11,7 @@ from .settings import SETTINGS
 
 
 SPELL_APP: typing.Final[fastapi.FastAPI] = fastapi.FastAPI(
-    title="Spellcheck API",
+    title=SETTINGS.app_title,
     version=SETTINGS.current_version,
     docs_url=SETTINGS.docs_url,
     openapi_url=f"{SETTINGS.api_prefix}/openapi.json",

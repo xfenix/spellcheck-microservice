@@ -40,6 +40,7 @@ class SettingsOfMicroservice(pydantic.BaseSettings):
     dictionaries_storage_provider: StorageProviders = StorageProviders.FILE
     dictionaries_disabled: bool = False
     current_version: str = ""
+    app_title: str = pydantic.Field("Spellcheck API", const=True)
 
     @pydantic.validator("api_prefix")
     def api_prefix_must_be_with_slash_for_left_part_and_without_it_for_right(cls, possible_value: str) -> str:
