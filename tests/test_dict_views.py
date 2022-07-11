@@ -12,7 +12,7 @@ from whole_app.settings import SETTINGS, StorageProviders
 DICT_ENDPOINT: typing.Final[str] = f"{SETTINGS.api_prefix}/dictionaries/"
 
 
-class TestFileUserDict:
+class TestFileBasedDicts:
     """Test file based user dict provider."""
 
     @pytest.fixture(params=[StorageProviders.DUMMY, StorageProviders.FILE])
@@ -52,3 +52,18 @@ class TestFileUserDict:
         assert server_response.status_code == 200
         if SETTINGS.storage_provider == StorageProviders.FILE:
             assert fake_exc_word not in path_to_dict_file.read_text()
+
+
+class TestDummyBasedDicts:
+    """Test dummy cases."""
+
+    def test_dummy_provider_init(self, monkeypatch, app_client, faker_obj):
+        """Test init with dummy provider (though add test)."""
+        monkeypatch.setattr(SETTINGS, "storage_provider", StorageProviders.DUMMY)
+        server_response: RequestsResponse = app_client.post(
+            DICT_ENDPOINT,
+            json=models.UserDictionaryRequestWithWord(
+                user_name=faker_obj.user_name(), exception_word=faker_obj.word()
+            ).dict(),
+        )
+        assert server_response.status_code == 201
