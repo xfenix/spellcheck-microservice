@@ -41,10 +41,12 @@ def test_with_corrections_simple(app_client, faker_obj):
     assert server_response.status_code == 200
 
 
+@pytest.repeat(3)
 @pytest.mark.parametrize("wannabe_user_input", BAD_PAYLOAD)
 def test_with_exception_word_in_dictionary(monkeypatch, app_client, faker_obj, wannabe_user_input):
     """Complex tests, where we add word to dictionary and tests that it really
     excluded from the output."""
+    tested_word: typing.Final[str] = random.choice(wannabe_user_input.split())
     monkeypatch.setattr(SETTINGS, "dictionaries_storage_provider", StorageProviders.FILE)
     run_request: typing.Callable = lambda: app_client.post(
         f"{SETTINGS.api_prefix}/check/",
@@ -53,16 +55,15 @@ def test_with_exception_word_in_dictionary(monkeypatch, app_client, faker_obj, w
     parse_words: typing.Callable = lambda server_response: [
         item["word"] for item in server_response.json()["corrections"]
     ]
-    excepted_word: typing.Final[str] = wannabe_user_input.split()[0]
     user_name: typing.Final[str] = faker_obj.user_name()
     # run usual check request
     server_response: RequestsResponse = run_request()
-    assert excepted_word in parse_words(server_response)
+    assert tested_word in parse_words(server_response)
     # add word to user dictionary
     app_client.post(
         f"{SETTINGS.api_prefix}/dictionaries/",
-        json=models.UserDictionaryRequestWithWord(user_name=user_name, exception_word=excepted_word).dict(),
+        json=models.UserDictionaryRequestWithWord(user_name=user_name, exception_word=tested_word).dict(),
     )
     # and than check that excepted word not in the check output
     server_response = run_request()
-    assert excepted_word not in parse_words(server_response)
+    assert tested_word not in parse_words(server_response)
