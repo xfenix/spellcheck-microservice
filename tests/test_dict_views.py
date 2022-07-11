@@ -56,7 +56,7 @@ class TestFileAndDummyBasedDicts:
             assert fake_exc_word not in path_to_dict_file.read_text()
 
     def test_dummy_provider_init(self, monkeypatch, app_client, faker_obj):
-        """Test init with dummy provider (though add test)."""
+        """Test init with dummy provider (through add test)."""
         monkeypatch.setattr(SETTINGS, "dictionaries_storage_provider", StorageProviders.DUMMY)
         server_response: RequestsResponse = app_client.post(
             DICT_ENDPOINT,
