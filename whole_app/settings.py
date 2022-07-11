@@ -51,6 +51,7 @@ class SettingsOfMicroservice(pydantic.BaseSettings):
             logger.warning(
                 "You set cache size less then 1. In this case, the cache size will be unlimited and polute your memory."
             )
+            return 0
         return possible_value
 
     class Config:
