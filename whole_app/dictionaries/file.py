@@ -29,7 +29,7 @@ class FileProvider:
         clean_word: str = exception_word.strip().lower()
         file_content: list[str] = await self.fetch_records()
         if clean_word not in file_content:
-            file_content.append(exception_word.strip())
+            file_content.append(clean_word)
             await self._store_lines(file_content)
 
     async def remove_record(self, exception_word: str) -> None:
