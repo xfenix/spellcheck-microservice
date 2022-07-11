@@ -82,3 +82,22 @@ class TestVarious:
             assert server_response.status_code == 404
         # restore back api state to ensure other tests wont break
         importlib.reload(views)
+
+    @pytest.mark.parametrize("api_key", [None, ""])
+    def test_empty_auth_key(self, api_key):
+        """Test add dict without api key at all."""
+        server_response: RequestsResponse = TestClient(views.SPELL_APP).post(
+            DICT_ENDPOINT,
+            json=models.UserDictionaryRequestWithWord(user_name="test", exception_word="test").dict(),
+            headers={} if api_key is None else {SETTINGS.api_key_header_name: ""},
+        )
+        assert server_response.status_code == 403
+
+    def test_wrong_api_key(self):
+        """Test add dict without api key at all."""
+        server_response: RequestsResponse = TestClient(views.SPELL_APP).post(
+            DICT_ENDPOINT,
+            json=models.UserDictionaryRequestWithWord(user_name="test", exception_word="test").dict(),
+            headers={SETTINGS.api_key_header_name: SETTINGS.api_key + "wrongTrashKekJunk --- 5000"},
+        )
+        assert server_response.status_code == 401

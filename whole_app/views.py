@@ -6,6 +6,7 @@ from anyio import to_thread
 from fastapi.middleware.cors import CORSMiddleware
 
 from . import dictionaries, misc_helpers, models, spell
+from .auth import auth_via_api_key
 from .dictionaries.protocol import UserDictProtocol
 from .settings import SETTINGS
 
@@ -65,6 +66,7 @@ if not SETTINGS.dictionaries_disabled:
     async def save_word(
         request_model: models.UserDictionaryRequestWithWord,
         storage_engine: UserDictProtocol = fastapi.Depends(dictionaries.prepare_storage_engine),
+        _: str = fastapi.Depends(auth_via_api_key),
     ) -> bool:
         """Save word to user dictionary."""
         await storage_engine.prepare(request_model.user_name).save_record(request_model.exception_word)
@@ -77,6 +79,7 @@ if not SETTINGS.dictionaries_disabled:
     async def delete_word(
         request_model: models.UserDictionaryRequestWithWord,
         storage_engine: UserDictProtocol = fastapi.Depends(dictionaries.prepare_storage_engine),
+        _: str = fastapi.Depends(auth_via_api_key),
     ) -> bool:
         """Save word to user dictionary."""
         await storage_engine.prepare(request_model.user_name).remove_record(request_model.exception_word)

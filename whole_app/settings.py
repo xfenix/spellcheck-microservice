@@ -23,8 +23,10 @@ class StorageProviders(enum.Enum):
 class SettingsOfMicroservice(pydantic.BaseSettings):
     """Literally no one cares."""
 
-    api_key: str = "DefaultAPIKEYValue1"
+    app_title: str = pydantic.Field("Spellcheck API", const=True)
     service_name: str = "spellcheck-microservice"
+    api_key: str = ""
+    api_key_header_name: str = "Api-Key"
     enable_cors: bool = True
     structured_logging: bool = True
     workers: pydantic.conint(gt=0, lt=301) = 8  # type: ignore
@@ -40,7 +42,6 @@ class SettingsOfMicroservice(pydantic.BaseSettings):
     dictionaries_storage_provider: StorageProviders = StorageProviders.FILE
     dictionaries_disabled: bool = False
     current_version: str = ""
-    app_title: str = pydantic.Field("Spellcheck API", const=True)
 
     @pydantic.validator("api_prefix")
     def api_prefix_must_be_with_slash_for_left_part_and_without_it_for_right(cls, possible_value: str) -> str:
@@ -55,6 +56,13 @@ class SettingsOfMicroservice(pydantic.BaseSettings):
                 "You set cache size less then 1. In this case, the cache size will be unlimited and polute your memory."
             )
             return 0
+        return possible_value
+
+    @pydantic.validator("api_key")
+    def warn_about_empty_api_key(cls, possible_value: str) -> str:
+        """Warn about empty API key."""
+        if not possible_value:
+            logger.warning("You set empty API key. This is not recommended.")
         return possible_value
 
     @pydantic.root_validator

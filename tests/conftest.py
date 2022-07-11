@@ -1,6 +1,7 @@
 """Basic programmatic fixtures for views."""
 import pathlib
 import tempfile
+import typing
 
 import faker
 import pytest
@@ -23,13 +24,17 @@ def patch_file_provider_for_temp(monkeypatch):
         yield patcher.setattr(SETTINGS, "dictionaries_path", pathlib.Path(tmp_dir_name))
 
 
+# pylint: disable=redefined-outer-name
 @pytest.fixture
-def app_client(monkeypatch):
+def app_client(monkeypatch, faker_obj):
     """Fake client with patched fake storage.
 
     Also in a form of context manager it allow us to test startup events
     on every test.
     """
+    fake_api_key: typing.Final[str] = faker_obj.password()
     with TestClient(views.SPELL_APP) as local_client, monkeypatch.context() as patcher:
         patcher.setattr(SETTINGS, "dictionaries_storage_provider", StorageProviders.DUMMY)
+        patcher.setattr(SETTINGS, "api_key", fake_api_key)
+        local_client.headers.update({SETTINGS.api_key_header_name: fake_api_key})
         yield local_client

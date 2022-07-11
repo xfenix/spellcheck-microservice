@@ -21,6 +21,8 @@ RUN poetry config virtualenvs.create false
 RUN poetry install
 RUN rm poetry.lock
 RUN pip uninstall -y poetry
+RUN mkdir /data/
+RUN chmod 777 /data/
 
 FROM python:3.10.5-slim as runtime
 ARG USERNAME

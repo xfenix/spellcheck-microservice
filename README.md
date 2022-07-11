@@ -8,7 +8,7 @@ This is a microservice designed to check the spelling of words. Based on [pyench
 Current available languages are: ru_RU, en_US, es_ES, fr_FR, de_DE, pt_PT
 
 ## Quickstart
-* `docker run  -p 10113:10113 -t xfenix/spellcheck-microservice:latest --mount source=spellcheck-dicts,target=/data/`
+* `docker run  -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:latest`
 * open http://localhost:10113/docs/ for more information about REST API
 * main REST endpoint you will be needed is http://localhost:10113/api/check/
 
@@ -25,6 +25,7 @@ You can change config of the service by changing the environment variables. Here
 * `SPELLCHECK_DICTIONARIES_DISABLED` switches off user dictionaries API (default `False`)
 * `SPELLCHECK_DICTIONARIES_PROVIDER` define user dicts storage provider (default `file`, available: `file`, `dummy`)
 * `SPELLCHECK_DICTIONARIES_PATH` define directory where user dicts is stored (default `/data/`)
+* `SPELLCHECK_API_KEY` define api key for users dictionaries mostly. Please, provide, if you want to enable user dicts.
 
 ## Development
 ### Quickstart
