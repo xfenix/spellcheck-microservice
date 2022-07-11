@@ -6,23 +6,19 @@ from . import models
 from .settings import SETTINGS
 
 
-_CACHE_STORAGE: dict[str, list[str]] = pylru.lrucache(SETTINGS.cache_size)
+_CACHE_STORAGE: dict[str, list[str]] = pylru.lrucache(SETTINGS.cache_size) if SETTINGS.cache_size > 0 else {}
 
 
 class SpellCheckService:
     """Spellcheck service class."""
 
-    _language: models.AvailableLanguagesType
+    _input_text: str
     _spellcheck_engine: SpellChecker
 
-    def __init__(self, request_payload: models.SpellCheckRequest) -> None:
-        """Initialize class from user request."""
-        self._language = request_payload.language
-        self._input_text = request_payload.text
-
-    def prepare(self) -> "SpellCheckService":
+    def prepare(self, request_payload: models.SpellCheckRequest) -> "SpellCheckService":
         """Initialize machinery."""
-        self._spellcheck_engine = SpellChecker(self._language)
+        self._input_text = request_payload.text
+        self._spellcheck_engine = SpellChecker(request_payload.language)
         return self
 
     def run_check(self) -> list[models.OneCorrection]:

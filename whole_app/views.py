@@ -4,7 +4,8 @@ import typing
 import fastapi
 from fastapi.middleware.cors import CORSMiddleware
 
-from . import misc_helpers, models, spell
+from . import dictionaries, misc_helpers, models, spell
+from .dictionaries.protocol import UserDictProtocol
 from .settings import SETTINGS
 
 
@@ -22,6 +23,13 @@ if SETTINGS.enable_cors:
     )
 
 
+@SPELL_APP.on_event("startup")
+def startup() -> None:
+    """Initialize storage."""
+    dictionaries.init_storage()
+    misc_helpers.init_logger()
+
+
 @SPELL_APP.post(f"{SETTINGS.api_prefix}/check/", summary="Check spelling")
 def spell_check_main_endpoint(
     request_payload: models.SpellCheckRequest, spell_service: spell.SpellCheckService = fastapi.Depends()
@@ -29,11 +37,39 @@ def spell_check_main_endpoint(
     """Check spelling of text for exact language."""
     return models.SpellCheckResponse(
         **request_payload.dict(),
-        corrections=spell_service.prepare().run_check(),
+        corrections=spell_service.prepare(request_payload).run_check(),
     )
 
 
 @SPELL_APP.get(f"{SETTINGS.api_prefix}/health/", summary="Regular healthcheck api")
 async def check_health_of_service() -> models.HealthCheckResponse:
     """Check health of service."""
-    return models.HealthCheckResponse(version=CURRENT_APP_VERSION)
+    return models.HealthCheckResponse(version=misc_helpers.parse_version_from_local_file())
+
+
+if not SETTINGS.dictionaries_disabled:
+
+    @SPELL_APP.post(
+        f"{SETTINGS.api_prefix}/dictionaries/",
+        summary="Add word to user dictionary",
+        status_code=201,
+    )
+    async def save_word(
+        request_model: models.UserDictionaryRequestWithWord,
+        storage_engine: UserDictProtocol = fastapi.Depends(dictionaries.prepare_storage_engine),
+    ) -> bool:
+        """Save word to user dictionary."""
+        await storage_engine.prepare(request_model.user_name).save_record(request_model.exception_word)
+        return True
+
+    @SPELL_APP.delete(
+        f"{SETTINGS.api_prefix}/dictionaries/",
+        summary="Remove word from user dictionary",
+    )
+    async def delete_word(
+        request_model: models.UserDictionaryRequestWithWord,
+        storage_engine: UserDictProtocol = fastapi.Depends(dictionaries.prepare_storage_engine),
+    ) -> bool:
+        """Save word to user dictionary."""
+        await storage_engine.prepare(request_model.user_name).remove_record(request_model.exception_word)
+        return True

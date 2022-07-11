@@ -1,5 +1,5 @@
 run-dev:
-	uvicorn whole_app.__main__:SPELL_APP --reload
+	SPELLCHECK_PATH_TO_DICTIONARIES=/tmp/sm-dicts/ uvicorn whole_app.__main__:SPELL_APP --reload
 build:
 	docker build -t spellcheck-microservice .
 prepare-buildx:

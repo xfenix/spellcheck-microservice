@@ -4,10 +4,7 @@ import typing
 
 import pydantic
 
-from .settings import SETTINGS
-
-
-AvailableLanguagesType = typing.Literal["ru_RU", "en_US", "es_ES", "fr_FR", "de_DE", "pt_PT"]
+from .settings import SETTINGS, AvailableLanguages, AvailableLanguagesType
 
 
 class OneCorrection(pydantic.BaseModel):
@@ -32,10 +29,24 @@ class SpellCheckResponse(SpellCheckRequest):
     corrections: list[OneCorrection]
 
 
+class UserDictionaryRequest(pydantic.BaseModel):
+    """Request model for user dictionary request."""
+
+    user_name: pydantic.constr(regex="^[a-zA-Z0-9-_]*$", min_length=3, max_length=60) = pydantic.Field(  # type: ignore
+        ..., example="username"
+    )
+
+
+class UserDictionaryRequestWithWord(UserDictionaryRequest):
+    """Request model for user dictionary request with word."""
+
+    exception_word: str
+
+
 class HealthCheckResponse(pydantic.BaseModel):
     """This model for health check response."""
 
     service_name: str = SETTINGS.service_name
-    supported_languages: tuple[str, ...] = typing.get_args(AvailableLanguagesType)
+    supported_languages: tuple[str, ...] = AvailableLanguages
     version: str
     status: typing.Literal["ok", "notok"] = "ok"

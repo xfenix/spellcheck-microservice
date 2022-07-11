@@ -27,6 +27,7 @@ types-requests = "*"
 Faker = "*"
 vulture = "*"
 types-toml = "*"
+pytest-repeat = "*"
 
 [tool.isort]
 line_length = 120
@@ -47,7 +48,7 @@ addopts = "--cov . --cov-report term-missing"
 
 [tool.pylint.settings]
 max-line-length = 120
-disable=["logging-fstring-interpolation", "too-few-public-methods", "no-name-in-module"]
+disable=["logging-fstring-interpolation", "too-few-public-methods", "no-name-in-module", "wrong-import-order"]
 
 [tool.mypy]
 ignore_missing_imports = true

@@ -14,14 +14,14 @@ Current available languages are: ru_RU, en_US, es_ES, fr_FR, de_DE, pt_PT
 
 ## Configuration
 You can change config of the service by changing the environment variables. Here is a list of them:
-* `SPELLCHECK_MICROSERVICE_WORKERS` define application server workers count (default `8`). If you plan to use k8s and only scale with replica sets, you might want to reduce this value to 1.
-* `SPELLCHECK_MICROSERVICE_PORT` binding port (default `10113`)
-* `SPELLCHECK_MICROSERVICE_API_PREFIX` define all API's prefix (default `/api/`)
-* `SPELLCHECK_MICROSERVICE_DOCS_URL` define swagger/documentation prefix (default `/docs/`)
-* `SPELLCHECK_MICROSERVICE_MAX_SUGGESTIONS` defines how many maximum suggestions for each word will be available (default is `None` means unlimited, can be any valid integer)
-* `SPELLCHECK_MICROSERVICE_MINIMUM_LENGTH_FOR_CORRECTION` if the word length is less than this option, the word will not be checked (default `3`)
-* `SPELLCHECK_MICROSERVICE_CACHE_SIZE` define LRU cache size for misspeled word/suggestions cache (default `10000`)
-* `SPELLCHECK_MICROSERVICE_ENABLE_CORS` defines if CORS is enabled (default `True`, in docker container is `False`)
+* `SPELLCHECK_WORKERS` define application server workers count (default `8`). If you plan to use k8s and only scale with replica sets, you might want to reduce this value to 1 (allowed range from `1` to `300`).
+* `SPELLCHECK_PORT` binding port (default `10113`, allowed range from `1024` to `65535`).
+* `SPELLCHECK_API_PREFIX` define all API's prefix (default `/api/`)
+* `SPELLCHECK_DOCS_URL` define swagger/documentation prefix (default `/docs/`)
+* `SPELLCHECK_MAX_SUGGESTIONS` defines how many maximum suggestions for each word will be available (default is `None` means unlimited, can be any valid integer)
+* `SPELLCHECK_MINIMUM_LENGTH_FOR_CORRECTION` if the word length is less than this option, the word will not be checked (default `3`)
+* `SPELLCHECK_CACHE_SIZE` define LRU cache size for misspeled word/suggestions cache (default `10000`, any value less than `1` makes the cache size unlimited, so be careful with this option)
+* `SPELLCHECK_ENABLE_CORS` defines if CORS is enabled (default `True`, in docker container is `False`)
 
 ## Development
 ### Quickstart
