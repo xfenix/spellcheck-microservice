@@ -23,6 +23,8 @@ def get_memorized_suggestions(word_spellcheck_result: SpellChecker) -> list[str]
 class SpellCheckService:
     """Spellcheck service class."""
 
+    __slots__ = ("_input_text", "_spellcheck_engine", "_exclusion_words")
+
     _input_text: str
     _spellcheck_engine: SpellChecker
     _exclusion_words: list[str]
