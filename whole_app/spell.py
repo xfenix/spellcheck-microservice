@@ -25,6 +25,19 @@ class SpellCheckService:
         self._spellcheck_engine = SpellChecker(request_payload.language)
         return self
 
+    def get_memorized_suggestions(self, word_spellcheck_result: SpellChecker) -> list[str]:
+        """Try to get suggestions from lru cache or ask SpellChecker for them
+        and then add to cache."""
+        misspelled_suggestions: list[str]
+        if word_spellcheck_result.word in _CACHE_STORAGE:
+            misspelled_suggestions = _CACHE_STORAGE[word_spellcheck_result.word]
+        else:
+            misspelled_suggestions = word_spellcheck_result.suggest()
+            _CACHE_STORAGE[word_spellcheck_result.word] = misspelled_suggestions
+        return (
+            misspelled_suggestions[: SETTINGS.max_suggestions] if SETTINGS.max_suggestions else misspelled_suggestions
+        )
+
     def run_check(self) -> list[models.OneCorrection]:
         """Main spellcheck procedure."""
         corrections_output: list[models.OneCorrection] = []
@@ -32,20 +45,12 @@ class SpellCheckService:
         for one_result in self._spellcheck_engine:
             if one_result.word.lower() in self._exclusion_words:
                 continue
-            misspelled_suggestions: list[str]
-            if one_result.word in _CACHE_STORAGE:
-                misspelled_suggestions = _CACHE_STORAGE[one_result.word]
-            else:
-                misspelled_suggestions = one_result.suggest()
-                _CACHE_STORAGE[one_result.word] = misspelled_suggestions
             corrections_output.append(
                 models.OneCorrection(
                     first_position=one_result.wordpos,
                     last_position=one_result.wordpos + len(one_result.word),
                     word=one_result.word,
-                    suggestions=misspelled_suggestions[: SETTINGS.max_suggestions]
-                    if SETTINGS.max_suggestions
-                    else misspelled_suggestions,
+                    suggestions=self.get_memorized_suggestions(one_result),
                 )
             )
         return corrections_output

@@ -30,7 +30,7 @@ You can change config of the service by changing the environment variables. Here
 ## Development
 ### Quickstart
 * Clone this repo
-* For MacOS X `brew install pyenchant`
+* For MacOS X `brew install enchant`
 * `poetry install`
 * `poetry shell`
 * And `make` will run local development server
