@@ -5,12 +5,13 @@
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 [![Imports: isort](https://img.shields.io/badge/imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://timothycrosley.github.io/isort/)<br>
 This is a microservice designed to check the spelling of words. Based on [pyenchant](https://github.com/pyenchant/pyenchant). Exposes a REST API.<br>
-Current available languages are: ru_RU, en_US, es_ES, fr_FR, de_DE, pt_PT
+Current available languages are: ru_RU, en_US, es_ES, fr_FR, de_DE, pt_PT<br>
+Also it supports feature called «user dictionaries» — user can add his own word-exceptions to personal dictionary.
 
 ## Quickstart
-* `docker run  -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:latest`
-* open http://localhost:10113/docs/ for more information about REST API
-* main REST endpoint you will be needed is http://localhost:10113/api/check/
+* `docker run  -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:2.0.0`
+* check http://localhost:10113/docs/ for full REST documentation
+* main REST endpoint you will be needed is http://localhost:10113/api/check/ (this will be available without authorization)
 
 ## Configuration
 You can change config of the service by changing the environment variables. Here is a list of them:
@@ -24,7 +25,7 @@ You can change config of the service by changing the environment variables. Here
 * `SPELLCHECK_ENABLE_CORS` defines if CORS is enabled (default `True`, in docker container is `False`)
 * `SPELLCHECK_DICTIONARIES_DISABLED` switches off user dictionaries API (default `False`)
 * `SPELLCHECK_DICTIONARIES_PROVIDER` define user dicts storage provider (default `file`, available: `file`, `dummy`)
-* `SPELLCHECK_DICTIONARIES_PATH` define directory where user dicts is stored (default `/data/`)
+* `SPELLCHECK_DICTIONARIES_PATH` define directory where user dicts is stored (default `/data/`, this is inner directory in the docker image, please map it to volume as it shown in the quickstart part of this readme)
 * `SPELLCHECK_API_KEY` define api key for users dictionaries mostly. Please, provide, if you want to enable user dicts.
 
 ## Development

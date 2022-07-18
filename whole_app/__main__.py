@@ -16,7 +16,7 @@ class GunicornCustomApplication(BaseApplication):
 
     def load_config(self) -> None:
         """Load configuration from memory."""
-        _options: dict = {
+        _options: dict[str, str | int] = {
             "worker_class": "uvicorn.workers.UvicornWorker",
             "bind": f"0.0.0.0:{SETTINGS.port}",
             "workers": SETTINGS.workers,
