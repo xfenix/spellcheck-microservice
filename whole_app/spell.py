@@ -9,17 +9,6 @@ from .settings import SETTINGS
 _CACHE_STORAGE: dict[str, list[str]] = pylru.lrucache(SETTINGS.cache_size) if SETTINGS.cache_size > 0 else {}
 
 
-def get_memorized_suggestions(word_spellcheck_result: SpellChecker) -> list[str]:
-    """Try to get suggestions from lru cache or ask SpellChecker for them."""
-    misspelled_suggestions: list[str]
-    if word_spellcheck_result.word in _CACHE_STORAGE:
-        misspelled_suggestions = _CACHE_STORAGE[word_spellcheck_result.word]
-    else:
-        misspelled_suggestions = word_spellcheck_result.suggest()
-        _CACHE_STORAGE[word_spellcheck_result.word] = misspelled_suggestions
-    return misspelled_suggestions[: SETTINGS.max_suggestions] if SETTINGS.max_suggestions else misspelled_suggestions
-
-
 class SpellCheckService:
     """Spellcheck service class."""
 
@@ -38,6 +27,19 @@ class SpellCheckService:
         self._spellcheck_engine = SpellChecker(request_payload.language)
         return self
 
+    @staticmethod
+    def get_memorized_suggestions(word_spellcheck_result: SpellChecker) -> list[str]:
+        """Try to get suggestions from lru cache or ask SpellChecker for them."""
+        misspelled_suggestions: list[str]
+        if word_spellcheck_result.word in _CACHE_STORAGE:
+            misspelled_suggestions = _CACHE_STORAGE[word_spellcheck_result.word]
+        else:
+            misspelled_suggestions = word_spellcheck_result.suggest()
+            _CACHE_STORAGE[word_spellcheck_result.word] = misspelled_suggestions
+        return (
+            misspelled_suggestions[: SETTINGS.max_suggestions] if SETTINGS.max_suggestions else misspelled_suggestions
+        )
+
     def run_check(self) -> list[models.OneCorrection]:
         """Main spellcheck procedure."""
         corrections_output: list[models.OneCorrection] = []
@@ -50,7 +52,7 @@ class SpellCheckService:
                     first_position=one_result.wordpos,
                     last_position=one_result.wordpos + len(one_result.word),
                     word=one_result.word,
-                    suggestions=get_memorized_suggestions(one_result),
+                    suggestions=self.get_memorized_suggestions(one_result),
                 )
             )
         return corrections_output
