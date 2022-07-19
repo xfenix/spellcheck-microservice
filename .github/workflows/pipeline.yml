@@ -87,7 +87,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          python -c "import re, pathlib; _p = pathlib.Path('README.md'); _p.write_text(re.sub(r'\#\# Development.*', r'', _p.read_text(), flags=re.I | re.S).strip())"
+          make prepare-dockerhub-readme
       - uses: peter-evans/dockerhub-description@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
