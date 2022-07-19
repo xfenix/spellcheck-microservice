@@ -21,7 +21,7 @@ class StorageProviders(enum.Enum):
 
 
 class SettingsOfMicroservice(pydantic.BaseSettings):
-    """Literally no one cares."""
+    """Main strict and totally validated settings of whole project."""
 
     app_title: str = pydantic.Field("Spellcheck API", const=True)
     service_name: str = "spellcheck-microservice"
