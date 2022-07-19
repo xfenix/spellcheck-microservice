@@ -81,10 +81,16 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      # - name: Update docker Hub Description
-      #   uses: peter-evans/dockerhub-description@v3
-      #   with:
-      #     username: ${{ secrets.DOCKER_HUB_USERNAME }}
-      #     password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-      #     repository: ${{ secrets.DOCKER_HUB_USERNAME }}/spellcheck-microservice
-      #     short-description: ${{ github.event.repository.description }}
+  update-dockerhub-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          pip3 install poetry
+          python -c "import re, pathlib; _p = pathlib.Path('README.md'); _p.write_text(re.sub(r'\#\# Development.*', r'', _p.read_text(), flags=re.I | re.S).strip())"
+      - uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          repository: ${{ secrets.DOCKER_HUB_USERNAME }}/spellcheck-microservice
+          readme-filepath: ./README.md
