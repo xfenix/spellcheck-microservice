@@ -27,6 +27,7 @@ You can change config of the service by changing the environment variables. Here
 * `SPELLCHECK_DICTIONARIES_PROVIDER` define user dicts storage provider (default `file`, available: `file`, `dummy`)
 * `SPELLCHECK_DICTIONARIES_PATH` define directory where user dicts is stored (default `/data/`, this is inner directory in the docker image, please map it to volume as it shown in the quickstart part of this readme)
 * `SPELLCHECK_API_KEY` define api key for users dictionaries mostly. Please, provide, if you want to enable user dicts.
+* `SPELLCHECK_SENTRY_DSN` define Sentry DSN (default is `""` means no sentry integration)
 
 ## Development
 ### Quickstart
