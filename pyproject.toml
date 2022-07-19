@@ -17,6 +17,7 @@ toml = "*"
 pylru = "*"
 aiopath = "*"
 anyio = "*"
+sentry-sdk = "^1.7.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"

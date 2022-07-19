@@ -3,7 +3,6 @@ import typing
 
 import fastapi
 from anyio import to_thread
-from fastapi.middleware.cors import CORSMiddleware
 
 from . import dictionaries, misc_helpers, models, spell
 from .auth import auth_via_api_key
@@ -18,6 +17,8 @@ SPELL_APP: typing.Final[fastapi.FastAPI] = fastapi.FastAPI(
     openapi_url=f"{SETTINGS.api_prefix}/openapi.json",
 )
 if SETTINGS.enable_cors:
+    from fastapi.middleware.cors import CORSMiddleware
+
     SPELL_APP.add_middleware(
         CORSMiddleware,
         allow_origins=("*",),
@@ -25,6 +26,12 @@ if SETTINGS.enable_cors:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+if SETTINGS.sentry_dsn:
+    import sentry_sdk
+    from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
+
+    sentry_sdk.init(dsn=SETTINGS.sentry_dsn)
+    SPELL_APP.add_middleware(SentryAsgiMiddleware)
 
 
 @SPELL_APP.on_event("startup")

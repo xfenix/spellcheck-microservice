@@ -68,7 +68,7 @@ class TestFileAndDummyBasedDicts:
 
 
 class TestVarious:
-    """Various things."""
+    """Various dict api things."""
 
     def test_disabled_dictionary_views(self, monkeypatch):
         """Test views with dictionaries_disabled SETTINGS option."""

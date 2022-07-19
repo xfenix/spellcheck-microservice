@@ -25,6 +25,7 @@ class SettingsOfMicroservice(pydantic.BaseSettings):
 
     app_title: str = pydantic.Field("Spellcheck API", const=True)
     service_name: str = "spellcheck-microservice"
+    sentry_dsn: str = ""
     api_key: str = ""
     api_key_header_name: str = "Api-Key"
     enable_cors: bool = True
