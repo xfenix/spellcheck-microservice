@@ -43,6 +43,9 @@ class SettingsOfMicroservice(pydantic.BaseSettings):
     dictionaries_storage_provider: StorageProviders = StorageProviders.FILE
     dictionaries_disabled: bool = False
     current_version: str = ""
+    username_min_length: int = 3
+    username_max_length: int = 60
+    username_regex: str = r"^[a-zA-Z0-9-_]*$"
 
     @pydantic.validator("api_prefix")
     def api_prefix_must_be_with_slash_for_left_part_and_without_it_for_right(cls, possible_value: str) -> str:
