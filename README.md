@@ -43,4 +43,3 @@ Please check [./Makefile](./Makefile) for more details
 
 ### Troubleshooting
 For MacOS X on Apple Silicon add `PYENCHANT_LIBRARY_PATH=/opt/homebrew/lib/libenchant-2.dylib` to your `.zprofile`
-
