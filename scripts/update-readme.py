@@ -36,8 +36,8 @@ def run_main():
         )
     automatic_config_readme: str = "  \n".join(pack_of_readme_lines)
     new_content = re.sub(
-        r"(.*Here is a list of them\:)(.*)(\#\# Development.*)",
-        r"\0\n" + automatic_config_readme + r"\n\n\2",
+        r"(.*Here is a list of them\:).*(\#\# Development.*)",
+        r"\1\n" + automatic_config_readme + r"\n\n\2",
         new_content,
         flags=re.I | re.M | re.S,
     )
