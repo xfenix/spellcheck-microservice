@@ -87,7 +87,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          make prepare-dockerhub-readme
+          make update-dockerhub-readme
       - uses: peter-evans/dockerhub-description@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}

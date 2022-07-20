@@ -24,27 +24,59 @@ class SettingsOfMicroservice(pydantic.BaseSettings):
     """Main strict and totally validated settings of whole project."""
 
     app_title: str = pydantic.Field("Spellcheck API", const=True)
-    service_name: str = "spellcheck-microservice"
-    sentry_dsn: str = ""
-    api_key: str = ""
+    service_name: str = pydantic.Field("spellcheck-microservice", const=True)
+    sentry_dsn: str = pydantic.Field("", description="Sentry DSN for integration. Empty field disables integration")
+    api_key: str = pydantic.Field(
+        "",
+        description=(
+            "define api key for users dictionaries mostly. "
+            "Please, provide, if you want to enable user dictionaries API"
+        ),
+    )
     api_key_header_name: str = "Api-Key"
-    enable_cors: bool = True
-    structured_logging: bool = True
-    workers: pydantic.conint(gt=0, lt=301) = 8  # type: ignore
-    port: pydantic.conint(gt=1_023, lt=65_536) = 10_113  # type: ignore
-    cache_size: int = 10_000
-    api_prefix: str = "/api/"
-    docs_url: str = "/docs/"
-    max_suggestions: pydantic.conint(gt=0) | None = None  # type: ignore
+    enable_cors: bool = pydantic.Field(
+        True, description="enable CORS for all endpoints. In docker container this option is disabled"
+    )
+    structured_logging: bool = pydantic.Field(True, description="enables structured (json) logging")
+    workers: pydantic.conint(gt=0, lt=301) = pydantic.Field(  # type: ignore
+        8,
+        description=(
+            "define application server workers count. "
+            "If you plan to use k8s and only scale with replica sets, you might want to reduce this value to `1`"
+        ),
+    )
+    port: pydantic.conint(gt=1_023, lt=65_536) = pydantic.Field(10_113, description="binding port")  # type: ignore
+    cache_size: int = pydantic.Field(
+        10_000,
+        description=(
+            "define LRU cache size for misspelled word/suggestions cache. "
+            "Any value less than `1` makes the cache size unlimited, so be careful with this option"
+        ),
+    )
+    api_prefix: str = pydantic.Field("/api/", description="define all API's URL prefix")
+    docs_url: str = pydantic.Field("/docs/", description="define documentation (swagger) URL prefix")
+    max_suggestions: pydantic.conint(gt=0) | None = pydantic.Field(  # type: ignore
+        None,
+        description="defines how many maximum suggestions for each word will be available. `None` means unlimitied",
+    )
     # version from this file will be available in the health check response
     # and version in the file itself will be updated in the CI through poetry version command
     path_to_version_file: pathlib.Path = pathlib.Path(__file__).parent.parent / "pyproject.toml"
-    dictionaries_path: pathlib.Path = pathlib.Path("/data/")
-    dictionaries_storage_provider: StorageProviders = StorageProviders.FILE
-    dictionaries_disabled: bool = False
+    dictionaries_path: pathlib.Path = pydantic.Field(
+        pathlib.Path("/data/"),
+        description=(
+            "define directory where user dicts is stored. "
+            "This is inner directory in the docker image, please map it to volume as it "
+            "shown in the quickstart part of this readme"
+        ),
+    )
+    dictionaries_storage_provider: StorageProviders = pydantic.Field(
+        StorageProviders.FILE, description="define wich engine will store user dictionaries"
+    )
+    dictionaries_disabled: bool = pydantic.Field(False, description="switches off user dictionaries API no matter what")
     current_version: str = ""
-    username_min_length: int = 3
-    username_max_length: int = 60
+    username_min_length: int = pydantic.Field(3, description="minimum length of username")
+    username_max_length: int = pydantic.Field(60, description="maximum length of username")
     username_regex: str = r"^[a-zA-Z0-9-_]*$"
 
     @pydantic.validator("api_prefix")

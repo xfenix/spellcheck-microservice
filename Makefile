@@ -26,5 +26,7 @@ check-languages:
 	python -c "import enchant; print(enchant.Broker().list_languages());"
 check-languages-docker:
 	docker run -it spellcheck-microservice python -c "import enchant; print(enchant.Broker().list_languages());"
-prepare-dockerhub-readme:
-	python -c "import re, pathlib; _p = pathlib.Path('README.md'); _p.write_text(re.sub(r'\#\# Development.*', r'', _p.read_text(), flags=re.I | re.S).strip())"
+update-readme:
+	./scripts/update-readme.py
+update-dockerhub-readme:
+	./scripts/update-dockerhub-readme.py
