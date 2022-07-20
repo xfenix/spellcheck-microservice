@@ -14,6 +14,7 @@ Also it supports feature called «user dictionaries» — user can add his own w
 * main REST endpoint you will be needed is http://localhost:10113/api/check/ (this will be available without authorization)
 
 ## Configuration
+### Config options
 You can change config of the service by changing the environment variables. Here is a list of them:
 * `SPELLCHECK_SENTRY_DSN` Sentry DSN for integration. Empty field disables integration. Default is `''`
 * `SPELLCHECK_API_KEY` define api key for users dictionaries mostly. Please, provide, if you want to enable user dictionaries API. Default is `''`
@@ -30,6 +31,27 @@ You can change config of the service by changing the environment variables. Here
 * `SPELLCHECK_DICTIONARIES_DISABLED` switches off user dictionaries API no matter what. Default is `False`
 * `SPELLCHECK_USERNAME_MIN_LENGTH` minimum length of username. Default is `3`
 * `SPELLCHECK_USERNAME_MAX_LENGTH` maximum length of username. Default is `60`
+
+## Deployment
+Note: all docker & docker-compose variants use named volumes to store user dictionaries.
+1. As regular docker container `docker run  -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:2.1.0`
+1. As docker-compose configuration:
+   1. Save this example configuration as `docker-compose.yml`:
+        ```yml
+        version: "3.9"
+        services:
+        spellcheck:
+            image: xfenix/spellcheck-microservice:2.1.0
+            ports:
+            - "10113:10113"
+            volumes:
+            - spellcheck-dicts:/data/
+
+        volumes:
+            spellcheck-dicts:
+        ```
+   1. Then run `docker-compose up`
+1. TODO: As a helm chart
 
 ## Development
 ### Quickstart
