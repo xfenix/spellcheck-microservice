@@ -53,6 +53,9 @@ Note: all docker & docker-compose variants use named volumes to store user dicti
    1. Then run `docker-compose up`
 1. TODO: As a helm chart
 
+## Changelog
+You cand find it here https://github.com/xfenix/spellcheck-microservice/releases
+
 ## Development
 ### Quickstart
 * Clone this repo
