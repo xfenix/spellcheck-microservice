@@ -87,6 +87,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
+          pip3 install poetry
+          poetry install
           make update-readme
           make update-dockerhub-readme
       - uses: peter-evans/dockerhub-description@v3
