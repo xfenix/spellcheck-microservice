@@ -15,8 +15,8 @@ Also it supports feature called «user dictionaries» — user can add his own w
 
 ## Configuration
 You can change config of the service by changing the environment variables. Here is a list of them:
-`SPELLCHECK_SENTRY_DSN` Sentry DSN for integration. Empty field disables integration. Default is ``  
-`SPELLCHECK_API_KEY` define api key for users dictionaries mostly. Please, provide, if you want to enable user dictionaries API. Default is ``  
+`SPELLCHECK_SENTRY_DSN` Sentry DSN for integration. Empty field disables integration. Default is `''`  
+`SPELLCHECK_API_KEY` define api key for users dictionaries mostly. Please, provide, if you want to enable user dictionaries API. Default is `''`  
 `SPELLCHECK_ENABLE_CORS` enable CORS for all endpoints. In docker container this option is disabled. Default is `True`  
 `SPELLCHECK_STRUCTURED_LOGGING` enables structured (json) logging. Default is `True`  
 `SPELLCHECK_WORKERS` define application server workers count. If you plan to use k8s and only scale with replica sets, you might want to reduce this value to `1`. Default is `8`, allowed values from `1`to `300`  

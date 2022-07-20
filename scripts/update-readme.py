@@ -24,6 +24,8 @@ def run_main():
             print("-", settings_env_key, "not be available in README")
             continue
         default_value: any = props["default"] if "default" in props else None
+        if default_value == "":
+            default_value = "''"
         allowed_restrictions: str = (
             ""
             if "exclusiveMinimum" not in props
