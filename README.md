@@ -15,21 +15,21 @@ Also it supports feature called «user dictionaries» — user can add his own w
 
 ## Configuration
 You can change config of the service by changing the environment variables. Here is a list of them:
-`SPELLCHECK_SENTRY_DSN` Sentry DSN for integration. Empty field disables integration. Default is `''`  
-`SPELLCHECK_API_KEY` define api key for users dictionaries mostly. Please, provide, if you want to enable user dictionaries API. Default is `''`  
-`SPELLCHECK_ENABLE_CORS` enable CORS for all endpoints. In docker container this option is disabled. Default is `True`  
-`SPELLCHECK_STRUCTURED_LOGGING` enables structured (json) logging. Default is `True`  
-`SPELLCHECK_WORKERS` define application server workers count. If you plan to use k8s and only scale with replica sets, you might want to reduce this value to `1`. Default is `8`, allowed values from `1`to `300`  
-`SPELLCHECK_PORT` binding port. Default is `10113`, allowed values from `1024`to `65535`  
-`SPELLCHECK_CACHE_SIZE` define LRU cache size for misspelled word/suggestions cache. Any value less than `1` makes the cache size unlimited, so be careful with this option. Default is `10000`  
-`SPELLCHECK_API_PREFIX` define all API's URL prefix. Default is `/api/`  
-`SPELLCHECK_DOCS_URL` define documentation (swagger) URL prefix. Default is `/docs/`  
-`SPELLCHECK_MAX_SUGGESTIONS` defines how many maximum suggestions for each word will be available. `None` means unlimitied. Default is `None`, allowed values from `1`  
-`SPELLCHECK_DICTIONARIES_PATH` define directory where user dicts is stored. This is inner directory in the docker image, please map it to volume as it shown in the quickstart part of this readme. Default is `/data`  
-`SPELLCHECK_DICTIONARIES_STORAGE_PROVIDER` define wich engine will store user dictionaries. Default is `file`  
-`SPELLCHECK_DICTIONARIES_DISABLED` switches off user dictionaries API no matter what. Default is `False`  
-`SPELLCHECK_USERNAME_MIN_LENGTH` minimum length of username. Default is `3`  
-`SPELLCHECK_USERNAME_MAX_LENGTH` maximum length of username. Default is `60`
+* `SPELLCHECK_SENTRY_DSN` Sentry DSN for integration. Empty field disables integration. Default is `''`
+* `SPELLCHECK_API_KEY` define api key for users dictionaries mostly. Please, provide, if you want to enable user dictionaries API. Default is `''`
+* `SPELLCHECK_ENABLE_CORS` enable CORS for all endpoints. In docker container this option is disabled. Default is `True`
+* `SPELLCHECK_STRUCTURED_LOGGING` enables structured (json) logging. Default is `True`
+* `SPELLCHECK_WORKERS` define application server workers count. If you plan to use k8s and only scale with replica sets, you might want to reduce this value to `1`. Default is `8`, allowed values from `1`to `300`
+* `SPELLCHECK_PORT` binding port. Default is `10113`, allowed values from `1024`to `65535`
+* `SPELLCHECK_CACHE_SIZE` define LRU cache size for misspelled word/suggestions cache. Any value less than `1` makes the cache size unlimited, so be careful with this option. Default is `10000`
+* `SPELLCHECK_API_PREFIX` define all API's URL prefix. Default is `/api/`
+* `SPELLCHECK_DOCS_URL` define documentation (swagger) URL prefix. Default is `/docs/`
+* `SPELLCHECK_MAX_SUGGESTIONS` defines how many maximum suggestions for each word will be available. `None` means unlimitied. Default is `None`, allowed values from `1`
+* `SPELLCHECK_DICTIONARIES_PATH` define directory where user dicts is stored. This is inner directory in the docker image, please map it to volume as it shown in the quickstart part of this readme. Default is `/data`
+* `SPELLCHECK_DICTIONARIES_STORAGE_PROVIDER` define wich engine will store user dictionaries. Default is `file`
+* `SPELLCHECK_DICTIONARIES_DISABLED` switches off user dictionaries API no matter what. Default is `False`
+* `SPELLCHECK_USERNAME_MIN_LENGTH` minimum length of username. Default is `3`
+* `SPELLCHECK_USERNAME_MAX_LENGTH` maximum length of username. Default is `60`
 
 ## Development
 ### Quickstart

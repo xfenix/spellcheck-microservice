@@ -36,7 +36,7 @@ def run_main():
             f'`{settings_env_key}` {props["description"].rstrip(".")}. '
             f"Default is `{default_value}`{allowed_restrictions}"
         )
-    automatic_config_readme: str = "  \n".join(pack_of_readme_lines)
+    automatic_config_readme: str = "* " + "\n* ".join(pack_of_readme_lines)
     new_content = re.sub(
         r"(.*Here is a list of them\:).*(\#\# Development.*)",
         r"\1\n" + automatic_config_readme + r"\n\n\2",
