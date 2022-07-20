@@ -59,7 +59,13 @@ Note: all docker & docker-compose variants use named volumes to store user dicti
 * For MacOS X `brew install enchant`
 * `poetry install`
 * `poetry shell`
-* And `make` will run local development server
+* Run `touch .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit`
+* Paste following contents in file `.git/hooks/pre-commit`:
+    ```sh
+    poetry run make update-readme
+    git add README.md
+    ```
+* Execute `make` command to run local development server
 
 Please check [./Makefile](./Makefile) for more details
 
