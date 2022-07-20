@@ -40,12 +40,12 @@ Note: all docker & docker-compose variants use named volumes to store user dicti
         ```yml
         version: "3.9"
         services:
-        spellcheck:
-            image: xfenix/spellcheck-microservice:2.1.0
-            ports:
-            - "10113:10113"
-            volumes:
-            - spellcheck-dicts:/data/
+            spellcheck:
+                image: xfenix/spellcheck-microservice:2.1.0
+                ports:
+                - "10113:10113"
+                volumes:
+                - spellcheck-dicts:/data/
 
         volumes:
             spellcheck-dicts:
