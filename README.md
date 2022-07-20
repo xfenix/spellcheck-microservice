@@ -70,6 +70,9 @@ You cand find it here https://github.com/xfenix/spellcheck-microservice/releases
     ```
 * Execute `make` command to run local development server
 
+### Notes
+Default api-key for local development is `debug` (you will need this to work with user dictionaries API).
+
 Please check [./Makefile](./Makefile) for more details
 
 ### Troubleshooting
