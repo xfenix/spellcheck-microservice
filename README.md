@@ -32,7 +32,7 @@ You can change config of the service by changing the environment variables. Here
 * `SPELLCHECK_USERNAME_MIN_LENGTH` minimum length of username. Default is `3`
 * `SPELLCHECK_USERNAME_MAX_LENGTH` maximum length of username. Default is `60`
 
-## Deployment
+### Deployment
 Note: all docker & docker-compose variants use named volumes to store user dictionaries.
 1. As regular docker container `docker run  -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:2.1.0`
 1. As docker-compose configuration:
