@@ -89,10 +89,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          pip3 install poetry
+          pip install poetry
           poetry install
-          make update-readme
-          make update-dockerhub-readme
+          poetry run make update-readme
+          poetry run make update-dockerhub-readme
       - uses: peter-evans/dockerhub-description@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
