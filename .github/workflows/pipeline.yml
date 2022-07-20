@@ -82,7 +82,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   update-dockerhub-readme:
-    # needs: [build-and-publish]
+    needs: [build-and-publish]
     runs-on: ubuntu-latest
     container:
       image: python:3.10.4-slim
