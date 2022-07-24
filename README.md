@@ -8,6 +8,7 @@
 
 This is a microservice designed to check the spelling of words. Based on [pyenchant](https://github.com/pyenchant/pyenchant). Exposes a REST API.<br>
 Current available languages are: ru_RU, en_US, es_ES, fr_FR, de_DE, pt_PT<br>
+It works blazinlgly fast due to pyenchant usage in it's core and LRU cache<br>
 Also it supports feature called «user dictionaries» — user can add his own word-exceptions to personal dictionary.
 
 ## Quickstart
