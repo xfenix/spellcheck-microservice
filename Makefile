@@ -27,6 +27,6 @@ check-languages:
 check-languages-docker:
 	docker run -it spellcheck-microservice python -c "import enchant; print(enchant.Broker().list_languages());"
 update-readme:
-	./scripts/update-readme.py
+	python -m scripts update-readme
 update-dockerhub-readme:
-	./scripts/update-dockerhub-readme.py
+	python -m scripts update-dockerhub-readme

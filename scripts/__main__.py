@@ -1,21 +1,27 @@
 #!/usr/bin/env python3
 """Simple dockerhub readme generator."""
+import argparse
 import pathlib
 import re
 import sys
 
+from ._helpers import parse_last_git_tag, replace_tag_in_readme
+
 
 PARENT_DIR: pathlib.Path = pathlib.Path(__file__).parent.parent
+README_PATH: pathlib.Path = PARENT_DIR / "README.md"
 
 
-def run_main():
-    """Main fn."""
-    sys.path.append(str(PARENT_DIR.resolve()))
+def _update_dockerhub_readme():
+    new_content: str = re.sub(r"\#\# Development.*", r"", README_PATH.read_text(), flags=re.I | re.S).strip()
+    new_content = replace_tag_in_readme(new_content, parse_last_git_tag())
+    README_PATH.write_text(new_content + "\n")
 
+
+def _update_readme():
     from whole_app.settings import SETTINGS
 
-    readme_path: pathlib.Path = PARENT_DIR / "README.md"
-    new_content: str = readme_path.read_text()
+    new_content: str = README_PATH.read_text()
     settings_schema: dict = SETTINGS.schema()["properties"]
     pack_of_readme_lines: list = []
     for _, props in settings_schema.items():
@@ -43,7 +49,20 @@ def run_main():
         new_content,
         flags=re.I | re.M | re.S,
     )
-    readme_path.write_text(new_content)
+    new_content = replace_tag_in_readme(new_content, parse_last_git_tag())
+    README_PATH.write_text(new_content)
 
 
-run_main()
+if __name__ == "__main__":
+    sys.path.append(str(PARENT_DIR.resolve()))
+
+    parser: argparse.ArgumentParser = argparse.ArgumentParser()
+    parser.add_argument("action")
+    arguments_list: argparse.Namespace = parser.parse_args()
+    match arguments_list.action:
+        case "update-dockerhub-readme":
+            _update_dockerhub_readme()
+        case "update-readme":
+            _update_readme()
+        case _:
+            print("Unknown action")
