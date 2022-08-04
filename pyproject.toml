@@ -17,6 +17,7 @@ pylru = "*"
 aiopath = "*"
 anyio = "*"
 sentry-sdk = "*"
+orjson = "*"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
