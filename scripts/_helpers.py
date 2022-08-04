@@ -1,13 +1,18 @@
 """Helper functions."""
+import os
 import re
 import shlex
 import subprocess
 
 
 def parse_last_git_tag() -> str:
-    """Return last git tag."""
-    last_tag_hash: str = subprocess.check_output(shlex.split("git rev-list --tags --max-count=1")).strip().decode()
-    return subprocess.check_output(shlex.split(f"git describe --tags {last_tag_hash}")).strip().decode().lstrip("v")
+    """Return last git tag (works in CI and on localhost)."""
+    last_tag_from_environment: str | None = os.getenv("GITHUB_REF_NAME")
+    if last_tag_from_environment is None:
+        last_tag_hash: str = subprocess.check_output(shlex.split("git rev-list --tags --max-count=1")).strip().decode()
+        return subprocess.check_output(shlex.split(f"git describe --tags {last_tag_hash}")).strip().decode().lstrip("v")
+    else:
+        return last_tag_from_environment.lstrip("v")
 
 
 def replace_tag_in_readme(readme_text: str, new_tag: str) -> str:
