@@ -49,6 +49,9 @@ line-length = 120
 [tool.pytest.ini_options]
 addopts = "--cov . --cov-report term-missing"
 
+[tool.coverage.run]
+omit = ["scripts/*"]
+
 [tool.pylint.settings]
 max-line-length = 120
 disable=["logging-fstring-interpolation", "too-few-public-methods", "no-name-in-module", "wrong-import-order"]
