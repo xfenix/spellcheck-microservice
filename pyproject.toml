@@ -30,6 +30,7 @@ Faker = "*"
 vulture = "*"
 types-toml = "*"
 pytest-repeat = "*"
+pylint-pydantic = "^0.1.4"
 
 [tool.isort]
 line_length = 120

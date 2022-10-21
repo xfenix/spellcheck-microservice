@@ -13,13 +13,13 @@ test:
 test-in-docker:
 	docker run -t spellcheck-microservice bash -c "COVERAGE_FILE=/tmp/junk.coverage pytest . -n3"
 lint:
-	pylint whole_app tests
+	pylint --load-plugins pylint_pydantic whole_app tests
 	mypy .
 	vulture whole_app --min-confidence 100
 	isort -c .
 	black . --check
 lint-in-docker:
-	docker run -t spellcheck-microservice bash -c "pylint whole_app tests && mypy . && vulture whole_app --min-confidence 100"
+	docker run -t spellcheck-microservice bash -c "pylint  --load-plugins pylint_pydantic whole_app tests && mypy . && vulture whole_app --min-confidence 100"
 run-prod:
 	docker run -p 10113:10113 -e SPELLCHECK_WORKERS=1 -t spellcheck-microservice:latest
 check-languages:
