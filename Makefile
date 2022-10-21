@@ -1,5 +1,5 @@
 run-dev:
-	SPELLCHECK_dictionaries_path=/tmp/sm-dicts/ SPELLCHECK_API_KEY=debug uvicorn whole_app.__main__:SPELL_APP --reload
+	SPELLCHECK_DICTIONARIES_PATH=/tmp/sm-dicts/ SPELLCHECK_DICTIONARIES_DISABLED=true SPELLCHECK_API_KEY=debug uvicorn whole_app.__main__:SPELL_APP --reload
 build:
 	docker build -t spellcheck-microservice .
 prepare-buildx:
@@ -21,7 +21,7 @@ lint:
 lint-in-docker:
 	docker run -t spellcheck-microservice bash -c "pylint whole_app tests && mypy . && vulture whole_app --min-confidence 100"
 run-prod:
-	docker run  -p 10113:10113 -t spellcheck-microservice:latest
+	docker run -p 10113:10113 -e SPELLCHECK_WORKERS=1 -t spellcheck-microservice:latest
 check-languages:
 	python -c "import enchant; print(enchant.Broker().list_languages());"
 check-languages-docker:

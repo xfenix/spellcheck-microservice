@@ -30,7 +30,7 @@ class SpellCheckRequest(pydantic.BaseModel):
 
     text: str = pydantic.Field(..., example="Привед как дила")
     language: AvailableLanguagesType
-    user_name: str | None = pydantic.Field(**USER_NAME_FIELDS_RESTRICTIONS)
+    user_name: typing.Optional[str] = pydantic.Field(**USER_NAME_FIELDS_RESTRICTIONS)
 
 
 class SpellCheckResponse(pydantic.BaseModel):

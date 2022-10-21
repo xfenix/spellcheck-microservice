@@ -3,6 +3,8 @@
 This file meant only for basic workers wrappers and fastapi exposure.
 For end-points look in views.py
 """
+import typing
+
 import fastapi
 from gunicorn.app.base import BaseApplication
 
@@ -16,7 +18,7 @@ class GunicornCustomApplication(BaseApplication):
 
     def load_config(self) -> None:
         """Load configuration from memory."""
-        _options: dict[str, str | int] = {
+        _options: dict[str, typing.Union[str, int]] = {
             "worker_class": "uvicorn.workers.UvicornWorker",
             "bind": f"0.0.0.0:{SETTINGS.port}",
             "workers": SETTINGS.workers,

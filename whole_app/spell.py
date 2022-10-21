@@ -1,4 +1,6 @@
 """Spellcheck service functions."""
+import typing
+
 import pylru
 from enchant.checker import SpellChecker
 
@@ -6,7 +8,7 @@ from . import models
 from .settings import SETTINGS
 
 
-_CACHE_STORAGE: dict[str, list[str]] = pylru.lrucache(SETTINGS.cache_size) if SETTINGS.cache_size > 0 else {}
+_MISSPELED_CACHE: dict[str, list[str]] = pylru.lrucache(SETTINGS.cache_size) if SETTINGS.cache_size > 0 else {}
 
 
 class SpellCheckService:
@@ -19,7 +21,7 @@ class SpellCheckService:
     _exclusion_words: list[str]
 
     def prepare(
-        self, request_payload: models.SpellCheckRequest, exclusion_words: list[str] | None = None
+        self, request_payload: models.SpellCheckRequest, exclusion_words: typing.Optional[list[str]] = None
     ) -> "SpellCheckService":
         """Initialize machinery."""
         self._input_text = request_payload.text
@@ -29,13 +31,14 @@ class SpellCheckService:
 
     @staticmethod
     def get_memorized_suggestions(word_spellcheck_result: SpellChecker) -> list[str]:
-        """Try to get suggestions from lru cache or ask SpellChecker for them."""
+        """Try to get suggestions from lru cache or ask SpellChecker for
+        them."""
         misspelled_suggestions: list[str]
-        if word_spellcheck_result.word in _CACHE_STORAGE:
-            misspelled_suggestions = _CACHE_STORAGE[word_spellcheck_result.word]
+        if word_spellcheck_result.word in _MISSPELED_CACHE:
+            misspelled_suggestions = _MISSPELED_CACHE[word_spellcheck_result.word]
         else:
             misspelled_suggestions = word_spellcheck_result.suggest()
-            _CACHE_STORAGE[word_spellcheck_result.word] = misspelled_suggestions
+            _MISSPELED_CACHE[word_spellcheck_result.word] = misspelled_suggestions
         return (
             misspelled_suggestions[: SETTINGS.max_suggestions] if SETTINGS.max_suggestions else misspelled_suggestions
         )

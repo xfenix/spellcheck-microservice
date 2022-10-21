@@ -1,5 +1,8 @@
+scripts/
 __pycache__/
 .mypy_cache/
+.pytest_cache/
+.coverage
 .DS_Store
 .git
 .github

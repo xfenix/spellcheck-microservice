@@ -3,7 +3,6 @@ import typing
 
 import fastapi
 from anyio import to_thread
-from fastapi.responses import ORJSONResponse
 
 from . import dictionaries, misc_helpers, models, spell
 from .auth import auth_via_api_key
@@ -42,7 +41,7 @@ def startup() -> None:
     misc_helpers.init_logger()
 
 
-@SPELL_APP.post(f"{SETTINGS.api_prefix}/check/", summary="Check spelling", response_class=ORJSONResponse)
+@SPELL_APP.post(f"{SETTINGS.api_prefix}/check/", summary="Check spelling")
 async def spell_check_main_endpoint(
     request_payload: models.SpellCheckRequest,
     spell_service: spell.SpellCheckService = fastapi.Depends(),

@@ -55,7 +55,7 @@ class SettingsOfMicroservice(pydantic.BaseSettings):
     )
     api_prefix: str = pydantic.Field("/api/", description="define all API's URL prefix")
     docs_url: str = pydantic.Field("/docs/", description="define documentation (swagger) URL prefix")
-    max_suggestions: pydantic.conint(gt=0) | None = pydantic.Field(  # type: ignore
+    max_suggestions: typing.Optional[pydantic.conint(gt=0)] = pydantic.Field(  # type: ignore
         None,
         description="defines how many maximum suggestions for each word will be available. `None` means unlimitied",
     )
