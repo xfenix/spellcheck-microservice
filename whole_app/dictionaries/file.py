@@ -6,7 +6,7 @@ from whole_app.settings import SETTINGS
 
 def init_storage() -> None:
     """Initialize dictionaries storage helper."""
-    SETTINGS.dictionaries_path.mkdir(parents=True, exist_ok=True)
+    SETTINGS.dictionaries_path.mkdir(parents=True, exist_ok=True)  # pylint: disable=no-member
 
 
 class FileProvider:

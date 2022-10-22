@@ -28,7 +28,9 @@ class TestFileAndDummyBasedDicts:
         """Add to user dict."""
         fake_user_name: typing.Final[str] = faker_obj.user_name()
         fake_exc_word: typing.Final[str] = faker_obj.word()
-        path_to_dict_file: typing.Final[str] = SETTINGS.dictionaries_path.joinpath(fake_user_name)
+        path_to_dict_file: typing.Final[str] = SETTINGS.dictionaries_path.joinpath(  # pylint: disable=no-member
+            fake_user_name
+        )
         server_response: RequestsResponse = app_client.post(
             DICT_ENDPOINT,
             json=models.UserDictionaryRequestWithWord(user_name=fake_user_name, exception_word=fake_exc_word).dict(),
@@ -42,7 +44,9 @@ class TestFileAndDummyBasedDicts:
         """Delete from user dict."""
         fake_exc_word: typing.Final[str] = faker_obj.word()
         fake_user_name: typing.Final[str] = faker_obj.user_name()
-        path_to_dict_file: typing.Final[str] = SETTINGS.dictionaries_path.joinpath(fake_user_name)
+        path_to_dict_file: typing.Final[str] = SETTINGS.dictionaries_path.joinpath(  # pylint: disable=no-member
+            fake_user_name
+        )
         path_to_dict_file.touch()
         path_to_dict_file.write_text(fake_exc_word)
         if SETTINGS.dictionaries_storage_provider == StorageProviders.FILE:
