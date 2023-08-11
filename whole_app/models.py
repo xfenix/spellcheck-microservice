@@ -6,6 +6,7 @@ import pydantic
 
 from .settings import SETTINGS, AvailableLanguages, AvailableLanguagesType
 
+
 # any because mypy & pydantic cant cope with proper typing
 USER_NAME_FIELDS_RESTRICTIONS: typing.Final[typing.Any] = {
     "example": "username",
