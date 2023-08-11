@@ -3,16 +3,18 @@ import os
 import re
 import shlex
 import subprocess
+import typing
 
 
 def parse_last_git_tag() -> str:
     """Return last git tag (works in CI and on localhost)."""
-    last_tag_from_environment: str | None = os.getenv("GITHUB_REF_NAME")
+    last_tag_from_environment: typing.Final[str | None] = os.getenv("GITHUB_REF_NAME")
     if last_tag_from_environment is None:
-        last_tag_hash: str = subprocess.check_output(shlex.split("git rev-list --tags --max-count=1")).strip().decode()
-        return subprocess.check_output(shlex.split(f"git describe --tags {last_tag_hash}")).strip().decode().lstrip("v")
-    else:
-        return last_tag_from_environment.lstrip("v")
+        git_tags_list: typing.Final[list[str]] = shlex.split("git rev-list --tags --max-count=1")
+        last_tag_hash: typing.Final[str] = subprocess.check_output(git_tags_list).strip().decode()  # noqa: S603
+        git_tag_description: typing.Final[list[str]] = shlex.split(f"git describe --tags {last_tag_hash}")
+        return subprocess.check_output(git_tag_description).strip().decode().lstrip("v")  # noqa: S603
+    return last_tag_from_environment.lstrip("v")
 
 
 def replace_tag_in_readme(readme_text: str, new_tag: str) -> str:

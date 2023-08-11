@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "spellcheck-microservice"
-version = "1.0.0"
+version = "3.2.0"
 description = "Microservice for spellchecking"
 authors = ["Denis Anikin <ad@xfenix.ru>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 fastapi = "*"
 gunicorn = "*"
 uvicorn = "*"
@@ -22,7 +22,6 @@ sentry-sdk = "*"
 pytest = "*"
 pytest-cov = "*"
 pytest-xdist = "*"
-pylint = "*"
 mypy = "*"
 requests = "*"
 types-requests = "*"
@@ -30,7 +29,7 @@ Faker = "*"
 vulture = "*"
 types-toml = "*"
 pytest-repeat = "*"
-pylint-pydantic = "^0.1.4"
+ruff = "*"
 
 [tool.isort]
 line_length = 120
@@ -46,21 +45,27 @@ known_local_folder = ["whole_app",]
 [tool.black]
 line-length = 120
 
-[tool.pytest.ini_options]
-addopts = "--cov . --cov-report term-missing"
+[tool.ruff]
+fix = true
+line-length = 120
+select = ["ALL"]
+ignore = ["D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107", "D203", "D213", "FA102", "I"]
 
-[tool.coverage.run]
-omit = ["scripts/*"]
-
-[tool.pylint.settings]
-max-line-length = 120
-disable=["logging-fstring-interpolation", "too-few-public-methods", "no-name-in-module", "wrong-import-order"]
+[tool.ruff.extend-per-file-ignores]
+"tests/*.py" = ["ANN001", "ANN002", "ANN003", "ANN401", "S101", "PLR2004", "S311"]
+"tests/_fixtures.py" = ["E501"]
 
 [tool.mypy]
 ignore_missing_imports = true
 
 [tool.vulture]
 exclude = ["whole_app/settings.py"]
+
+[tool.pytest.ini_options]
+addopts = "--cov . --cov-report term-missing"
+
+[tool.coverage.run]
+omit = ["scripts/*"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

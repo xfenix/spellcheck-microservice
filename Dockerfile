@@ -3,7 +3,7 @@ ARG USER_UID=2000
 ARG USER_GID=$USER_UID
 ARG WORKDIR=/srv/www/
 
-FROM pypy:3.9-7.3.9-slim as builder
+FROM pypy:3.10-7.3-slim as builder
 ARG USERNAME
 ARG USER_UID
 ARG USER_GID
@@ -23,7 +23,7 @@ RUN apt-get install -y build-essential libssl-dev enchant-2 hunspell-ru hunspell
 RUN pip install -U pip poetry
 RUN poetry config virtualenvs.create false
 # install necessary packages
-RUN poetry install
+RUN poetry install --compile --without dev
 # massive cleanup
 RUN rm poetry.lock
 RUN poetry cache clear pypi --all
@@ -38,7 +38,7 @@ RUN rm -rf /var/lib/apt/lists/*
 RUN mkdir /data/
 RUN chmod 777 /data/
 
-FROM pypy:3.9-7.3.9-slim as runtime
+FROM pypy:3.10-7.3-slim as runtime
 ARG USERNAME
 ARG WORKDIR
 WORKDIR $WORKDIR

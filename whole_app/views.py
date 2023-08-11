@@ -44,16 +44,26 @@ def startup() -> None:
 @SPELL_APP.post(f"{SETTINGS.api_prefix}/check/", summary="Check spelling")
 async def spell_check_main_endpoint(
     request_payload: models.SpellCheckRequest,
-    spell_service: spell.SpellCheckService = fastapi.Depends(),
-    storage_engine: UserDictProtocol = fastapi.Depends(dictionaries.prepare_storage_engine),
+    spell_service: typing.Annotated[
+        spell.SpellCheckService,
+        fastapi.Depends(spell.SpellCheckService),
+    ],
+    storage_engine: typing.Annotated[
+        UserDictProtocol,
+        fastapi.Depends(dictionaries.prepare_storage_engine),
+    ],
 ) -> models.SpellCheckResponse:
     """Check spelling of text for exact language."""
     exclusion_words: list[str] = []
     if request_payload.user_name and not SETTINGS.dictionaries_disabled:
-        exclusion_words = await storage_engine.prepare(request_payload.user_name).fetch_records()
+        exclusion_words = await storage_engine.prepare(
+            request_payload.user_name,
+        ).fetch_records()
     return models.SpellCheckResponse(
         **request_payload.dict(),
-        corrections=await to_thread.run_sync(spell_service.prepare(request_payload, exclusion_words).run_check),
+        corrections=await to_thread.run_sync(
+            spell_service.prepare(request_payload, exclusion_words).run_check,
+        ),
     )
 
 
@@ -72,11 +82,16 @@ if not SETTINGS.dictionaries_disabled:
     )
     async def save_word(
         request_model: models.UserDictionaryRequestWithWord,
-        storage_engine: UserDictProtocol = fastapi.Depends(dictionaries.prepare_storage_engine),
-        _: str = fastapi.Depends(auth_via_api_key),
+        storage_engine: typing.Annotated[
+            UserDictProtocol,
+            fastapi.Depends(dictionaries.prepare_storage_engine),
+        ],
+        _: typing.Annotated[str, fastapi.Depends(auth_via_api_key)],
     ) -> bool:
         """Save word to user dictionary."""
-        await storage_engine.prepare(request_model.user_name).save_record(request_model.exception_word)
+        await storage_engine.prepare(request_model.user_name).save_record(
+            request_model.exception_word,
+        )
         return True
 
     @SPELL_APP.delete(
@@ -85,9 +100,14 @@ if not SETTINGS.dictionaries_disabled:
     )
     async def delete_word(
         request_model: models.UserDictionaryRequestWithWord,
-        storage_engine: UserDictProtocol = fastapi.Depends(dictionaries.prepare_storage_engine),
-        _: str = fastapi.Depends(auth_via_api_key),
+        storage_engine: typing.Annotated[
+            UserDictProtocol,
+            fastapi.Depends(dictionaries.prepare_storage_engine),
+        ],
+        _: typing.Annotated[str, fastapi.Depends(auth_via_api_key)],
     ) -> bool:
         """Save word to user dictionary."""
-        await storage_engine.prepare(request_model.user_name).remove_record(request_model.exception_word)
+        await storage_engine.prepare(request_model.user_name).remove_record(
+            request_model.exception_word,
+        )
         return True

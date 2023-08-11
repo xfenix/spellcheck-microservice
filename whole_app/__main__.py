@@ -4,7 +4,6 @@ This file meant only for basic workers wrappers and fastapi exposure.
 For end-points look in views.py
 """
 import typing
-
 import fastapi
 from gunicorn.app.base import BaseApplication
 
@@ -16,9 +15,9 @@ from .views import SPELL_APP
 class GunicornCustomApplication(BaseApplication):
     """Our easing wrapper around gunicorn."""
 
-    def load_config(self) -> None:
+    def load_config(self: typing.Self) -> None:
         """Load configuration from memory."""
-        _options: dict[str, typing.Union[str, int]] = {
+        _options: dict[str, str | int] = {
             "worker_class": "uvicorn.workers.UvicornWorker",
             "bind": f"0.0.0.0:{SETTINGS.port}",
             "workers": SETTINGS.workers,
@@ -27,7 +26,7 @@ class GunicornCustomApplication(BaseApplication):
             if key in self.cfg.settings and value is not None:
                 self.cfg.set(key.lower(), value)
 
-    def load(self) -> fastapi.FastAPI:
+    def load(self: typing.Self) -> fastapi.FastAPI:
         """Just return application."""
         return SPELL_APP
 
