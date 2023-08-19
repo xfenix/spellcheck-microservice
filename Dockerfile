@@ -23,7 +23,7 @@ RUN apt-get install -y build-essential libssl-dev enchant-2 hunspell-ru hunspell
 RUN pip install -U pip poetry
 RUN poetry config virtualenvs.create false
 # install necessary packages
-RUN poetry install --compile --without dev
+RUN poetry install --compile
 # massive cleanup
 RUN rm poetry.lock
 RUN poetry cache clear pypi --all
