@@ -13,7 +13,7 @@ jobs:
   py-lint-and-test:
     runs-on: ubuntu-latest
     container:
-      image: docker:20.10.16
+      image: docker:24.0.5
     steps:
       - uses: actions/checkout@v3
       - run: |
@@ -33,7 +33,7 @@ jobs:
   submit-coverage:
     runs-on: ubuntu-latest
     container:
-      image: python:3.9.15-slim
+      image: python:3.10.12-slim
     steps:
       - uses: actions/checkout@v3
       - run: |
@@ -63,7 +63,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
       - name: Add tags for image
         uses: docker/metadata-action@v4
         id: meta
@@ -85,7 +84,7 @@ jobs:
     needs: [build-and-publish]
     runs-on: ubuntu-latest
     container:
-      image: python:3.10.8-slim
+      image: python:3.10.12-slim
     steps:
       - uses: actions/checkout@v3
       - run: |
