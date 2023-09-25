@@ -16,7 +16,9 @@ def faker_obj() -> faker.Faker:
 
 
 @pytest.fixture(autouse=True)
-def patch_file_provider_for_temp(monkeypatch) -> typing.Generator[None, None, None]:
+def patch_file_provider_for_temp(
+    monkeypatch: typing.Any,
+) -> typing.Generator[None, None, None]:
     """Patch settings, to rewrite dict path to temporary directory."""
     with monkeypatch.context() as patcher, tempfile.TemporaryDirectory() as tmp_dir_name:
         yield patcher.setattr(SETTINGS, "dictionaries_path", pathlib.Path(tmp_dir_name))

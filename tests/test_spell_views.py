@@ -9,9 +9,9 @@ from whole_app import models
 from whole_app.settings import SETTINGS, StorageProviders
 
 from ._fixtures import BAD_PAYLOAD
+from requests.models import Response as RequestsResponse
 
 if typing.TYPE_CHECKING:
-    from requests.models import Response as RequestsResponse
     from fastapi.testclient import TestClient
     import faker
 
@@ -91,7 +91,7 @@ def test_with_exception_word_in_dictionary(
             ).dict(),
         )
 
-    def parse_words(server_response) -> typing.Any:
+    def parse_words(server_response: RequestsResponse) -> typing.Any:
         return [item["word"] for item in server_response.json()["corrections"]]
 
     user_name: typing.Final[str] = faker_obj.user_name()

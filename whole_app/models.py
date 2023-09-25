@@ -7,15 +7,6 @@ import pydantic
 from .settings import SETTINGS, AvailableLanguages, AvailableLanguagesType
 
 
-class _RequestWithUserName(pydantic.BaseModel):
-    user_name: str | None = pydantic.Field(
-        example="username",
-        regex=SETTINGS.username_regex,
-        min_length=SETTINGS.username_min_length,
-        max_length=SETTINGS.username_max_length,
-    )
-
-
 class OneCorrection(pydantic.BaseModel):
     first_position: int
     last_position: int
@@ -23,9 +14,16 @@ class OneCorrection(pydantic.BaseModel):
     suggestions: set[str]
 
 
-class SpellCheckRequest(_RequestWithUserName):
+class SpellCheckRequest(pydantic.BaseModel):
     text: str = pydantic.Field(..., example="Привед как дила")
     language: AvailableLanguagesType
+    user_name: str | None = pydantic.Field(
+        None,
+        example="username",
+        regex=SETTINGS.username_regex,
+        min_length=SETTINGS.username_min_length,
+        max_length=SETTINGS.username_max_length,
+    )
 
 
 class SpellCheckResponse(pydantic.BaseModel):
@@ -34,8 +32,13 @@ class SpellCheckResponse(pydantic.BaseModel):
     corrections: list[OneCorrection]
 
 
-class UserDictionaryRequest(_RequestWithUserName):
-    pass
+class UserDictionaryRequest(pydantic.BaseModel):
+    user_name: str = pydantic.Field(
+        example="username",
+        regex=SETTINGS.username_regex,
+        min_length=SETTINGS.username_min_length,
+        max_length=SETTINGS.username_max_length,
+    )
 
 
 class UserDictionaryRequestWithWord(UserDictionaryRequest):

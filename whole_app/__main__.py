@@ -12,7 +12,7 @@ from .views import SPELL_APP
 
 # pylint: disable=abstract-method
 class GunicornCustomApplication(BaseApplication):
-    def load_config(self) -> None:
+    def load_config(self: "GunicornCustomApplication") -> None:
         _options: dict[str, str | int] = {
             "worker_class": "uvicorn.workers.UvicornWorker",
             "bind": f"0.0.0.0:{SETTINGS.port}",
@@ -22,7 +22,7 @@ class GunicornCustomApplication(BaseApplication):
             if key in self.cfg.settings and value is not None:
                 self.cfg.set(key.lower(), value)
 
-    def load(self) -> fastapi.FastAPI:
+    def load(self: "GunicornCustomApplication") -> fastapi.FastAPI:
         return SPELL_APP
 
 

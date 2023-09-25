@@ -9,9 +9,6 @@ from fastapi.testclient import TestClient
 from whole_app import models, views
 from whole_app.settings import SETTINGS, StorageProviders
 
-if typing.TYPE_CHECKING:
-    from requests.models import Response as RequestsResponse
-
 
 DICT_ENDPOINT: typing.Final = f"{SETTINGS.api_prefix}/dictionaries/"
 
@@ -44,7 +41,7 @@ class TestFileAndDummyBasedDicts:
                 fake_user_name,
             )
         )
-        server_response: RequestsResponse = app_client.post(
+        server_response = app_client.post(
             DICT_ENDPOINT,
             json=models.UserDictionaryRequestWithWord(
                 user_name=fake_user_name,
@@ -73,7 +70,7 @@ class TestFileAndDummyBasedDicts:
         path_to_dict_file.write_text(fake_exc_word)
         if SETTINGS.dictionaries_storage_provider == StorageProviders.FILE:
             assert fake_exc_word in path_to_dict_file.read_text()
-        server_response: RequestsResponse = app_client.delete(
+        server_response = app_client.delete(
             DICT_ENDPOINT,
             json=models.UserDictionaryRequestWithWord(
                 user_name=fake_user_name,
@@ -95,7 +92,7 @@ class TestFileAndDummyBasedDicts:
             "dictionaries_storage_provider",
             StorageProviders.DUMMY,
         )
-        server_response: RequestsResponse = app_client.post(
+        server_response = app_client.post(
             DICT_ENDPOINT,
             json=models.UserDictionaryRequestWithWord(
                 user_name=faker_obj.user_name(),
@@ -116,7 +113,7 @@ class TestVarious:
         with monkeypatch.context() as patcher:
             patcher.setattr(SETTINGS, "dictionaries_disabled", True)
             importlib.reload(views)
-            server_response: RequestsResponse = TestClient(views.SPELL_APP).post(
+            server_response = TestClient(views.SPELL_APP).post(
                 DICT_ENDPOINT,
                 json=models.UserDictionaryRequestWithWord(
                     user_name="test",
@@ -129,7 +126,7 @@ class TestVarious:
 
     @pytest.mark.parametrize("api_key", [None, ""])
     def test_empty_auth_key(self: "TestVarious", api_key: str) -> None:
-        server_response: RequestsResponse = TestClient(views.SPELL_APP).post(
+        server_response = TestClient(views.SPELL_APP).post(
             DICT_ENDPOINT,
             json=models.UserDictionaryRequestWithWord(
                 user_name="test",
@@ -140,7 +137,7 @@ class TestVarious:
         assert server_response.status_code == 403
 
     def test_wrong_api_key(self: "TestVarious") -> None:
-        server_response: RequestsResponse = TestClient(views.SPELL_APP).post(
+        server_response = TestClient(views.SPELL_APP).post(
             DICT_ENDPOINT,
             json=models.UserDictionaryRequestWithWord(
                 user_name="test",
