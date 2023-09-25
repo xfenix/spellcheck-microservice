@@ -1,4 +1,3 @@
-"""Basic programmatic fixtures for views."""
 import pathlib
 import tempfile
 import typing
@@ -13,12 +12,11 @@ from whole_app.settings import SETTINGS, StorageProviders
 
 @pytest.fixture(scope="session")
 def faker_obj() -> faker.Faker:
-    """Fixture for faker object."""
     return faker.Faker("ru_RU")
 
 
 @pytest.fixture(autouse=True)
-def patch_file_provider_for_temp(monkeypatch) -> typing.Any:
+def patch_file_provider_for_temp(monkeypatch) -> typing.Generator[None, None, None]:
     """Patch settings, to rewrite dict path to temporary directory."""
     with monkeypatch.context() as patcher, tempfile.TemporaryDirectory() as tmp_dir_name:
         yield patcher.setattr(SETTINGS, "dictionaries_path", pathlib.Path(tmp_dir_name))
@@ -26,7 +24,10 @@ def patch_file_provider_for_temp(monkeypatch) -> typing.Any:
 
 # pylint: disable=redefined-outer-name
 @pytest.fixture()
-def app_client(monkeypatch: typing.Any, faker_obj: typing.Any) -> typing.Any:
+def app_client(
+    monkeypatch: pytest.MonkeyPatch,
+    faker_obj: typing.Any,
+) -> typing.Generator[TestClient, None, None]:
     """Fake client with patched fake storage.
 
     Also in a form of context manager it allow us to test startup events

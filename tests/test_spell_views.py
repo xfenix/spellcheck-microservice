@@ -12,19 +12,21 @@ from ._fixtures import BAD_PAYLOAD
 
 if typing.TYPE_CHECKING:
     from requests.models import Response as RequestsResponse
+    from fastapi.testclient import TestClient
+    import faker
 
 
-RUSSIAN_LETTERS: typing.Final[str] = "абвгдежзийклмнопрстуфхцчшщъыьэюяё"
-RU_LANG: typing.Final[str] = "ru_RU"
+RUSSIAN_LETTERS: typing.Final = "абвгдежзийклмнопрстуфхцчшщъыьэюяё"
+RU_LANG: typing.Final = "ru_RU"
 
 
 @pytest.mark.parametrize(
     "wannabe_user_input",
     ["Привет как дела", "Пока, я ушёл", *BAD_PAYLOAD],
 )
-def test_no_corrections(app_client, wannabe_user_input) -> None:
+def test_no_corrections(app_client: "TestClient", wannabe_user_input: str) -> None:
     """Dead simple test."""
-    server_response: typing.Final[RequestsResponse] = app_client.post(
+    server_response: typing.Final = app_client.post(
         f"{SETTINGS.api_prefix}/check/",
         json=models.SpellCheckRequest(text=wannabe_user_input, language=RU_LANG).dict(),
     )
@@ -32,10 +34,13 @@ def test_no_corrections(app_client, wannabe_user_input) -> None:
 
 
 @pytest.mark.repeat(5)
-def test_with_corrections_simple(app_client, faker_obj) -> None:
+def test_with_corrections_simple(
+    app_client: "TestClient",
+    faker_obj: "faker.Faker",
+) -> None:
     """Not so dead simple test."""
-    generated_letter: typing.Final[str] = random.choice(RUSSIAN_LETTERS)
-    wannabe_user_input: str = (
+    generated_letter: typing.Final = random.choice(RUSSIAN_LETTERS)
+    wannabe_user_input: typing.Final[str] = (
         faker_obj.text()
         .lower()
         .replace(
@@ -43,7 +48,7 @@ def test_with_corrections_simple(app_client, faker_obj) -> None:
             random.choice(RUSSIAN_LETTERS.replace(generated_letter, "")),
         )
     )
-    server_response: typing.Final[RequestsResponse] = app_client.post(
+    server_response: typing.Final = app_client.post(
         f"{SETTINGS.api_prefix}/check/",
         json=models.SpellCheckRequest(
             text=wannabe_user_input,
@@ -62,11 +67,11 @@ def test_with_corrections_simple(app_client, faker_obj) -> None:
     ],
 )
 def test_with_exception_word_in_dictionary(
-    monkeypatch,
-    app_client,
-    faker_obj,
-    wannabe_user_input,
-    tested_word,
+    monkeypatch: typing.Any,
+    app_client: "TestClient",
+    faker_obj: "faker.Faker",
+    wannabe_user_input: str,
+    tested_word: str,
 ) -> None:
     """Complex tests, where we add word to dictionary and tests that it really excluded from the output."""
     # replace all symbols from wannabe_user_input except letters and numbers

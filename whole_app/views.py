@@ -10,7 +10,7 @@ from .dictionaries.protocol import UserDictProtocol
 from .settings import SETTINGS
 
 
-SPELL_APP: typing.Final[fastapi.FastAPI] = fastapi.FastAPI(
+SPELL_APP: typing.Final = fastapi.FastAPI(
     title=SETTINGS.app_title,
     version=SETTINGS.current_version,
     docs_url=SETTINGS.docs_url,

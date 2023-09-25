@@ -1,5 +1,4 @@
 """Basic file provider."""
-import typing
 import aiopath
 
 from whole_app.settings import SETTINGS
@@ -18,16 +17,16 @@ class FileProvider:
 
     _user_dict_path: aiopath.AsyncPath
 
-    def prepare(self: typing.Self, user_name: str) -> "FileProvider":
+    def prepare(self: "FileProvider", user_name: str) -> "FileProvider":
         """Prepare class for user name."""
         self._user_dict_path = aiopath.AsyncPath(SETTINGS.dictionaries_path / user_name)
         return self
 
-    async def _store_lines(self: typing.Self, lines: list[str]) -> None:
+    async def _store_lines(self: "FileProvider", lines: list[str]) -> None:
         """Store lines to user dictionary."""
         await self._user_dict_path.write_text("\n".join(lines) + "\n")
 
-    async def save_record(self: typing.Self, exception_word: str) -> None:
+    async def save_record(self: "FileProvider", exception_word: str) -> None:
         """Save record to user dictionary."""
         await self._user_dict_path.touch()
         clean_word: str = exception_word.strip().lower()
@@ -36,14 +35,14 @@ class FileProvider:
             file_content.append(clean_word)
             await self._store_lines(file_content)
 
-    async def remove_record(self: typing.Self, exception_word: str) -> None:
+    async def remove_record(self: "FileProvider", exception_word: str) -> None:
         """Remove record from user dictionary."""
         file_content: list[str] = await self.fetch_records()
         if exception_word in file_content:
             file_content.remove(exception_word)
             await self._store_lines(file_content)
 
-    async def fetch_records(self: typing.Self) -> list[str]:
+    async def fetch_records(self: "FileProvider") -> list[str]:
         """Fetch records from user dictionary."""
         if await self._user_dict_path.exists():
             return [

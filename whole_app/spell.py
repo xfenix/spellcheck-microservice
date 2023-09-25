@@ -23,7 +23,7 @@ class SpellCheckService:
     _exclusion_words: list[str]
 
     def prepare(
-        self: typing.Self,
+        self: "SpellCheckService",
         request_payload: models.SpellCheckRequest,
         exclusion_words: list[str] | None = None,
     ) -> "SpellCheckService":
@@ -48,7 +48,7 @@ class SpellCheckService:
             else misspelled_suggestions
         )
 
-    def run_check(self: typing.Self) -> list[models.OneCorrection]:
+    def run_check(self: "SpellCheckService") -> list[models.OneCorrection]:
         """Run main checking procedure."""
         corrections_output: list[models.OneCorrection] = []
         self._spellcheck_engine.set_text(self._input_text)

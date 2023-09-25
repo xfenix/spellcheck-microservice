@@ -13,15 +13,16 @@ if typing.TYPE_CHECKING:
     from requests.models import Response as RequestsResponse
 
 
-DICT_ENDPOINT: typing.Final[str] = f"{SETTINGS.api_prefix}/dictionaries/"
+DICT_ENDPOINT: typing.Final = f"{SETTINGS.api_prefix}/dictionaries/"
 
 
 class TestFileAndDummyBasedDicts:
-    """Test file based user dict provider."""
-
     @pytest.fixture(params=[StorageProviders.DUMMY, StorageProviders.FILE])
-    def patch_various_providers(self: typing.Self, monkeypatch, request) -> typing.Any:
-        """Made test, used this fixture, run for various storage providers."""
+    def patch_various_providers(
+        self: "TestFileAndDummyBasedDicts",
+        monkeypatch: typing.Any,
+        request: typing.Any,
+    ) -> typing.Any:
         with monkeypatch.context() as patcher:
             yield patcher.setattr(
                 SETTINGS,
@@ -31,18 +32,17 @@ class TestFileAndDummyBasedDicts:
 
     @pytest.mark.repeat(3)
     def test_add_to_dict(
-        self: typing.Self,
-        app_client,
-        faker_obj,
-        patch_various_providers,  # noqa: ARG002
+        self: "TestFileAndDummyBasedDicts",
+        app_client: typing.Any,
+        faker_obj: typing.Any,
+        patch_various_providers: typing.Any,  # noqa: ARG002
     ) -> None:
-        """Add to user dict."""
-        fake_user_name: typing.Final[str] = faker_obj.user_name()
-        fake_exc_word: typing.Final[str] = faker_obj.word()
-        path_to_dict_file: typing.Final[
-            str
-        ] = SETTINGS.dictionaries_path.joinpath(  # pylint: disable=no-member
-            fake_user_name,
+        fake_user_name: typing.Final = faker_obj.user_name()
+        fake_exc_word: typing.Final = faker_obj.word()
+        path_to_dict_file: typing.Final = (
+            SETTINGS.dictionaries_path.joinpath(  # pylint: disable=no-member
+                fake_user_name,
+            )
         )
         server_response: RequestsResponse = app_client.post(
             DICT_ENDPOINT,
@@ -57,18 +57,17 @@ class TestFileAndDummyBasedDicts:
 
     @pytest.mark.repeat(3)
     def test_remove_from_user_dict(
-        self: typing.Self,
-        app_client,
-        faker_obj,
-        patch_various_providers,  # noqa: ARG002
+        self: "TestFileAndDummyBasedDicts",
+        app_client: typing.Any,
+        faker_obj: typing.Any,
+        patch_various_providers: typing.Any,  # noqa: ARG002
     ) -> None:
-        """Delete from user dict."""
-        fake_exc_word: typing.Final[str] = faker_obj.word()
-        fake_user_name: typing.Final[str] = faker_obj.user_name()
-        path_to_dict_file: typing.Final[
-            str
-        ] = SETTINGS.dictionaries_path.joinpath(  # pylint: disable=no-member
-            fake_user_name,
+        fake_exc_word: typing.Final = faker_obj.word()
+        fake_user_name: typing.Final = faker_obj.user_name()
+        path_to_dict_file: typing.Final = (
+            SETTINGS.dictionaries_path.joinpath(  # pylint: disable=no-member
+                fake_user_name,
+            )
         )
         path_to_dict_file.touch()
         path_to_dict_file.write_text(fake_exc_word)
@@ -86,12 +85,11 @@ class TestFileAndDummyBasedDicts:
             assert fake_exc_word not in path_to_dict_file.read_text()
 
     def test_dummy_provider_init(
-        self: typing.Self,
-        monkeypatch,
-        app_client,
-        faker_obj,
+        self: "TestFileAndDummyBasedDicts",
+        monkeypatch: typing.Any,
+        app_client: typing.Any,
+        faker_obj: typing.Any,
     ) -> None:
-        """Test init with dummy provider (through add test)."""
         monkeypatch.setattr(
             SETTINGS,
             "dictionaries_storage_provider",
@@ -110,7 +108,10 @@ class TestFileAndDummyBasedDicts:
 class TestVarious:
     """Various dict api things."""
 
-    def test_disabled_dictionary_views(self: typing.Self, monkeypatch) -> None:
+    def test_disabled_dictionary_views(
+        self: "TestVarious",
+        monkeypatch: typing.Any,
+    ) -> None:
         """Test views with dictionaries_disabled SETTINGS option."""
         with monkeypatch.context() as patcher:
             patcher.setattr(SETTINGS, "dictionaries_disabled", True)
@@ -127,8 +128,7 @@ class TestVarious:
         importlib.reload(views)
 
     @pytest.mark.parametrize("api_key", [None, ""])
-    def test_empty_auth_key(self: typing.Self, api_key) -> None:
-        """Test add dict without api key at all."""
+    def test_empty_auth_key(self: "TestVarious", api_key: str) -> None:
         server_response: RequestsResponse = TestClient(views.SPELL_APP).post(
             DICT_ENDPOINT,
             json=models.UserDictionaryRequestWithWord(
@@ -139,8 +139,7 @@ class TestVarious:
         )
         assert server_response.status_code == 403
 
-    def test_wrong_api_key(self: typing.Self) -> None:
-        """Test add dict without api key at all."""
+    def test_wrong_api_key(self: "TestVarious") -> None:
         server_response: RequestsResponse = TestClient(views.SPELL_APP).post(
             DICT_ENDPOINT,
             json=models.UserDictionaryRequestWithWord(

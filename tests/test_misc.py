@@ -13,25 +13,20 @@ from whole_app.settings import SETTINGS, SettingsOfMicroservice
 
 if TYPE_CHECKING:
     from requests.models import Response as RequestsResponse
+    import faker
 
 
-def test_main_py(monkeypatch) -> None:
-    """Test __main__.py."""
-
+def test_main_py(monkeypatch: typing.Any) -> None:
     class FakeGunicorn:
-        """Fake gunicorn."""
-
         def __init__(self: "FakeGunicorn", *_, **__) -> None:
             """Init."""
 
         @property
         def cfg(self: "FakeGunicorn") -> "FakeGunicorn":
-            """Fake config object."""
             return self
 
         @property
         def settings(self: "FakeGunicorn") -> dict[str, None | int]:
-            """Fake settings object."""
             return {
                 "bind": None,
                 "workers": 666_13,
@@ -41,7 +36,6 @@ def test_main_py(monkeypatch) -> None:
             """Fake setter for «config» object."""
 
         def run(self: "FakeGunicorn", *_, **__) -> typing.Any:
-            """Faky run."""
             self.load_config()
             self.load()
 
@@ -49,8 +43,7 @@ def test_main_py(monkeypatch) -> None:
     runpy.run_module("whole_app.__main__", run_name="__main__")
 
 
-def test_incorrect_settings(monkeypatch) -> None:
-    """Test some various incorrect settings."""
+def test_incorrect_settings(monkeypatch: typing.Any) -> None:
     fake_settings: SettingsOfMicroservice = SettingsOfMicroservice()
     assert fake_settings.cache_size == 10_000
 
@@ -65,8 +58,7 @@ def test_incorrect_settings(monkeypatch) -> None:
     assert fake_settings.current_version == ""
 
 
-def test_sentry_integration(monkeypatch, faker_obj) -> None:
-    """Test sentry integration."""
+def test_sentry_integration(monkeypatch: typing.Any, faker_obj: "faker.Faker") -> None:
     with monkeypatch.context() as patcher:
         patcher.setattr(SETTINGS, "sentry_dsn", f"https://{faker_obj.pystr()}")
         patcher.setattr("sentry_sdk.init", lambda **_: None)

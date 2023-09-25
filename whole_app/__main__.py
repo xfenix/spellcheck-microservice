@@ -3,7 +3,6 @@
 This file meant only for basic workers wrappers and fastapi exposure.
 For end-points look in views.py
 """
-import typing
 import fastapi
 from gunicorn.app.base import BaseApplication
 
@@ -13,10 +12,7 @@ from .views import SPELL_APP
 
 # pylint: disable=abstract-method
 class GunicornCustomApplication(BaseApplication):
-    """Our easing wrapper around gunicorn."""
-
-    def load_config(self: typing.Self) -> None:
-        """Load configuration from memory."""
+    def load_config(self) -> None:
         _options: dict[str, str | int] = {
             "worker_class": "uvicorn.workers.UvicornWorker",
             "bind": f"0.0.0.0:{SETTINGS.port}",
@@ -26,8 +22,7 @@ class GunicornCustomApplication(BaseApplication):
             if key in self.cfg.settings and value is not None:
                 self.cfg.set(key.lower(), value)
 
-    def load(self: typing.Self) -> fastapi.FastAPI:
-        """Just return application."""
+    def load(self) -> fastapi.FastAPI:
         return SPELL_APP
 
 

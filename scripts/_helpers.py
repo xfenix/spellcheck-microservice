@@ -10,10 +10,21 @@ def parse_last_git_tag() -> str:
     """Return last git tag (works in CI and on localhost)."""
     last_tag_from_environment: typing.Final[str | None] = os.getenv("GITHUB_REF_NAME")
     if last_tag_from_environment is None:
-        git_tags_list: typing.Final[list[str]] = shlex.split("git rev-list --tags --max-count=1")
-        last_tag_hash: typing.Final[str] = subprocess.check_output(git_tags_list).strip().decode()  # noqa: S603
-        git_tag_description: typing.Final[list[str]] = shlex.split(f"git describe --tags {last_tag_hash}")
-        return subprocess.check_output(git_tag_description).strip().decode().lstrip("v")  # noqa: S603
+        git_tags_list: typing.Final = shlex.split(
+            "git rev-list --tags --max-count=1",
+        )
+        last_tag_hash: typing.Final = (
+            subprocess.check_output(git_tags_list).strip().decode()  # noqa: S603
+        )
+        git_tag_description: typing.Final = shlex.split(
+            f"git describe --tags {last_tag_hash}",
+        )
+        return (
+            subprocess.check_output(git_tag_description)  # noqa: S603
+            .strip()
+            .decode()
+            .lstrip("v")
+        )
     return last_tag_from_environment.lstrip("v")
 
 

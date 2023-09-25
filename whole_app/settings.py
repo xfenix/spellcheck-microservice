@@ -1,5 +1,4 @@
 # pylint: disable=no-member, no-self-argument
-"""Core settings of whole project."""
 import enum
 import pathlib
 import typing
@@ -7,6 +6,7 @@ import typing
 import pydantic
 import toml
 from loguru import logger
+from pydantic_settings import BaseSettings
 
 
 AvailableLanguagesType = typing.Literal[
@@ -20,23 +20,44 @@ AvailableLanguagesType = typing.Literal[
 AvailableLanguages: tuple[str, ...] = typing.get_args(AvailableLanguagesType)
 
 
-class StorageProviders(enum.Enum):
-    """Default system storage providers."""
+def _warn_about_poor_lru_cache_size(
+    possible_value: int,
+) -> int:
+    if possible_value < 1:
+        logger.warning(
+            (
+                "You set cache size less then 1. In this case, "
+                "the cache size will be unlimited and polute your memory."
+            ),
+        )
+        return 0
+    return possible_value
 
+
+def _warn_about_empty_api_key(
+    possible_value: str,
+) -> str:
+    if not possible_value:
+        logger.warning("You set empty API key. This is not recommended.")
+    return possible_value
+
+
+class StorageProviders(enum.Enum):
     FILE: str = "file"
     DUMMY: str = "dummy"
 
 
-class SettingsOfMicroservice(pydantic.BaseSettings):
-    """Main strict and totally validated settings of whole project."""
-
-    app_title: str = pydantic.Field("Spellcheck API", const=True)
-    service_name: str = pydantic.Field("spellcheck-microservice", const=True)
+class SettingsOfMicroservice(BaseSettings):
+    app_title: typing.Literal["Spellcheck API"] = "Spellcheck API"
+    service_name: typing.Literal["spellcheck-microservice"] = "spellcheck-microservice"
     sentry_dsn: str = pydantic.Field(
         "",
         description="Sentry DSN for integration. Empty field disables integration",
     )
-    api_key: str = pydantic.Field(
+    api_key: typing.Annotated[
+        str,
+        pydantic.BeforeValidator(_warn_about_empty_api_key),
+    ] = pydantic.Field(
         "",
         description=(
             "define api key for users dictionaries mostly. "
@@ -63,14 +84,22 @@ class SettingsOfMicroservice(pydantic.BaseSettings):
         10_113,
         description="binding port",
     )
-    cache_size: int = pydantic.Field(
+    cache_size: typing.Annotated[
+        int,
+        pydantic.BeforeValidator(_warn_about_poor_lru_cache_size),
+    ] = pydantic.Field(
         10_000,
         description=(
             "define LRU cache size for misspelled word/suggestions cache. "
             "Any value less than `1` makes the cache size unlimited, so be careful with this option"
         ),
     )
-    api_prefix: str = pydantic.Field("/api/", description="define all API's URL prefix")
+    api_prefix: typing.Annotated[
+        str,
+        pydantic.BeforeValidator(
+            lambda possible_value: f"/{possible_value.strip('/')}",
+        ),
+    ] = pydantic.Field("/api/", description="define all API's URL prefix")
     docs_url: str = pydantic.Field(
         "/docs/",
         description="define documentation (swagger) URL prefix",
@@ -111,56 +140,23 @@ class SettingsOfMicroservice(pydantic.BaseSettings):
     )
     username_regex: str = r"^[a-zA-Z0-9-_]*$"
 
-    @pydantic.validator("api_prefix")
-    def api_prefix_must_be_with_slash_for_left_part_and_without_it_for_right(
-        self: "SettingsOfMicroservice",
-        possible_value: str,
-    ) -> str:
-        """Help not mess up the API prefix in the application."""
-        return f"/{possible_value.strip('/')}"
-
-    @pydantic.validator("cache_size")
-    def warn_about_poor_lru_cache_size(
-        self: "SettingsOfMicroservice",
-        possible_value: int,
-    ) -> int:
-        """Warn about poor LRU cache size."""
-        if possible_value < 1:
-            logger.warning(
-                (
-                    "You set cache size less then 1. In this case, "
-                    "the cache size will be unlimited and polute your memory."
-                ),
-            )
-            return 0
-        return possible_value
-
-    @pydantic.validator("api_key")
-    def warn_about_empty_api_key(
-        self: "SettingsOfMicroservice",
-        possible_value: str,
-    ) -> str:
-        """Warn about empty API key."""
-        if not possible_value:
-            logger.warning("You set empty API key. This is not recommended.")
-        return possible_value
-
-    @pydantic.root_validator
-    def parse_version_from_local_file(
-        self: "SettingsOfMicroservice",
+    @pydantic.model_validator(mode="before")
+    def __parse_version_from_local_file(
+        self: typing.Any,
         values: dict,
     ) -> dict:
         """Parse version from pyproject (this file will be updated in the CI pipeline)."""
-        try:
-            pyproject_obj: dict = toml.loads(values["path_to_version_file"].read_text())
-            values["current_version"] = pyproject_obj["tool"]["poetry"]["version"]
-        except (toml.TomlDecodeError, KeyError, FileNotFoundError) as exc:
-            logger.warning(f"Cant parse version from pyproject. Trouble {exc}")
+        if isinstance(values, dict):
+            try:
+                pyproject_obj: dict = toml.loads(
+                    values["path_to_version_file"].read_text(),
+                )
+                values["current_version"] = pyproject_obj["tool"]["poetry"]["version"]
+            except (toml.TomlDecodeError, KeyError, FileNotFoundError) as exc:
+                logger.warning(f"Cant parse version from pyproject. Trouble {exc}")
         return values
 
     class Config:
-        """I hate this config classes in classes."""
-
         env_prefix: str = "spellcheck_"
 
 
