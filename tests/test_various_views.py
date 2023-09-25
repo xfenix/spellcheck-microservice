@@ -4,11 +4,10 @@ import typing
 from whole_app.settings import SETTINGS
 
 if typing.TYPE_CHECKING:
-    from requests.models import Response
+    from fastapi.testclient import TestClient
 
 
-def test_healthcheck_api_good(app_client) -> typing.Any:
-    """Basic healthcheck test."""
-    server_response: Response = app_client.get(f"{SETTINGS.api_prefix}/health/")
+def test_healthcheck_api_good(app_client: "TestClient") -> typing.Any:
+    server_response = app_client.get(f"{SETTINGS.api_prefix}/health/")
     assert server_response.status_code == 200
     assert server_response.json()["version"] == "1.0.0"

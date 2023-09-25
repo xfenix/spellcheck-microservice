@@ -2,13 +2,16 @@
 import enum
 import pathlib
 import typing
+import toml
 
 import pydantic
-import toml
 from loguru import logger
 from pydantic_settings import BaseSettings
 
 
+PATH_TO_PYPROJECT: typing.Final = (
+    pathlib.Path(__file__).parent.parent / "pyproject.toml"
+)
 AvailableLanguagesType = typing.Literal[
     "ru_RU",
     "en_US",
@@ -42,6 +45,20 @@ def _warn_about_empty_api_key(
     return possible_value
 
 
+def _parse_version_from_local_file(
+    default_value: str,
+) -> str:
+    """Parse version from pyproject (this file will be updated in the CI pipeline)."""
+    try:
+        pyproject_obj: dict[str, dict[str, dict[str, str]]] = toml.loads(
+            PATH_TO_PYPROJECT.read_text(),
+        )
+        return pyproject_obj["tool"]["poetry"]["version"]
+    except (toml.TomlDecodeError, KeyError, FileNotFoundError) as exc:
+        logger.warning(f"Cant parse version from pyproject. Trouble {exc}")
+    return default_value
+
+
 class StorageProviders(enum.Enum):
     FILE: str = "file"
     DUMMY: str = "dummy"
@@ -73,14 +90,14 @@ class SettingsOfMicroservice(BaseSettings):
         default=True,
         description="enables structured (json) logging",
     )
-    workers: pydantic.conint(gt=0, lt=301) = pydantic.Field(
+    workers: typing.Annotated[int, pydantic.conint(gt=0, lt=301)] = pydantic.Field(
         8,
         description=(
             "define application server workers count. "
             "If you plan to use k8s and only scale with replica sets, you might want to reduce this value to `1`"
         ),
     )
-    port: pydantic.conint(gt=1_023, lt=65_536) = pydantic.Field(
+    port: typing.Annotated[int, pydantic.conint(gt=1_023, lt=65_536)] = pydantic.Field(
         10_113,
         description="binding port",
     )
@@ -104,14 +121,12 @@ class SettingsOfMicroservice(BaseSettings):
         "/docs/",
         description="define documentation (swagger) URL prefix",
     )
-    max_suggestions: pydantic.conint(gt=0) | None = pydantic.Field(
+    max_suggestions: typing.Annotated[
+        int | None,
+        pydantic.conint(gt=0) | None,
+    ] = pydantic.Field(
         None,
         description="defines how many maximum suggestions for each word will be available. `None` means unlimitied",
-    )
-    # version from this file will be available in the health check response
-    # and version in the file itself will be updated in the CI through poetry version command
-    path_to_version_file: pathlib.Path = (
-        pathlib.Path(__file__).parent.parent / "pyproject.toml"
     )
     dictionaries_path: pathlib.Path = pydantic.Field(
         pathlib.Path("/data/"),
@@ -129,7 +144,10 @@ class SettingsOfMicroservice(BaseSettings):
         default=False,
         description="switches off user dictionaries API no matter what",
     )
-    current_version: str = ""
+    current_version: typing.Annotated[
+        str,
+        pydantic.BeforeValidator(_parse_version_from_local_file),
+    ] = ""
     username_min_length: int = pydantic.Field(
         3,
         description="minimum length of username",
@@ -139,22 +157,6 @@ class SettingsOfMicroservice(BaseSettings):
         description="maximum length of username",
     )
     username_regex: str = r"^[a-zA-Z0-9-_]*$"
-
-    @pydantic.model_validator(mode="before")
-    def __parse_version_from_local_file(
-        self: typing.Any,
-        values: dict,
-    ) -> dict:
-        """Parse version from pyproject (this file will be updated in the CI pipeline)."""
-        if isinstance(values, dict):
-            try:
-                pyproject_obj: dict = toml.loads(
-                    values["path_to_version_file"].read_text(),
-                )
-                values["current_version"] = pyproject_obj["tool"]["poetry"]["version"]
-            except (toml.TomlDecodeError, KeyError, FileNotFoundError) as exc:
-                logger.warning(f"Cant parse version from pyproject. Trouble {exc}")
-        return values
 
     class Config:
         env_prefix: str = "spellcheck_"
