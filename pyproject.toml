@@ -72,6 +72,11 @@ exclude = ["whole_app/settings.py"]
 [tool.pytest.ini_options]
 addopts = "--cov . --cov-report term-missing"
 
+[tool.coverage.report]
+exclude_also = [
+    "if typing.TYPE_CHECKING",
+]
+
 [tool.coverage.run]
 omit = ["scripts/*"]
 
