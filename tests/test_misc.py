@@ -38,6 +38,12 @@ def test_main_py(monkeypatch: typing.Any) -> None:
         ) -> typing.Any:
             """Fake setter for «config» object."""
 
+        def load_config(self: "FakeGunicorn") -> None:
+            pass
+
+        def load(self: "FakeGunicorn") -> None:
+            pass
+
         def run(self: "FakeGunicorn", *_: typing.Any, **__: typing.Any) -> typing.Any:
             self.load_config()
             self.load()

@@ -23,7 +23,6 @@ lint:
 	ruff .
 	mypy .
 	vulture whole_app --min-confidence 100
-	isort -c .
 	black . --check
 
 lint-in-docker:

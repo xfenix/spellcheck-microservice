@@ -1,5 +1,4 @@
 # pylint: disable=redefined-outer-name, unspecified-encoding
-"""Basic test for views."""
 import importlib
 import typing
 
@@ -103,8 +102,6 @@ class TestFileAndDummyBasedDicts:
 
 
 class TestVarious:
-    """Various dict api things."""
-
     def test_disabled_dictionary_views(
         self: "TestVarious",
         monkeypatch: typing.Any,

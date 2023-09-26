@@ -1,4 +1,3 @@
-"""Spellcheck service functions."""
 import typing
 
 import pylru
@@ -14,8 +13,6 @@ _MISSPELED_CACHE: typing.Final[dict[str, list[str]]] = (
 
 
 class SpellCheckService:
-    """Spellcheck service class."""
-
     __slots__ = ("_input_text", "_spellcheck_engine", "_exclusion_words")
 
     _input_text: str
@@ -35,7 +32,6 @@ class SpellCheckService:
 
     @staticmethod
     def get_memorized_suggestions(word_spellcheck_result: SpellChecker) -> list[str]:
-        """Try to get suggestions from lru cache or ask SpellChecker for them."""
         misspelled_suggestions: list[str]
         if word_spellcheck_result.word in _MISSPELED_CACHE:
             misspelled_suggestions = _MISSPELED_CACHE[word_spellcheck_result.word]
@@ -49,7 +45,6 @@ class SpellCheckService:
         )
 
     def run_check(self: "SpellCheckService") -> list[models.OneCorrection]:
-        """Run main checking procedure."""
         corrections_output: list[models.OneCorrection] = []
         self._spellcheck_engine.set_text(self._input_text)
         for one_result in self._spellcheck_engine:

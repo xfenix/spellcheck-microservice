@@ -1,4 +1,5 @@
 import typing
+
 import fastapi
 from fastapi.security.api_key import APIKeyHeader
 

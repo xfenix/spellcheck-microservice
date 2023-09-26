@@ -11,7 +11,7 @@ from .views import SPELL_APP
 
 
 # pylint: disable=abstract-method
-class GunicornCustomApplication(BaseApplication):
+class GunicornCustomApplication(BaseApplication):  # type: ignore[misc]
     def load_config(self: "GunicornCustomApplication") -> None:
         _options: dict[str, str | int] = {
             "worker_class": "uvicorn.workers.UvicornWorker",

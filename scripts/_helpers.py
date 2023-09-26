@@ -1,4 +1,3 @@
-"""Helper functions."""
 import os
 import re
 import shlex
@@ -7,7 +6,6 @@ import typing
 
 
 def parse_last_git_tag() -> str:
-    """Return last git tag (works in CI and on localhost)."""
     last_tag_from_environment: typing.Final[str | None] = os.getenv("GITHUB_REF_NAME")
     if last_tag_from_environment is None:
         git_tags_list: typing.Final = shlex.split(
@@ -29,7 +27,6 @@ def parse_last_git_tag() -> str:
 
 
 def replace_tag_in_readme(readme_text: str, new_tag: str) -> str:
-    """Place new tag in README text."""
     return re.sub(
         r"(xfenix/spellcheck-microservice\:)(\d{1,}\.\d{1,}\.\d{1,})",
         r"\g<1>" + new_tag,

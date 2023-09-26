@@ -32,26 +32,22 @@ vulture = "*"
 types-toml = "*"
 pytest-repeat = "*"
 ruff = "*"
-
-[tool.isort]
-line_length = 120
-multi_line_output = 3
-include_trailing_comma = true
-lines_after_imports = 2
-lexicographical = true
-sections = ["FUTURE", "STDLIB", "FIRSTPARTY", "THIRDPARTY", "LOCALFOLDER"]
-no_lines_before = ["STDLIB", "THIRDPARTY"]
-known_third_party = []
-known_local_folder = ["whole_app"]
+black = "*"
 
 [tool.black]
 line-length = 120
 
 [tool.ruff]
-fix = true
 line-length = 120
+fix = true
 select = ["ALL"]
 ignore = ["D1", "D203", "D213", "FA102", "I", "ANN101"]
+
+[tool.ruff.isort]
+lines-after-imports = 2
+no-lines-before = ["standard-library", "local-folder"]
+known-third-party = []
+known-local-folder = ["whole_app"]
 
 [tool.ruff.extend-per-file-ignores]
 "tests/*.py" = [

@@ -14,7 +14,12 @@ README_PATH: pathlib.Path = PARENT_DIR / "README.md"
 
 
 def _update_dockerhub_readme() -> None:
-    new_content: str = re.sub(r"\#\# Development.*", r"", README_PATH.read_text(), flags=re.I | re.S).strip()
+    new_content: str = re.sub(
+        r"\#\# Development.*",
+        r"",
+        README_PATH.read_text(),
+        flags=re.I | re.S,
+    ).strip()
     new_content = replace_tag_in_readme(new_content, parse_last_git_tag())
     README_PATH.write_text(new_content + "\n")
 
@@ -23,8 +28,8 @@ def _update_readme() -> None:
     from whole_app.settings import SETTINGS
 
     new_content: str = README_PATH.read_text()
-    settings_schema: dict = SETTINGS.schema()["properties"]
-    pack_of_readme_lines: list = []
+    settings_schema: dict[str, typing.Any] = SETTINGS.schema()["properties"]
+    pack_of_readme_lines: list[str] = []
     for props in settings_schema.values():
         settings_env_key: str = props["env_names"].pop().upper()
         if "description" not in props:
@@ -37,7 +42,11 @@ def _update_readme() -> None:
             ""
             if "exclusiveMinimum" not in props
             else f", allowed values from `{props['exclusiveMinimum'] + 1}`"
-            + (f"to `{props['exclusiveMaximum'] - 1}`" if "exclusiveMaximum" in props else "")
+            + (
+                f"to `{props['exclusiveMaximum'] - 1}`"
+                if "exclusiveMaximum" in props
+                else ""
+            )
         )
         pack_of_readme_lines.append(
             f'`{settings_env_key}` {props["description"].rstrip(".")}. '

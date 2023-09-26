@@ -1,19 +1,16 @@
-"""Initalizatior of user dictionaries."""
 from loguru import logger
-
-from whole_app import misc_helpers
-from whole_app.settings import SETTINGS, StorageProviders
 
 from . import dummy as dummy_storage
 from . import file as file_storage
 from . import protocol
+from whole_app import misc_helpers
+from whole_app.settings import SETTINGS, StorageProviders
 
 
 misc_helpers.init_logger()
 
 
 def init_storage() -> None:
-    """General storage initializer."""
     if SETTINGS.dictionaries_storage_provider == StorageProviders.FILE:
         file_storage.init_storage()
     elif SETTINGS.dictionaries_storage_provider == StorageProviders.DUMMY:
@@ -24,7 +21,6 @@ def init_storage() -> None:
 
 
 def prepare_storage_engine() -> protocol.UserDictProtocol:
-    """Storage engine factory."""
     if SETTINGS.dictionaries_storage_provider == StorageProviders.FILE:
         return file_storage.FileProvider()
     return dummy_storage.DummyProvider()

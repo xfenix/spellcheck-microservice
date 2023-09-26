@@ -1,10 +1,9 @@
-# pylint: disable=no-member, no-self-argument
 import enum
 import pathlib
 import typing
-import toml
 
 import pydantic
+import toml
 from loguru import logger
 from pydantic_settings import BaseSettings
 
@@ -48,7 +47,6 @@ def _warn_about_empty_api_key(
 def _parse_version_from_local_file(
     default_value: str,
 ) -> str:
-    """Parse version from pyproject (this file will be updated in the CI pipeline)."""
     try:
         pyproject_obj: dict[str, dict[str, dict[str, str]]] = toml.loads(
             PATH_TO_PYPROJECT.read_text(),
