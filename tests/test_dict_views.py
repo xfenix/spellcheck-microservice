@@ -35,10 +35,8 @@ class TestFileAndDummyBasedDicts:
     ) -> None:
         fake_user_name: typing.Final = faker_obj.user_name()
         fake_exc_word: typing.Final = faker_obj.word()
-        path_to_dict_file: typing.Final = (
-            SETTINGS.dictionaries_path.joinpath(  # pylint: disable=no-member
-                fake_user_name,
-            )
+        path_to_dict_file: typing.Final = SETTINGS.dictionaries_path.joinpath(  # pylint: disable=no-member
+            fake_user_name,
         )
         server_response = app_client.post(
             DICT_ENDPOINT,
@@ -60,10 +58,8 @@ class TestFileAndDummyBasedDicts:
     ) -> None:
         fake_exc_word: typing.Final = faker_obj.word()
         fake_user_name: typing.Final = faker_obj.user_name()
-        path_to_dict_file: typing.Final = (
-            SETTINGS.dictionaries_path.joinpath(  # pylint: disable=no-member
-                fake_user_name,
-            )
+        path_to_dict_file: typing.Final = SETTINGS.dictionaries_path.joinpath(  # pylint: disable=no-member
+            fake_user_name,
         )
         path_to_dict_file.touch()
         path_to_dict_file.write_text(fake_exc_word)
@@ -141,8 +137,7 @@ class TestVarious:
                 exception_word="test",
             ).dict(),
             headers={
-                SETTINGS.api_key_header_name: SETTINGS.api_key
-                + "wrongTrashKekJunk --- 5000",
+                SETTINGS.api_key_header_name: SETTINGS.api_key + "wrongTrashKekJunk --- 5000",
             },
         )
         assert server_response.status_code == 401

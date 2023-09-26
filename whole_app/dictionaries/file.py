@@ -36,9 +36,5 @@ class FileProvider:
 
     async def fetch_records(self: "FileProvider") -> list[str]:
         if await self._user_dict_path.exists():
-            return [
-                one_line.strip()
-                for one_line in (await self._user_dict_path.read_text()).split("\n")
-                if one_line
-            ]
+            return [one_line.strip() for one_line in (await self._user_dict_path.read_text()).split("\n") if one_line]
         return []

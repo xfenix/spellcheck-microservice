@@ -41,7 +41,7 @@ line-length = 120
 line-length = 120
 fix = true
 select = ["ALL"]
-ignore = ["D1", "D203", "D213", "FA102", "I", "ANN101"]
+ignore = ["D1", "D203", "D213", "FA102", "ANN101"]
 
 [tool.ruff.isort]
 lines-after-imports = 2

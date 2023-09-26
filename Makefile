@@ -20,7 +20,7 @@ test-in-docker:
 	docker run -t spellcheck-microservice bash -c "COVERAGE_FILE=/tmp/junk.coverage pytest . -n3"
 
 lint:
-	ruff .
+	ruff . --no-fix
 	mypy .
 	vulture whole_app --min-confidence 100
 	black . --check

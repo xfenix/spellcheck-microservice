@@ -3,13 +3,14 @@
 import importlib
 import os
 import runpy
-from typing import TYPE_CHECKING
 import typing
+from typing import TYPE_CHECKING
 
 from fastapi.testclient import TestClient
 
 from whole_app import views
 from whole_app.settings import SETTINGS, SettingsOfMicroservice
+
 
 if TYPE_CHECKING:
     import faker

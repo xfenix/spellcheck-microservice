@@ -8,9 +8,7 @@ from loguru import logger
 from pydantic_settings import BaseSettings
 
 
-PATH_TO_PYPROJECT: typing.Final = (
-    pathlib.Path(__file__).parent.parent / "pyproject.toml"
-)
+PATH_TO_PYPROJECT: typing.Final = pathlib.Path(__file__).parent.parent / "pyproject.toml"
 AvailableLanguagesType = typing.Literal[
     "ru_RU",
     "en_US",

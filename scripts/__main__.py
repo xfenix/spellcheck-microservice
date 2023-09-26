@@ -42,11 +42,7 @@ def _update_readme() -> None:
             ""
             if "exclusiveMinimum" not in props
             else f", allowed values from `{props['exclusiveMinimum'] + 1}`"
-            + (
-                f"to `{props['exclusiveMaximum'] - 1}`"
-                if "exclusiveMaximum" in props
-                else ""
-            )
+            + (f"to `{props['exclusiveMaximum'] - 1}`" if "exclusiveMaximum" in props else "")
         )
         pack_of_readme_lines.append(
             f'`{settings_env_key}` {props["description"].rstrip(".")}. '

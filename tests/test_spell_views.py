@@ -1,19 +1,18 @@
 # pylint: disable=redefined-outer-name
-"""Basic test for views."""
 import random
 import typing
 
 import pytest
+from requests.models import Response as RequestsResponse
 
+from ._fixtures import BAD_PAYLOAD
 from whole_app import models
 from whole_app.settings import SETTINGS, StorageProviders
 
-from ._fixtures import BAD_PAYLOAD
-from requests.models import Response as RequestsResponse
 
 if typing.TYPE_CHECKING:
-    from fastapi.testclient import TestClient
     import faker
+    from fastapi.testclient import TestClient
 
 
 RUSSIAN_LETTERS: typing.Final = "абвгдежзийклмнопрстуфхцчшщъыьэюяё"

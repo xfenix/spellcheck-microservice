@@ -3,6 +3,7 @@ import typing
 
 from whole_app.settings import SETTINGS
 
+
 if typing.TYPE_CHECKING:
     from fastapi.testclient import TestClient
 
