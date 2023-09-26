@@ -23,7 +23,7 @@ AvailableLanguages: tuple[str, ...] = typing.get_args(AvailableLanguagesType)
 def _warn_about_poor_lru_cache_size(
     possible_value: int,
 ) -> int:
-    if possible_value < 1:
+    if int(possible_value) < 1:
         logger.warning(
             (
                 "You set cache size less then 1. In this case, "

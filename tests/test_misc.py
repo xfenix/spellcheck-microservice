@@ -1,5 +1,3 @@
-# pylint: disable=no-member
-"""Test __main__.py."""
 import importlib
 import os
 import runpy

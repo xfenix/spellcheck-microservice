@@ -1,4 +1,3 @@
-# pylint: disable=redefined-outer-name, unspecified-encoding
 import importlib
 import typing
 
@@ -65,7 +64,8 @@ class TestFileAndDummyBasedDicts:
         path_to_dict_file.write_text(fake_exc_word)
         if SETTINGS.dictionaries_storage_provider == StorageProviders.FILE:
             assert fake_exc_word in path_to_dict_file.read_text()
-        server_response = app_client.delete(
+        server_response = app_client.request(
+            "DELETE",
             DICT_ENDPOINT,
             json=models.UserDictionaryRequestWithWord(
                 user_name=fake_user_name,

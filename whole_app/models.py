@@ -20,7 +20,7 @@ class SpellCheckRequest(pydantic.BaseModel):
     user_name: str | None = pydantic.Field(
         None,
         example="username",
-        regex=SETTINGS.username_regex,
+        pattern=SETTINGS.username_regex,
         min_length=SETTINGS.username_min_length,
         max_length=SETTINGS.username_max_length,
     )
@@ -35,7 +35,7 @@ class SpellCheckResponse(pydantic.BaseModel):
 class UserDictionaryRequest(pydantic.BaseModel):
     user_name: str = pydantic.Field(
         example="username",
-        regex=SETTINGS.username_regex,
+        pattern=SETTINGS.username_regex,
         min_length=SETTINGS.username_min_length,
         max_length=SETTINGS.username_max_length,
     )

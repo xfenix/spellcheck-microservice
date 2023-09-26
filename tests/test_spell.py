@@ -1,5 +1,3 @@
-"""Basic test for views."""
-
 from whole_app import models
 from whole_app.spell import SpellCheckService
 
