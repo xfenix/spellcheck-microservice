@@ -9,12 +9,12 @@ import typing
 from ._helpers import parse_last_git_tag, replace_tag_in_readme
 
 
-PARENT_DIR: pathlib.Path = pathlib.Path(__file__).parent.parent
-README_PATH: pathlib.Path = PARENT_DIR / "README.md"
+PARENT_DIR: typing.Final = pathlib.Path(__file__).parent.parent
+README_PATH: typing.Final = PARENT_DIR / "README.md"
 
 
 def _update_dockerhub_readme() -> None:
-    new_content: str = re.sub(
+    new_content = re.sub(
         r"\#\# Development.*",
         r"",
         README_PATH.read_text(),
@@ -28,7 +28,7 @@ def _update_readme() -> None:
     from whole_app.settings import SETTINGS
 
     new_content: str = README_PATH.read_text()
-    settings_schema: dict[str, typing.Any] = SETTINGS.schema()["properties"]
+    settings_schema: typing.Final[dict[str, typing.Any]] = SETTINGS.schema()["properties"]
     pack_of_readme_lines: list[str] = []
     for props in settings_schema.values():
         settings_env_key: str = props["env_names"].pop().upper()
@@ -62,9 +62,9 @@ def _update_readme() -> None:
 if __name__ == "__main__":
     sys.path.append(str(PARENT_DIR.resolve()))
 
-    parser: argparse.ArgumentParser = argparse.ArgumentParser()
-    parser.add_argument("action")
-    arguments_list: argparse.Namespace = parser.parse_args()
+    parser_obj: typing.Final = argparse.ArgumentParser()
+    parser_obj.add_argument("action")
+    arguments_list: argparse.Namespace = parser_obj.parse_args()
     match arguments_list.action:
         case "update-dockerhub-readme":
             _update_dockerhub_readme()

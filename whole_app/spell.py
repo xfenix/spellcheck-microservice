@@ -14,7 +14,6 @@ _MISSPELED_CACHE: typing.Final[dict[str, list[str]]] = (
 
 class SpellCheckService:
     __slots__ = ("_input_text", "_spellcheck_engine", "_exclusion_words")
-
     _input_text: str
     _spellcheck_engine: SpellChecker
     _exclusion_words: list[str]
