@@ -42,10 +42,11 @@ jobs:
           pip install poetry
           poetry install
           poetry run pytest -n3 --cov-report=xml
-      - uses: codacy/codacy-coverage-reporter-action@v1
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: coverage.xml
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.xml
 
   # build stage with auto-versioning based on git tags like vX.Y.Z (example: v3.1.2)
   build-and-publish:
