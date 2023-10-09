@@ -26,7 +26,7 @@ lint:
 	black . --check
 
 lint-in-docker:
-	docker run -t spellcheck-microservice bash -c "ruff . && mypy . && vulture whole_app --min-confidence 100"
+	docker run -t spellcheck-microservice bash -c "ruff . && mypy . && vulture whole_app --min-confidence 100 && black . --check"
 
 run-prod:
 	docker run -p 10113:10113 -e SPELLCHECK_WORKERS=1 -t spellcheck-microservice:latest
