@@ -1,4 +1,3 @@
-"""User dictionaries implementation."""
 import typing
 
 
