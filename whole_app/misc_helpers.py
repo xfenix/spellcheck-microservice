@@ -1,10 +1,22 @@
-import sys
+import logging
+import typing
 
-from loguru import logger
+import structlog
 
-from .settings import SETTINGS
+from whole_app.settings import SETTINGS
 
 
 def init_logger() -> None:
-    logger.remove()
-    logger.add(sys.stdout, serialize=SETTINGS.structured_logging)
+    our_processors: typing.Final[typing.Any] = [
+        structlog.contextvars.merge_contextvars,
+        structlog.processors.add_log_level,
+        structlog.processors.format_exc_info,
+        structlog.processors.TimeStamper(fmt="iso", utc=True),
+    ]
+    if SETTINGS.structured_logging:
+        our_processors.append(structlog.processors.JSONRenderer())
+    structlog.configure(
+        cache_logger_on_first_use=True,
+        wrapper_class=structlog.make_filtering_bound_logger(logging.INFO),
+        processors=our_processors,
+    )

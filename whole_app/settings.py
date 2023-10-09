@@ -3,11 +3,12 @@ import pathlib
 import typing
 
 import pydantic
+import structlog
 import toml
-from loguru import logger
 from pydantic_settings import BaseSettings
 
 
+LOGGER_OBJ: typing.Final = structlog.get_logger()
 PATH_TO_PYPROJECT: typing.Final = pathlib.Path(__file__).parent.parent / "pyproject.toml"
 AvailableLanguagesType = typing.Literal[
     "ru_RU",
@@ -24,7 +25,7 @@ def _warn_about_poor_lru_cache_size(
     possible_value: int,
 ) -> int:
     if int(possible_value) < 1:
-        logger.warning(
+        LOGGER_OBJ.warning(
             (
                 "You set cache size less then 1. In this case, "
                 "the cache size will be unlimited and polute your memory."
@@ -38,7 +39,7 @@ def _warn_about_empty_api_key(
     possible_value: str,
 ) -> str:
     if not possible_value:
-        logger.warning("You set empty API key. This is not recommended.")
+        LOGGER_OBJ.warning("You set empty API key. This is not recommended.")
     return possible_value
 
 
@@ -51,7 +52,7 @@ def _parse_version_from_local_file(
         )
         return pyproject_obj["tool"]["poetry"]["version"]
     except (toml.TomlDecodeError, KeyError, FileNotFoundError) as exc:
-        logger.warning(f"Cant parse version from pyproject. Trouble {exc}")
+        LOGGER_OBJ.warning("Cant parse version from pyproject. Trouble %s", exc)
     return default_value
 
 
