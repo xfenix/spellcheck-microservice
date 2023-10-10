@@ -17,7 +17,7 @@ anyio = "*"
 sentry-sdk = "*"
 pydantic-settings = "*"
 fastapi = "*"
-structlog = "^23.2.0"
+structlog = "*"
 
 [tool.poetry.group.dev.dependencies]
 httpx = "*"
@@ -64,8 +64,8 @@ known-local-folder = ["whole_app"]
 
 [tool.mypy]
 plugins = "pydantic.mypy"
-ignore_missing_imports = true
 strict = true
+ignore_missing_imports = true
 
 [tool.vulture]
 exclude = ["whole_app/settings.py"]

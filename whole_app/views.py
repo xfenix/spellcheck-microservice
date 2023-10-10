@@ -2,6 +2,7 @@
 import typing
 
 import fastapi
+import structlog
 from anyio import to_thread
 
 from . import dictionaries, misc_helpers, models, spell
@@ -10,6 +11,7 @@ from .dictionaries.protocol import UserDictProtocol
 from .settings import SETTINGS
 
 
+LOGGER_OBJ: typing.Final = structlog.get_logger()
 SPELL_APP: typing.Final = fastapi.FastAPI(
     title=SETTINGS.app_title,
     version=SETTINGS.current_version,
@@ -39,6 +41,7 @@ def startup() -> None:
     """Initialize storage."""
     dictionaries.init_storage()
     misc_helpers.init_logger()
+    LOGGER_OBJ.info("Current settings: %s", SETTINGS)
 
 
 @SPELL_APP.post(f"{SETTINGS.api_prefix}/check/", summary="Check spelling")

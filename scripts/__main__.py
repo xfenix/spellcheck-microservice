@@ -7,6 +7,7 @@ import sys
 import typing
 
 from ._helpers import parse_last_git_tag, replace_tag_in_readme
+from whole_app.settings import SETTINGS
 
 
 PARENT_DIR: typing.Final = pathlib.Path(__file__).parent.parent
@@ -25,29 +26,21 @@ def _update_dockerhub_readme() -> None:
 
 
 def _update_readme() -> None:
-    from whole_app.settings import SETTINGS
-
-    new_content: str = README_PATH.read_text()
-    settings_schema: typing.Final[dict[str, typing.Any]] = SETTINGS.schema()["properties"]
     pack_of_readme_lines: list[str] = []
-    for props in settings_schema.values():
-        settings_env_key: str = props["env_names"].pop().upper()
-        if "description" not in props:
-            print("-", settings_env_key, "not be available in README")  # noqa: T201
+    new_content: str = README_PATH.read_text()
+    env_prefix_value: typing.Final = SETTINGS.model_config["env_prefix"]
+    for one_field_name, field_properties in SETTINGS.model_fields.items():
+        if field_properties.description is None:
+            print("-", one_field_name, "not be available in README")
             continue
-        default_value: typing.Any = props["default"] if "default" in props else None
-        if default_value == "":
-            default_value = "''"
-        allowed_restrictions: str = (
-            ""
-            if "exclusiveMinimum" not in props
-            else f", allowed values from `{props['exclusiveMinimum'] + 1}`"
-            + (f"to `{props['exclusiveMaximum'] - 1}`" if "exclusiveMaximum" in props else "")
-        )
-        pack_of_readme_lines.append(
-            f'`{settings_env_key}` {props["description"].rstrip(".")}. '
-            f"Default is `{default_value}`{allowed_restrictions}",
-        )
+        one_row_parts = [
+            f"`{(env_prefix_value + one_field_name).upper()}`",
+            field_properties.description + ".",
+            f"Default value is `{field_properties.default}`.",
+        ]
+        if field_properties.metadata:
+            one_row_parts.append(f"Restrictions is `{field_properties.metadata}`")
+        pack_of_readme_lines.append(" ".join(one_row_parts))
     automatic_config_readme: str = "* " + "\n* ".join(pack_of_readme_lines)
     new_content = re.sub(
         r"(.*Here is a list of them\:).*?(\#\#\#\s.*)",
