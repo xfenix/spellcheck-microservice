@@ -38,7 +38,9 @@ class SpellCheckService:
             misspelled_suggestions = word_spellcheck_result.suggest()
             _MISSPELED_CACHE[word_spellcheck_result.word] = misspelled_suggestions
         return (
-            misspelled_suggestions[: SETTINGS.max_suggestions] if SETTINGS.max_suggestions else misspelled_suggestions
+            misspelled_suggestions[: SETTINGS.max_suggestions]
+            if SETTINGS.max_suggestions > 0
+            else misspelled_suggestions
         )
 
     def run_check(self: "SpellCheckService") -> list[models.OneCorrection]:

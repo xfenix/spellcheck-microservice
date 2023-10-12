@@ -20,15 +20,15 @@ Also it supports feature called «user dictionaries» — user can add his own w
 ### Config options
 You can change config of the service by changing the environment variables. Here is a list of them:
 * `SPELLCHECK_SENTRY_DSN` Sentry DSN for integration. Empty field disables integration. Default value is ``.
-* `SPELLCHECK_API_KEY` define api key for users dictionaries mostly. Please, provide, if you want to enable user dictionaries API. Default value is ``. Restrictions is `[BeforeValidator(func=<function _warn_about_empty_api_key at 0x1028aad40>)]`
+* `SPELLCHECK_API_KEY` define api key for users dictionaries mostly. Please, provide, if you want to enable user dictionaries API. Default value is ``.
 * `SPELLCHECK_ENABLE_CORS` enable CORS for all endpoints. In docker container this option is disabled. Default value is `True`.
 * `SPELLCHECK_STRUCTURED_LOGGING` enables structured (json) logging. Default value is `True`.
-* `SPELLCHECK_WORKERS` define application server workers count. If you plan to use k8s and only scale with replica sets, you might want to reduce this value to `1`. Default value is `8`. Restrictions is `[typing.Annotated[int, None, Interval(gt=0, ge=None, lt=301, le=None), None]]`
-* `SPELLCHECK_PORT` binding port. Default value is `10113`. Restrictions is `[typing.Annotated[int, None, Interval(gt=1023, ge=None, lt=65536, le=None), None]]`
-* `SPELLCHECK_CACHE_SIZE` define LRU cache size for misspelled word/suggestions cache. Any value less than `1` makes the cache size unlimited, so be careful with this option. Default value is `10000`. Restrictions is `[BeforeValidator(func=<function _warn_about_poor_lru_cache_size at 0x100f97490>)]`
-* `SPELLCHECK_API_PREFIX` define all API's URL prefix. Default value is `/api/`. Restrictions is `[BeforeValidator(func=<function SettingsOfMicroservice.<lambda> at 0x102ab4f70>)]`
+* `SPELLCHECK_WORKERS` define application server workers count. If you plan to use k8s and only scale with replica sets, you might want to reduce this value to `1`. Default value is `8`. Restrictions: `Gt(gt=0)`, `Lt(lt=301)`
+* `SPELLCHECK_PORT` binding port. Default value is `10113`. Restrictions: `Gt(gt=1023)`, `Lt(lt=65536)`
+* `SPELLCHECK_CACHE_SIZE` define LRU cache size for misspelled word/suggestions cache. Any value less than `1` makes the cache size unlimited, so be careful with this option. Default value is `10000`.
+* `SPELLCHECK_API_PREFIX` define all API's URL prefix. Default value is `/api/`.
 * `SPELLCHECK_DOCS_URL` define documentation (swagger) URL prefix. Default value is `/docs/`.
-* `SPELLCHECK_MAX_SUGGESTIONS` defines how many maximum suggestions for each word will be available. `None` means unlimitied. Default value is `None`. Restrictions is `[typing.Optional[typing.Annotated[int, None, Interval(gt=0, ge=None, lt=None, le=None), None]]]`
+* `SPELLCHECK_MAX_SUGGESTIONS` defines how many maximum suggestions for each word will be available. 0 means unlimitied. Default value is `0`. Restrictions: `Ge(ge=0)`
 * `SPELLCHECK_DICTIONARIES_PATH` define directory where user dicts is stored. This is inner directory in the docker image, please map it to volume as it shown in the quickstart part of this readme. Default value is `/data`.
 * `SPELLCHECK_DICTIONARIES_STORAGE_PROVIDER` define wich engine will store user dictionaries. Default value is `StorageProviders.FILE`.
 * `SPELLCHECK_DICTIONARIES_DISABLED` switches off user dictionaries API no matter what. Default value is `False`.

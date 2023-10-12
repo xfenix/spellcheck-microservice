@@ -39,7 +39,14 @@ def _update_readme() -> None:
             f"Default value is `{field_properties.default}`.",
         ]
         if field_properties.metadata:
-            one_row_parts.append(f"Restrictions is `{field_properties.metadata}`")
+            validators_buf: list[str] = []
+            for one_obj in field_properties.metadata:
+                restriction_stringified: typing.Final = str(one_obj)
+                if any(("BeforeValidator" in restriction_stringified, "StringConstraints" in restriction_stringified)):
+                    continue
+                validators_buf.append(f"`{restriction_stringified}`")
+            if validators_buf:
+                one_row_parts.append(f"Restrictions: {', '.join(validators_buf)}")
         pack_of_readme_lines.append(" ".join(one_row_parts))
     automatic_config_readme: str = "* " + "\n* ".join(pack_of_readme_lines)
     new_content = re.sub(
