@@ -39,14 +39,14 @@ You can change config of the service by changing the environment variables. Here
 ### Deployment
 Note: all docker & docker-compose variants use named volumes to store user dictionaries.
 #### Plain docker
-`docker run  -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:3.0.0`
+`docker run  -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:4.0.0`
 #### Docker-compose
 * Save this example configuration as `docker-compose.yml`:
 ```yml
 version: "3.9"
 services:
     spellcheck:
-        image: xfenix/spellcheck-microservice:3.0.0
+        image: xfenix/spellcheck-microservice:4.0.0
         ports:
         - "10113:10113"
         volumes:
