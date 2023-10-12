@@ -27,7 +27,7 @@ RUN poetry install --compile
 # massive cleanup
 RUN rm poetry.lock
 RUN poetry cache clear pypi --all
-RUN pip uninstall -y poetry
+RUN pip uninstall -y poetry pip setuptools
 RUN rustup self uninstall -y
 RUN apt-get remove -y build-essential libssl-dev gcc curl
 RUN apt-get clean autoclean

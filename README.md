@@ -13,7 +13,7 @@ It runs blazingly fast due to the use of pychant in its kernel, LRU cache usage 
 Also it supports feature called «user dictionaries» — user can add his own word-exceptions to personal dictionary.
 
 ## Quickstart
-* `docker run -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:3.0.0`
+* `docker run -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:4.0.0`
 * check http://localhost:10113/docs/ for full REST documentation
 * main REST endpoint you will be needed is http://localhost:10113/api/check/ (this will be available without authorization)
 
