@@ -33,10 +33,15 @@ def _update_readme() -> None:
         if field_properties.description is None:
             print("-", one_field_name, "not be available in README")
             continue
+        default_value_beautified: str = (
+            "empty string"
+            if isinstance(field_properties.default, str) and not field_properties.default
+            else f"`{field_properties.default}`"
+        )
         one_row_parts = [
             f"`{(env_prefix_value + one_field_name).upper()}`",
             field_properties.description + ".",
-            f"Default value is `{field_properties.default}`.",
+            f"Default value is {default_value_beautified}.",
         ]
         if field_properties.metadata:
             validators_buf: list[str] = []
