@@ -32,23 +32,22 @@ vulture = "*"
 types-toml = "*"
 pytest-repeat = "*"
 ruff = "*"
-black = "*"
-
-[tool.black]
-line-length = 120
 
 [tool.ruff]
-line-length = 120
 fix = true
+unsafe-fixes = true
+line-length = 120
 select = ["ALL"]
-ignore = ["D1", "D203", "D213", "FA102", "ANN101"]
-cache-dir = "/tmp/ruff-cache/"
+ignore = ["D1", "D203", "D213", "FA102", "ANN101", "COM812", "ISC001"]
 
-[tool.ruff.isort]
-lines-after-imports = 2
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint.isort]
 no-lines-before = ["standard-library", "local-folder"]
 known-third-party = []
 known-local-folder = ["whole_app"]
+lines-after-imports = 2
 
 [tool.ruff.extend-per-file-ignores]
 "tests/*.py" = [

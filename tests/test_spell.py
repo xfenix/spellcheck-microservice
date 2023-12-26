@@ -3,7 +3,6 @@ from whole_app.spell import SpellCheckService
 
 
 def test_correct_spell() -> None:
-    """Basic test."""
     fake_engine: SpellCheckService = SpellCheckService()
     # нужно сделать несколько тестов. B одном text рандомизировать
     # в другом брать из _fixtures

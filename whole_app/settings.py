@@ -7,7 +7,6 @@ import structlog
 import toml
 from pydantic_settings import BaseSettings
 
-
 LOGGER_OBJ: typing.Final = structlog.get_logger()
 PATH_TO_PYPROJECT: typing.Final = pathlib.Path(__file__).parent.parent / "pyproject.toml"
 AvailableLanguagesType = typing.Literal[
