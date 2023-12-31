@@ -31,7 +31,7 @@ def _update_readme() -> None:
     env_prefix_value: typing.Final = SETTINGS.model_config["env_prefix"]
     for one_field_name, field_properties in SETTINGS.model_fields.items():
         if field_properties.description is None:
-            print("-", one_field_name, "not be available in README")
+            print("-", one_field_name, "not be available in README")  # noqa: T201
             continue
         default_value_beautified: str = (
             "empty string"
