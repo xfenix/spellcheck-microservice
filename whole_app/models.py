@@ -15,11 +15,11 @@ class OneCorrection(pydantic.BaseModel):
 
 
 class SpellCheckRequest(pydantic.BaseModel):
-    text: str = pydantic.Field(..., example="Привед как дила")
+    text: str = pydantic.Field(..., examples=["Привед как дила"])
     language: AvailableLanguagesType
     user_name: str | None = pydantic.Field(
         None,
-        example="username",
+        examples=["username"],
         pattern=SETTINGS.username_regex,
         min_length=SETTINGS.username_min_length,
         max_length=SETTINGS.username_max_length,
@@ -34,7 +34,7 @@ class SpellCheckResponse(pydantic.BaseModel):
 
 class UserDictionaryRequest(pydantic.BaseModel):
     user_name: str = pydantic.Field(
-        example="username",
+        examples=["username"],
         pattern=SETTINGS.username_regex,
         min_length=SETTINGS.username_min_length,
         max_length=SETTINGS.username_max_length,
@@ -42,7 +42,7 @@ class UserDictionaryRequest(pydantic.BaseModel):
 
 
 class UserDictionaryRequestWithWord(UserDictionaryRequest):
-    exception_word: str = pydantic.Field(..., example="привед")
+    exception_word: str = pydantic.Field(..., examples=["привед"])
 
 
 class HealthCheckResponse(pydantic.BaseModel):

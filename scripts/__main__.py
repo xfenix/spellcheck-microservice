@@ -46,7 +46,7 @@ def _update_readme() -> None:
         if field_properties.metadata:
             validators_buf: list[str] = []
             for one_obj in field_properties.metadata:
-                restriction_stringified: typing.Final = str(one_obj)
+                restriction_stringified: str = str(one_obj)
                 if any(("BeforeValidator" in restriction_stringified, "StringConstraints" in restriction_stringified)):
                     continue
                 validators_buf.append(f"`{restriction_stringified}`")
