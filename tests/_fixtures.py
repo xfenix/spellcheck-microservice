@@ -2,6 +2,7 @@
 
 We do not want to parse files for tests — it's just waste of time.
 """
+
 import typing
 
 

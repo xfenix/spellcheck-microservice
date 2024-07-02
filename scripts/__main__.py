@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Simple dockerhub readme generator."""
+
 import argparse
 import pathlib
 import re
@@ -19,7 +20,7 @@ def _update_dockerhub_readme() -> None:
         r"\#\# Development.*",
         r"",
         README_PATH.read_text(),
-        flags=re.I | re.S,
+        flags=re.IGNORECASE | re.DOTALL,
     ).strip()
     new_content = replace_tag_in_readme(new_content, parse_last_git_tag())
     README_PATH.write_text(new_content + "\n")
@@ -58,7 +59,7 @@ def _update_readme() -> None:
         r"(.*Here is a list of them\:).*?(\#\#\#\s.*)",
         r"\1\n" + automatic_config_readme + r"\n\n\2",
         new_content,
-        flags=re.I | re.M | re.S,
+        flags=re.IGNORECASE | re.MULTILINE | re.DOTALL,
     )
     new_content = replace_tag_in_readme(new_content, parse_last_git_tag())
     README_PATH.write_text(new_content)
