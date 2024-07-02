@@ -1,6 +1,8 @@
+import re
 import typing
 
 import pylru
+import urlextract
 from enchant.checker import SpellChecker
 
 from . import models
@@ -17,6 +19,7 @@ class SpellCheckService:
     _input_text: str
     _spellcheck_engine: SpellChecker
     _exclusion_words: list[str]
+    _url_extractor: urlextract.URLExtract = urlextract.URLExtract()
 
     def prepare(
         self: "SpellCheckService",
@@ -26,6 +29,13 @@ class SpellCheckService:
         """Initialize machinery."""
         self._input_text = request_payload.text
         self._exclusion_words = exclusion_words if exclusion_words else []
+
+        if request_payload.exclude_urls:
+            for url in self._url_extractor.find_urls(self._input_text):
+                self._exclusion_words.extend(
+                    [word.lower() for word in re.split(r"\.|\:|\/\/|\/|\?|\&|\=|\+|\#|\-", url)]
+                )
+
         self._spellcheck_engine = SpellChecker(request_payload.language)
         return self
 

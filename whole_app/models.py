@@ -24,6 +24,7 @@ class SpellCheckRequest(pydantic.BaseModel):
         min_length=SETTINGS.username_min_length,
         max_length=SETTINGS.username_max_length,
     )
+    exclude_urls: bool = True
 
 
 class SpellCheckResponse(pydantic.BaseModel):
