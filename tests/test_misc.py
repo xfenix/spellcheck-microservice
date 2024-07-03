@@ -29,7 +29,7 @@ def test_main_py(monkeypatch: typing.Any) -> None:
                 "workers": 666_13,
             }
 
-        def set(
+        def set(  # noqa: A003
             self: "FakeGunicorn",
             _: typing.Any,
             __: typing.Any,

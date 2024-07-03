@@ -13,6 +13,8 @@ _MISSPELED_CACHE: typing.Final[dict[str, list[str]]] = (
     pylru.lrucache(SETTINGS.cache_size) if SETTINGS.cache_size > 0 else {}
 )
 
+SEPARATORS_TO_SPLIT_URL_BY_WORDS: typing.Final[re.Pattern[str]] = re.compile(r"\.|\:|\/\/|\/|\?|\&|\=|\+|\#|\-")
+
 
 class SpellCheckService:
     __slots__ = ("_input_text", "_spellcheck_engine", "_exclusion_words")
@@ -31,9 +33,9 @@ class SpellCheckService:
         self._exclusion_words = exclusion_words if exclusion_words else []
 
         if request_payload.exclude_urls:
-            for url in self._url_extractor.find_urls(self._input_text):
+            for one_url in self._url_extractor.find_urls(self._input_text):
                 self._exclusion_words.extend(
-                    [word.lower() for word in re.split(r"\.|\:|\/\/|\/|\?|\&|\=|\+|\#|\-", url)]
+                    [word.lower() for word in re.split(SEPARATORS_TO_SPLIT_URL_BY_WORDS, one_url)]
                 )
 
         self._spellcheck_engine = SpellChecker(request_payload.language)
