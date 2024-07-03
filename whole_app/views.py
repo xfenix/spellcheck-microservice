@@ -1,4 +1,5 @@
 """All project end-points lie here."""
+
 import typing
 
 import fastapi

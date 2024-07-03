@@ -24,5 +24,5 @@ def replace_tag_in_readme(readme_text: str, new_tag: str) -> str:
         r"(xfenix/spellcheck-microservice\:)(\d{1,}\.\d{1,}\.\d{1,})",
         r"\g<1>" + new_tag,
         readme_text,
-        flags=re.I | re.S,
+        flags=re.IGNORECASE | re.DOTALL,
     )

@@ -18,6 +18,7 @@ sentry-sdk = "*"
 pydantic-settings = "*"
 fastapi = "*"
 structlog = "*"
+urlextract = "*"
 
 [tool.poetry.group.dev.dependencies]
 httpx = "*"
