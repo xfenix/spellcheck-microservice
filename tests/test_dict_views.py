@@ -42,7 +42,7 @@ class TestFileAndDummyBasedDicts:
             json=models.UserDictionaryRequestWithWord(
                 user_name=fake_user_name,
                 exception_word=fake_exc_word,
-            ).dict(),
+            ).model_dump(),
         )
         assert server_response.status_code == 201
         if SETTINGS.dictionaries_storage_provider == StorageProviders.FILE:
@@ -70,7 +70,7 @@ class TestFileAndDummyBasedDicts:
             json=models.UserDictionaryRequestWithWord(
                 user_name=fake_user_name,
                 exception_word=fake_exc_word,
-            ).dict(),
+            ).model_dump(),
         )
         assert server_response.status_code == 200
         if SETTINGS.dictionaries_storage_provider == StorageProviders.FILE:
@@ -92,7 +92,7 @@ class TestFileAndDummyBasedDicts:
             json=models.UserDictionaryRequestWithWord(
                 user_name=faker_obj.user_name(),
                 exception_word=faker_obj.word(),
-            ).dict(),
+            ).model_dump(),
         )
         assert server_response.status_code == 201
 
@@ -111,7 +111,7 @@ class TestVarious:
                 json=models.UserDictionaryRequestWithWord(
                     user_name="test",
                     exception_word="test",
-                ).dict(),
+                ).model_dump(),
             )
             assert server_response.status_code == 404
         # restore back api state to ensure other tests wont break
@@ -124,7 +124,7 @@ class TestVarious:
             json=models.UserDictionaryRequestWithWord(
                 user_name="test",
                 exception_word="test",
-            ).dict(),
+            ).model_dump(),
             headers={} if api_key is None else {SETTINGS.api_key_header_name: ""},
         )
         assert server_response.status_code == 403
@@ -135,7 +135,7 @@ class TestVarious:
             json=models.UserDictionaryRequestWithWord(
                 user_name="test",
                 exception_word="test",
-            ).dict(),
+            ).model_dump(),
             headers={
                 SETTINGS.api_key_header_name: SETTINGS.api_key + "wrongTrashKekJunk --- 5000",
             },
