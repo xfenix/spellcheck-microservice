@@ -195,7 +195,7 @@ class SettingsOfMicroservice(BaseSettings):
         ),
     ] = 60
     username_regex: str = r"^[a-zA-Z0-9-_]*$"
-    exclusion_words: list[str] = []
+    exclusion_words: str = ""
 
     class Config:
         env_prefix: str = "spellcheck_"

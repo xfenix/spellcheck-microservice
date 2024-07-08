@@ -112,12 +112,12 @@ def test_with_exception_word_in_dictionary(
 
 @pytest.mark.parametrize(
     ("wannabe_user_input", "excluded_words"),
-    [("ШЯЧЛО ПОПЯЧТСА ПОПЯЧТСА", ["шячло", "попячтса"])],
+    [("ШЯЧЛО ПОПЯЧТСА ПОПЯЧТСА", "шЯчЛо, ПоПяЧтСа")],
 )
 def test_default_excluded_words(
     app_client: "TestClient",
     wannabe_user_input: str,
-    excluded_words: list[str],
+    excluded_words: str,
     monkeypatch: typing.Any,
 ) -> None:
     """Dead simple test."""
