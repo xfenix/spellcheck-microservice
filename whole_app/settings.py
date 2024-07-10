@@ -195,7 +195,12 @@ class SettingsOfMicroservice(BaseSettings):
         ),
     ] = 60
     username_regex: str = r"^[a-zA-Z0-9-_]*$"
-    exclusion_words: str = ""
+    exclusion_words: typing.Annotated[
+        str,
+        pydantic.Field(
+            description="list of words which will ignored by default(string separated by comma)",
+        ),
+    ] = ""
 
     class Config:
         env_prefix: str = "spellcheck_"
