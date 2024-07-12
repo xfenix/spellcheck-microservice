@@ -5,6 +5,7 @@ import typing
 import pydantic
 import structlog
 import toml
+import typing_extensions
 from pydantic_settings import BaseSettings
 
 
@@ -195,12 +196,25 @@ class SettingsOfMicroservice(BaseSettings):
         ),
     ] = 60
     username_regex: str = r"^[a-zA-Z0-9-_]*$"
-    exclusion_words: typing.Annotated[
+    exclusion_words_str: typing.Annotated[
         str,
         pydantic.Field(
             description="list of words which will ignored by default(string separated by comma)",
         ),
     ] = ""
+    exclusion_words_set: typing.Annotated[
+        set[str],
+        pydantic.Field(
+            description="set of words which will ignored by default(filled from exclusion_words_str)",
+        ),
+    ] = set()
+
+    @pydantic.model_validator(mode="after")
+    def validate_block_structure(self) -> "typing_extensions.Self":
+        self.exclusion_words_set = {
+            one_word.strip().lower() for one_word in self.exclusion_words_str.split(",") if one_word
+        }
+        return self
 
     class Config:
         env_prefix: str = "spellcheck_"
