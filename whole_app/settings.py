@@ -210,7 +210,7 @@ class SettingsOfMicroservice(BaseSettings):
     ] = set()
 
     @pydantic.model_validator(mode="after")
-    def validate_block_structure(self) -> "typing_extensions.Self":
+    def assemble_exclusion_words_set(self) -> "typing_extensions.Self":
         self.exclusion_words_set = {
             one_word.strip().lower() for one_word in self.exclusion_words_str.split(",") if one_word
         }
