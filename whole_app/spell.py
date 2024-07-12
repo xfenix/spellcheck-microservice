@@ -35,7 +35,7 @@ class SpellCheckService:
         if request_payload.exclude_urls:
             for one_url in self._url_extractor.find_urls(self._input_text):
                 self._exclusion_words.extend(
-                    [word.lower() for word in re.split(SEPARATORS_TO_SPLIT_URL_BY_WORDS, one_url)]
+                    {word.lower() for word in re.split(SEPARATORS_TO_SPLIT_URL_BY_WORDS, one_url)}
                 )
 
         self._spellcheck_engine = SpellChecker(request_payload.language)
