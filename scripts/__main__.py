@@ -22,7 +22,7 @@ def _update_dockerhub_readme() -> None:
         README_PATH.read_text(),
         flags=re.IGNORECASE | re.DOTALL,
     ).strip()
-    new_content = replace_tag_in_readme(new_content, parse_last_git_tag())
+    new_content = replace_tag_in_readme(new_content, "4.1.0")
     README_PATH.write_text(new_content + "\n")
 
 
@@ -61,7 +61,7 @@ def _update_readme() -> None:
         new_content,
         flags=re.IGNORECASE | re.MULTILINE | re.DOTALL,
     )
-    new_content = replace_tag_in_readme(new_content, parse_last_git_tag())
+    new_content = replace_tag_in_readme(new_content, "4.1.0")
     README_PATH.write_text(new_content)
 
 

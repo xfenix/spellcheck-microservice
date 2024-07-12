@@ -45,7 +45,7 @@ def test_urls_ignored(
 ) -> None:
     fake_engine: SpellCheckService = SpellCheckService()
     corrections = fake_engine.prepare(
-        models.SpellCheckRequest(text=COMMON_TEXT_MESSAGE.format(url), language=RU_LANG, exclude_urls=True),
+        models.SpellCheckRequest(text=COMMON_TEXT_MESSAGE.format(url), language="ru_RU", exclude_urls=True),
     ).run_check()
     assert not corrections
 

@@ -1,0 +1,20 @@
+version: "3"
+
+tasks:
+  build:
+    desc: "build application docker container"
+    cmds:
+      - docker build -t spellcheck-microservice .
+
+  tests:
+    desc: "run pytest (pass args after '--')"
+    cmds:
+      - task: build
+      - docker run -t spellcheck-microservice bash -c "COVERAGE_FILE=/tmp/junk.coverage pytest . {{.CLI_ARGS}}"
+
+  lint:
+    desc: "run linters"
+    cmds:
+      - poetry run ruff format .
+      - poetry run ruff check . --fix
+      - poetry run mypy .
