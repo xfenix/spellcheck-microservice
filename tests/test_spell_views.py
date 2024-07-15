@@ -27,7 +27,7 @@ def test_no_corrections(app_client: "TestClient", wannabe_user_input: str) -> No
     """Dead simple test."""
     server_response: typing.Final = app_client.post(
         f"{SETTINGS.api_prefix}/check/",
-        json=models.SpellCheckRequest(text=wannabe_user_input, language=RU_LANG).dict(),
+        json=models.SpellCheckRequest(text=wannabe_user_input, language=RU_LANG).model_dump(),
     )
     assert server_response.status_code == 200
 
@@ -53,7 +53,7 @@ def test_with_corrections_simple(
             text=wannabe_user_input,
             language=RU_LANG,
             user_name=faker_obj.user_name(),
-        ).dict(),
+        ).model_dump(),
     )
     assert server_response.status_code == 200
 
@@ -87,7 +87,7 @@ def test_with_exception_word_in_dictionary(
                 text=wannabe_user_input,
                 language=RU_LANG,
                 user_name=user_name,
-            ).dict(),
+            ).model_dump(),
         )
 
     def parse_words(server_response: RequestsResponse) -> typing.Any:
@@ -103,8 +103,29 @@ def test_with_exception_word_in_dictionary(
         json=models.UserDictionaryRequestWithWord(
             user_name=user_name,
             exception_word=tested_word,
-        ).dict(),
+        ).model_dump(),
     )
     # and than check that excepted word not in the check output
     server_response = run_request()
     assert tested_word not in parse_words(server_response)
+
+
+@pytest.mark.parametrize(
+    ("wannabe_user_input", "excluded_words"),
+    [("ШЯЧЛО ПОПЯЧТСА ПОПЯЧТСА", "шЯчЛо, ПоПяЧтСа")],
+)
+def test_default_excluded_words(
+    app_client: "TestClient",
+    wannabe_user_input: str,
+    excluded_words: str,
+    monkeypatch: typing.Any,
+) -> None:
+    """Dead simple test."""
+    with monkeypatch.context() as patcher:
+        patcher.setattr(SETTINGS, "exclusion_words", excluded_words)
+        server_response: typing.Final = app_client.post(
+            f"{SETTINGS.api_prefix}/check/",
+            json=models.SpellCheckRequest(text=wannabe_user_input, language=RU_LANG).model_dump(),
+        )
+        assert server_response.status_code == 200
+        assert server_response.json()["corrections"] == [], f"{server_response.json()=} --- {excluded_words=}"

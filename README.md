@@ -13,7 +13,7 @@ It runs blazingly fast due to the use of pychant in its kernel, LRU cache usage 
 Also it supports feature called «user dictionaries» — user can add his own word-exceptions to personal dictionary.
 
 ## Quickstart
-* `docker run -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:4.0.0`
+* `docker run -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:4.1.0`
 * check http://localhost:10113/docs/ for full REST documentation
 * main REST endpoint you will be needed is http://localhost:10113/api/check/ (this will be available without authorization)
 
@@ -35,18 +35,19 @@ You can change config of the service by changing the environment variables. Here
 * `SPELLCHECK_DICTIONARIES_DISABLED` switches off user dictionaries API no matter what. Default value is `False`.
 * `SPELLCHECK_USERNAME_MIN_LENGTH` minimum length of username. Default value is `3`.
 * `SPELLCHECK_USERNAME_MAX_LENGTH` maximum length of username. Default value is `60`.
+* `SPELLCHECK_EXCLUSION_WORDS` list of words which will ignored by default(string separated by comma). Default value is empty string.
 
 ### Deployment
 Note: all docker & docker-compose variants use named volumes to store user dictionaries.
 #### Plain docker
-`docker run  -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:4.0.0`
+`docker run  -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:4.1.0`
 #### Docker-compose
 * Save this example configuration as `docker-compose.yml`:
 ```yml
 version: "3.9"
 services:
     spellcheck:
-        image: xfenix/spellcheck-microservice:4.0.0
+        image: xfenix/spellcheck-microservice:4.1.0
         ports:
         - "10113:10113"
         volumes:

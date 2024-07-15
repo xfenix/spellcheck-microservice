@@ -63,8 +63,9 @@ async def spell_check_main_endpoint(
         exclusion_words = await storage_engine.prepare(
             request_payload.user_name,
         ).fetch_records()
+    exclusion_words.extend([one_word.strip().lower() for one_word in SETTINGS.exclusion_words.split(",")])
     return models.SpellCheckResponse(
-        **request_payload.dict(),
+        **request_payload.model_dump(),
         corrections=await to_thread.run_sync(
             spell_service.prepare(request_payload, exclusion_words).run_check,
         ),
