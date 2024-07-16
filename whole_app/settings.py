@@ -199,21 +199,23 @@ class SettingsOfMicroservice(BaseSettings):
     exclusion_words_str: typing.Annotated[
         str,
         pydantic.Field(
-            description="list of words which will ignored by default(string separated by comma)",
+            description="list of words which will ignored by default(string separated by comma). " "Example: 'foo, bar'"
         ),
     ] = ""
     exclusion_words_set: typing.Annotated[
         set[str],
         pydantic.Field(
-            description="set of words which will ignored by default(filled from exclusion_words_str)",
+            description="""set of words which will ignored by default(filled from exclusion_words_str).
+            Example: '["foo", "bar"]' """,
         ),
     ] = set()
 
     @pydantic.model_validator(mode="after")
     def assemble_exclusion_words_set(self) -> "typing_extensions.Self":
-        self.exclusion_words_set = {
-            one_word.strip().lower() for one_word in self.exclusion_words_str.split(",") if one_word
-        }
+        if not self.exclusion_words_set:
+            self.exclusion_words_set = {
+                one_word.strip().lower() for one_word in self.exclusion_words_str.split(",") if one_word
+            }
         return self
 
     class Config:
