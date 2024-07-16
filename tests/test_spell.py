@@ -60,7 +60,7 @@ def test_default_excluded_words(
     monkeypatch: typing.Any,
 ) -> None:
     with monkeypatch.context() as patcher:
-        patcher.setattr(SETTINGS, "exclusion_words_set", excluded_words)
+        patcher.setattr(SETTINGS, "_exclusion_words_set", excluded_words)
         fake_engine: SpellCheckService = SpellCheckService()
         prepared = fake_engine.prepare(
             models.SpellCheckRequest(text=wannabe_user_input, language=RU_LANG, exclude_urls=False),

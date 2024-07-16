@@ -35,9 +35,7 @@ You can change config of the service by changing the environment variables. Here
 * `SPELLCHECK_DICTIONARIES_DISABLED` switches off user dictionaries API no matter what. Default value is `False`.
 * `SPELLCHECK_USERNAME_MIN_LENGTH` minimum length of username. Default value is `3`.
 * `SPELLCHECK_USERNAME_MAX_LENGTH` maximum length of username. Default value is `60`.
-* `SPELLCHECK_EXCLUSION_WORDS_STR` list of words which will ignored by default(string separated by comma). Example: 'foo, bar'. Default value is empty string.
-* `SPELLCHECK_EXCLUSION_WORDS_SET` set of words which will ignored by default(filled from exclusion_words_str).
-            Example: '["foo", "bar"]' . Default value is `set()`.
+* `SPELLCHECK_EXCLUSION_WORDS_STR` String with list of words which will be ignored in /api/check endpoint each request. Example: `'foo, bar'`. Default value is empty string.
 
 ### Deployment
 Note: all docker & docker-compose variants use named volumes to store user dictionaries.
