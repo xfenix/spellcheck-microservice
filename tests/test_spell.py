@@ -1,7 +1,11 @@
+import typing
+
 import pytest
 
 from tests._fixtures import COMMON_TEXT_MESSAGE
+from tests.test_spell_views import RU_LANG
 from whole_app import models
+from whole_app.settings import SETTINGS
 from whole_app.spell import SpellCheckService
 
 
@@ -44,3 +48,23 @@ def test_urls_ignored(
         models.SpellCheckRequest(text=COMMON_TEXT_MESSAGE.format(url), language="ru_RU", exclude_urls=True),
     ).run_check()
     assert not corrections
+
+
+@pytest.mark.parametrize(
+    ("wannabe_user_input", "excluded_words"),
+    [("ШЯЧЛО ПОПЯЧТСА ПОПЯЧТСА", {"шячло", "попячтса"})],
+)
+def test_default_excluded_words(
+    wannabe_user_input: str,
+    excluded_words: str,
+    monkeypatch: typing.Any,
+) -> None:
+    with monkeypatch.context() as patcher:
+        patcher.setattr(SETTINGS, "_exclusion_words_set", excluded_words)
+        fake_engine: SpellCheckService = SpellCheckService()
+        prepared = fake_engine.prepare(
+            models.SpellCheckRequest(text=wannabe_user_input, language=RU_LANG, exclude_urls=False),
+        )
+
+        corrections = prepared.run_check()
+        assert corrections == [], f"{corrections=} --- {prepared._exclusion_words=}"  # noqa: SLF001

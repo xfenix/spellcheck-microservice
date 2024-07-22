@@ -5,6 +5,8 @@ import typing
 import pydantic
 import structlog
 import toml
+import typing_extensions
+from pydantic import computed_field
 from pydantic_settings import BaseSettings
 
 
@@ -195,12 +197,32 @@ class SettingsOfMicroservice(BaseSettings):
         ),
     ] = 60
     username_regex: str = r"^[a-zA-Z0-9-_]*$"
-    exclusion_words: typing.Annotated[
+    exclusion_words_str: typing.Annotated[
         str,
         pydantic.Field(
-            description="list of words which will ignored by default(string separated by comma)",
+            description="String with list of words which will be ignored in /api/check endpoint each request. "
+            "Example: `'foo, bar'`"
         ),
     ] = ""
+    _exclusion_words_set: typing.Annotated[
+        set[str],
+        pydantic.Field(
+            description="""set of words which will ignored by default(filled from exclusion_words_str).
+            Example: `'["foo", "bar"]'` """,
+        ),
+    ] = set()
+
+    @computed_field  # type: ignore[misc]
+    @property
+    def exclusion_words_set(self) -> set[str]:
+        return self._exclusion_words_set
+
+    @pydantic.model_validator(mode="after")
+    def _assemble_exclusion_words_set(self) -> "typing_extensions.Self":
+        self._exclusion_words_set = {
+            one_word.strip().lower() for one_word in self.exclusion_words_str.split(",") if one_word
+        }
+        return self
 
     class Config:
         env_prefix: str = "spellcheck_"
