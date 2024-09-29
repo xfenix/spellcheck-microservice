@@ -1,56 +1,49 @@
-[tool.poetry]
+[project]
 name = "spellcheck-microservice"
 version = "4.0.0"
 description = "Microservice for spellchecking"
-authors = ["Denis Anikin <ad@xfenix.ru>"]
-license = "MIT"
+authors = [{name = "Denis Anikin", email = "<ad@xfenix.ru>"}]
+license = {text = "MIT"}
+dependencies = [
+    "aiopath",
+    "anyio",
+    "fastapi",
+    "gunicorn",
+    "pydantic-settings",
+    "pyenchant",
+    "pylru",
+    "sentry-sdk",
+    "structlog",
+    "toml",
+    "urlextract",
+    "uvicorn",
+]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-gunicorn = "*"
-uvicorn = "*"
-pyenchant = "*"
-toml = "*"
-pylru = "*"
-aiopath = "*"
-anyio = "*"
-sentry-sdk = "*"
-pydantic-settings = "*"
-fastapi = "*"
-structlog = "*"
-urlextract = "*"
-
-[tool.poetry.group.dev.dependencies]
-httpx = "*"
-pytest = "*"
-pytest-cov = "*"
-pytest-xdist = "*"
-mypy = "*"
-requests = "*"
-types-requests = "*"
-Faker = "*"
-vulture = "*"
-types-toml = "*"
-pytest-repeat = "*"
-ruff = "*"
+[project.optional-dependencies]
+dev = [
+    "httpx",
+    "pytest",
+    "pytest-cov",
+    "pytest-xdist",
+    "mypy",
+    "requests",
+    "types-requests",
+    "faker",
+    "vulture",
+    "types-toml",
+    "pytest-repeat",
+]
 
 [tool.ruff]
 fix = true
 unsafe-fixes = true
 line-length = 120
+
+[tool.ruff.lint]
 select = ["ALL"]
 ignore = ["D1", "D203", "D213", "FA102", "ANN101", "COM812", "ISC001"]
 
-[tool.ruff.format]
-docstring-code-format = true
-
-[tool.ruff.lint.isort]
-no-lines-before = ["standard-library", "local-folder"]
-known-third-party = []
-known-local-folder = ["whole_app"]
-lines-after-imports = 2
-
-[tool.ruff.extend-per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "tests/*.py" = [
     "ANN001",
     "ANN002",
@@ -61,6 +54,15 @@ lines-after-imports = 2
     "S311",
 ]
 "tests/_fixtures.py" = ["E501"]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint.isort]
+no-lines-before = ["standard-library", "local-folder"]
+known-third-party = []
+known-local-folder = ["whole_app"]
+lines-after-imports = 2
 
 [tool.mypy]
 plugins = "pydantic.mypy"
@@ -80,7 +82,3 @@ exclude_also = [
 
 [tool.coverage.run]
 omit = ["scripts/*"]
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
