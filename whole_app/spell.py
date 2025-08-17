@@ -17,7 +17,7 @@ SEPARATORS_TO_SPLIT_URL_BY_WORDS: typing.Final[re.Pattern[str]] = re.compile(r"\
 
 
 class SpellCheckService:
-    __slots__ = ("_input_text", "_spellcheck_engine", "_exclusion_words")
+    __slots__ = ("_exclusion_words", "_input_text", "_spellcheck_engine")
     _input_text: str
     _spellcheck_engine: SpellChecker
     _exclusion_words: list[str]
@@ -31,7 +31,7 @@ class SpellCheckService:
         """Initialize machinery."""
         self._input_text = request_payload.text
         self._exclusion_words = exclusion_words if exclusion_words else []
-        self._exclusion_words.extend(SETTINGS.exclusion_words_set)
+        self._exclusion_words.extend(SETTINGS.exclusion_words_set())
 
         if request_payload.exclude_urls:
             for one_url in self._url_extractor.find_urls(self._input_text):

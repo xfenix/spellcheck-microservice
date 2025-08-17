@@ -25,7 +25,7 @@ def patch_file_provider_for_temp(
 
 
 # pylint: disable=redefined-outer-name
-@pytest.fixture()
+@pytest.fixture
 def app_client(
     monkeypatch: pytest.MonkeyPatch,
     faker_obj: typing.Any,

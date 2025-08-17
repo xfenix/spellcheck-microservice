@@ -11,7 +11,7 @@ ARG WORKDIR
 WORKDIR $WORKDIR
 RUN groupadd --gid $USER_GID $USERNAME
 RUN useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
-COPY poetry.lock .
+COPY uv.lock .
 COPY pyproject.toml .
 RUN apt-get update -y
 # install rust
@@ -20,14 +20,13 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 # install prerequisites
 RUN apt-get install -y build-essential libssl-dev enchant-2 hunspell-ru hunspell-es hunspell-de-de hunspell-fr hunspell-pt-pt
-RUN pip install -U pip poetry
-RUN poetry config virtualenvs.create false
+RUN pip install -U pip uv
 # install necessary packages
-RUN poetry install --compile
+RUN uv pip install --system -r uv.lock --group default
 # massive cleanup
-RUN rm poetry.lock
-RUN poetry cache clear pypi --all
-RUN pip uninstall -y poetry pip setuptools
+RUN rm uv.lock
+RUN uv cache clean
+RUN pip uninstall -y uv pip setuptools
 RUN rustup self uninstall -y
 RUN apt-get remove -y build-essential libssl-dev gcc curl
 RUN apt-get clean autoclean

@@ -20,12 +20,12 @@ test-in-docker:
 	docker run -t spellcheck-microservice bash -c "COVERAGE_FILE=/tmp/junk.coverage pytest . -n3"
 
 lint:
-	ruff . --no-fix
+	ruff check . --no-fix
 	mypy .
 	vulture whole_app --min-confidence 100
 
 lint-in-docker:
-	docker run -t spellcheck-microservice bash -c "RUFF_CACHE_DIR=/tmp/ruff-cache ruff . --no-fix && mypy . && vulture whole_app --min-confidence 100"
+	docker run -t spellcheck-microservice bash -c "RUFF_CACHE_DIR=/tmp/ruff-cache ruff check . --no-fix && mypy . && vulture whole_app --min-confidence 100"
 
 run-prod:
 	docker run -p 10113:10113 -e SPELLCHECK_WORKERS=1 -t spellcheck-microservice:latest
