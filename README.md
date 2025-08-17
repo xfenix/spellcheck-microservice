@@ -65,12 +65,12 @@ You cand find it here https://github.com/xfenix/spellcheck-microservice/releases
 ### Quickstart
 * Clone this repo
 * For MacOS X `brew install enchant`
-* `poetry install`
-* `poetry shell`
+* `uv sync --group dev`
+* `source .venv/bin/activate`
 * Run `touch .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit`
 * Paste following contents in file `.git/hooks/pre-commit`:
     ```sh
-    poetry run make update-readme
+    uv run make update-readme
     git add README.md
     ```
 * Execute `make` command to run local development server

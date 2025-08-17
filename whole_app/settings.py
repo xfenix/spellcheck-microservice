@@ -28,10 +28,7 @@ def _warn_about_poor_lru_cache_size(
 ) -> int:
     if int(possible_value) < 1:
         LOGGER_OBJ.warning(
-            (
-                "You set cache size less then 1. In this case, "
-                "the cache size will be unlimited and polute your memory."
-            ),
+            ("You set cache size less then 1. In this case, the cache size will be unlimited and polute your memory."),
         )
         return 0
     return possible_value
@@ -49,18 +46,18 @@ def _parse_version_from_local_file(
     default_value: str,
 ) -> str:
     try:
-        pyproject_obj: dict[str, dict[str, dict[str, str]]] = toml.loads(
+        pyproject_obj: typing.Final[dict[str, dict[str, object]]] = toml.loads(
             PATH_TO_PYPROJECT.read_text(),
         )
-        return pyproject_obj["tool"]["poetry"]["version"]
+        return typing.cast("str", pyproject_obj["project"]["version"])
     except (toml.TomlDecodeError, KeyError, FileNotFoundError) as exc:
         LOGGER_OBJ.warning("Cant parse version from pyproject. Trouble %s", exc)
     return default_value
 
 
 class StorageProviders(enum.Enum):
-    FILE: str = "file"
-    DUMMY: str = "dummy"
+    FILE = "file"
+    DUMMY = "dummy"
 
 
 class SettingsOfMicroservice(BaseSettings):
@@ -212,13 +209,12 @@ class SettingsOfMicroservice(BaseSettings):
         ),
     ] = set()
 
-    @computed_field  # type: ignore[misc]
-    @property
+    @computed_field
     def exclusion_words_set(self) -> set[str]:
         return self._exclusion_words_set
 
     @pydantic.model_validator(mode="after")
-    def _assemble_exclusion_words_set(self) -> "typing_extensions.Self":
+    def _assemble_exclusion_words_set(self) -> typing_extensions.Self:
         self._exclusion_words_set = {
             one_word.strip().lower() for one_word in self.exclusion_words_str.split(",") if one_word
         }
