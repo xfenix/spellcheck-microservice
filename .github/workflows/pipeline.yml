@@ -12,12 +12,9 @@ on:
 jobs:
   py-lint-and-test:
     runs-on: ubuntu-latest
-    container:
-      image: docker:24.0.5
     steps:
       - uses: actions/checkout@v3
       - run: |
-          apk add make
           make build
           make lint-in-docker
           make test-in-docker
