@@ -3,7 +3,7 @@ ARG USER_UID=2000
 ARG USER_GID=$USER_UID
 ARG WORKDIR=/srv/www/
 
-FROM pypy:3.10-slim as builder
+FROM pypy:3.11-slim as builder
 ARG USERNAME
 ARG USER_UID
 ARG USER_GID
@@ -37,7 +37,7 @@ RUN rm -rf /var/lib/apt/lists/*
 RUN mkdir /data/
 RUN chmod 777 /data/
 
-FROM pypy:3.10-slim as runtime
+FROM pypy:3.11-slim as runtime
 ARG USERNAME
 ARG WORKDIR
 WORKDIR $WORKDIR
