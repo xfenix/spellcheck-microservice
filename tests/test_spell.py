@@ -9,16 +9,49 @@ from whole_app.settings import SETTINGS
 from whole_app.spell import SpellCheckService
 
 
-def test_correct_spell() -> None:
+@pytest.mark.parametrize(
+    (
+        "text_input",
+        "expected_corrections",
+    ),
+    [
+        (
+            "Превед медвет",
+            [
+                ("Превед", 0, 6, None),
+                ("медвет", 7, 13, "медведь"),
+            ],
+        ),
+        (
+            "превет как дила",
+            [
+                ("превет", 0, 6, "привет"),
+                ("дила", 11, 15, "дела"),
+            ],
+        ),
+    ],
+)
+def test_correct_spell(
+    text_input: str,
+    expected_corrections: list[tuple[str, int, int, str | None]],
+) -> None:
     fake_engine: SpellCheckService = SpellCheckService()
-    # нужно сделать несколько тестов. B одном text рандомизировать
-    # в другом брать из _fixtures
-    fake_engine.prepare(
-        models.SpellCheckRequest(text="Превед медвет", language="ru_RU"),
+    corrections = fake_engine.prepare(
+        models.SpellCheckRequest(text=text_input, language=RU_LANG),
     ).run_check()
-    # a тут надо проверять, что first_position и last_position корректные, что word соответствует слову из text
-    # что в corrections есть правильные варианты (в рандомизированном случае можно такое не проверять)
-    # важно: нужно ВРУЧНУЮ подбирать first_position, last_position и правильные слова и вручную вносить сюда
+    assert len(corrections) == len(expected_corrections)
+    for one_correction, (word, first_position, last_position, suggestion) in zip(
+        corrections,
+        expected_corrections, strict=False,
+    ):
+        assert one_correction.first_position == first_position
+        assert one_correction.last_position == last_position
+        assert one_correction.word == word
+        assert text_input[first_position:last_position] == word
+        if suggestion is None:
+            assert one_correction.suggestions
+        else:
+            assert suggestion in one_correction.suggestions
 
 
 @pytest.mark.parametrize(
