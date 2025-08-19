@@ -11,8 +11,7 @@ ARG WORKDIR
 WORKDIR $WORKDIR
 RUN groupadd --gid $USER_GID $USERNAME
 RUN useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
-COPY uv.lock .
-COPY pyproject.toml .
+COPY pyproject.toml uv.lock ./
 RUN apt-get update -y
 # install rust
 RUN apt-get install -y curl
@@ -21,8 +20,8 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 # install prerequisites
 RUN apt-get install -y build-essential libssl-dev enchant-2 hunspell-ru hunspell-es hunspell-de-de hunspell-fr hunspell-pt-pt
 RUN pip install -U pip uv
-# install necessary packages
-RUN uv pip install --system -r uv.lock --group default
+# install necessary packages from lockfile
+RUN uv pip install --system -r uv.lock --frozen
 # massive cleanup
 RUN rm uv.lock
 RUN uv cache clean

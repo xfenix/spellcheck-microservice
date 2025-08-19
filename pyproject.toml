@@ -86,6 +86,9 @@ exclude_also = [
 [tool.coverage.run]
 omit = ["scripts/*"]
 
+[tool.hatch.build.targets.wheel]
+packages = ["whole_app"]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
