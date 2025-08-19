@@ -3,7 +3,7 @@ ARG USER_UID=2000
 ARG USER_GID=$USER_UID
 ARG WORKDIR=/srv/www/
 
-FROM pypy:3.11-slim as builder
+FROM pypy:3.11-slim AS builder
 ARG USERNAME
 ARG USER_UID
 ARG USER_GID
@@ -21,7 +21,7 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 RUN apt-get install -y build-essential libssl-dev enchant-2 hunspell-ru hunspell-es hunspell-de-de hunspell-fr hunspell-pt-pt
 RUN pip install -U pip uv
 # install necessary packages from lockfile
-RUN uv pip install --system -r uv.lock --frozen
+RUN uv pip install --system -r uv.lock
 # massive cleanup
 RUN rm uv.lock
 RUN uv cache clean
@@ -36,7 +36,7 @@ RUN rm -rf /var/lib/apt/lists/*
 RUN mkdir /data/
 RUN chmod 777 /data/
 
-FROM pypy:3.11-slim as runtime
+FROM pypy:3.11-slim AS runtime
 ARG USERNAME
 ARG WORKDIR
 WORKDIR $WORKDIR
