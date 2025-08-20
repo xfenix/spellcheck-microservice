@@ -13,7 +13,6 @@ ARG WORKDIR
 WORKDIR $WORKDIR
 RUN groupadd --gid $USER_GID $USERNAME
 RUN useradd --uid $USER_UID --gid $USER_GID -m $USERNAME
-COPY pyproject.toml uv.lock ./
 RUN apt-get update -y
 # install rust
 RUN apt-get install -y curl
@@ -22,12 +21,14 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 # install prerequisites
 RUN apt-get install -y build-essential libssl-dev enchant-2 hunspell-ru hunspell-es hunspell-de-de hunspell-fr hunspell-pt-pt
 RUN pip install -U pip uv
-# install necessary packages from lockfile
-RUN uv sync --locked --no-install-project
+# Install the project's dependencies using the lockfile and settings
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --locked --no-install-project
 # massive cleanup
-RUN rm uv.lock
 RUN uv cache clean
-RUN pip uninstall -y uv pip setuptools
+RUN pip uninstall -y pip setuptools
 RUN rustup self uninstall -y
 RUN apt-get remove -y build-essential libssl-dev gcc curl
 RUN apt-get clean autoclean
@@ -45,5 +46,6 @@ WORKDIR $WORKDIR
 COPY --from=builder / /
 COPY . $WORKDIR
 USER $USERNAME
+ENV PATH="$WORKDIR/.venv/bin:$PATH"
 ENV SPELLCHECK_ENABLE_CORS=false
 CMD ["python", "-m", "whole_app"]
