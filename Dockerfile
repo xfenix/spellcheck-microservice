@@ -4,6 +4,8 @@ ARG USER_GID=$USER_UID
 ARG WORKDIR=/srv/www/
 
 FROM pypy:3.11-slim AS builder
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_LINK_MODE=copy
 ARG USERNAME
 ARG USER_UID
 ARG USER_GID
@@ -21,7 +23,7 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 RUN apt-get install -y build-essential libssl-dev enchant-2 hunspell-ru hunspell-es hunspell-de-de hunspell-fr hunspell-pt-pt
 RUN pip install -U pip uv
 # install necessary packages from lockfile
-RUN uv pip install --system -r uv.lock
+RUN uv sync --locked --no-install-project --no-dev
 # massive cleanup
 RUN rm uv.lock
 RUN uv cache clean
