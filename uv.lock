@@ -1,53 +1,9 @@
 version = 1
-revision = 3
+revision = 2
 requires-python = ">=3.10"
 resolution-markers = [
     "python_full_version >= '3.12'",
     "python_full_version < '3.12'",
-]
-
-[[package]]
-name = "aiofile"
-version = "3.9.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "caio" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/67/e2/d7cb819de8df6b5c1968a2756c3cb4122d4fa2b8fc768b53b7c9e5edb646/aiofile-3.9.0.tar.gz", hash = "sha256:e5ad718bb148b265b6df1b3752c4d1d83024b93da9bd599df74b9d9ffcf7919b", size = 17943, upload-time = "2024-10-08T10:39:35.846Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/50/25/da1f0b4dd970e52bf5a36c204c107e11a0c6d3ed195eba0bfbc664c312b2/aiofile-3.9.0-py3-none-any.whl", hash = "sha256:ce2f6c1571538cbdfa0143b04e16b208ecb0e9cb4148e528af8a640ed51cc8aa", size = 19539, upload-time = "2024-10-08T10:39:32.955Z" },
-]
-
-[[package]]
-name = "aiopath"
-version = "0.6.11"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version < '3.12'",
-]
-dependencies = [
-    { name = "aiofile", marker = "python_full_version < '3.12'" },
-    { name = "anyio", version = "3.7.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/b9/4b/aa390154894571e28c6cc7c8dbf3e1da79955923c10fc41e3ff275318101/aiopath-0.6.11.tar.gz", hash = "sha256:2f0d4d9195281612c6508cbfa12ac3184c31540d13b9e6215a325897da59decd", size = 20187, upload-time = "2022-10-28T00:05:48.682Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/47/4f/14f740a26b3ebd346f3412f0d908f502679a8a17f5d2d0b635a66eced560/aiopath-0.6.11-py2.py3-none-any.whl", hash = "sha256:7b1f1aa3acb422050908ac3c4755b5e43f625111be003f1bfc7dc2193027c45d", size = 18866, upload-time = "2022-10-28T00:05:46.944Z" },
-]
-
-[[package]]
-name = "aiopath"
-version = "0.7.7"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version >= '3.12'",
-]
-dependencies = [
-    { name = "aiofile", marker = "python_full_version >= '3.12'" },
-    { name = "anyio", version = "4.10.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/a4/6f/b377e3eb293feb57e457b33961004cc3716794ef97428d2ae2a326599b1c/aiopath-0.7.7.tar.gz", hash = "sha256:ad4b9d09ae08ddf6d39dd06e7b0a353939e89528da571c0cd4f3fe071aefad4f", size = 16925, upload-time = "2023-10-16T22:37:11.381Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/97/df/6a3826363e4848ffa8972410ab5234d3802597ae92f4a6397600149112c7/aiopath-0.7.7-py2.py3-none-any.whl", hash = "sha256:cd5d18de8ede167e1db659f02ee448fe085f923cb8e194407ccc568bffc4fe4e", size = 12200, upload-time = "2023-10-16T22:37:09.595Z" },
 ]
 
 [[package]]
@@ -61,56 +17,21 @@ wheels = [
 
 [[package]]
 name = "anyio"
-version = "3.7.1"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version < '3.12'",
-]
-dependencies = [
-    { name = "exceptiongroup", marker = "python_full_version < '3.11'" },
-    { name = "idna", marker = "python_full_version < '3.12'" },
-    { name = "sniffio", marker = "python_full_version < '3.12'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/28/99/2dfd53fd55ce9838e6ff2d4dac20ce58263798bd1a0dbe18b3a9af3fcfce/anyio-3.7.1.tar.gz", hash = "sha256:44a3c9aba0f5defa43261a8b3efb97891f2bd7d804e0e1f56419befa1adfc780", size = 142927, upload-time = "2023-07-05T16:45:02.294Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/19/24/44299477fe7dcc9cb58d0a57d5a7588d6af2ff403fdd2d47a246c91a3246/anyio-3.7.1-py3-none-any.whl", hash = "sha256:91dee416e570e92c64041bd18b900d1d6fa78dff7048769ce5ac5ddad004fbb5", size = 80896, upload-time = "2023-07-05T16:44:59.805Z" },
-]
-
-[[package]]
-name = "anyio"
 version = "4.10.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
+    "python_full_version < '3.12'",
     "python_full_version >= '3.12'",
 ]
 dependencies = [
-    { name = "idna", marker = "python_full_version >= '3.12'" },
-    { name = "sniffio", marker = "python_full_version >= '3.12'" },
-    { name = "typing-extensions", marker = "python_full_version == '3.12.*'" },
+    { name = "exceptiongroup", marker = "python_full_version < '3.11'" },
+    { name = "idna" },
+    { name = "sniffio" },
+    { name = "typing-extensions", marker = "python_full_version < '3.13'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/f1/b4/636b3b65173d3ce9a38ef5f0522789614e590dab6a8d505340a4efe4c567/anyio-4.10.0.tar.gz", hash = "sha256:3f3fae35c96039744587aa5b8371e7e8e603c0702999535961dd336026973ba6", size = 213252, upload-time = "2025-08-04T08:54:26.451Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/6f/12/e5e0282d673bb9746bacfb6e2dba8719989d3660cdb2ea79aee9a9651afb/anyio-4.10.0-py3-none-any.whl", hash = "sha256:60e474ac86736bbfd6f210f7a61218939c318f43f9972497381f1c5e930ed3d1", size = 107213, upload-time = "2025-08-04T08:54:24.882Z" },
-]
-
-[[package]]
-name = "caio"
-version = "0.9.24"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/98/04/ec9b6864135032fd454f6cd1d9444e0bb01040196ad0cd776c061fc92c6b/caio-0.9.24.tar.gz", hash = "sha256:5bcdecaea02a9aa8e3acf0364eff8ad9903d57d70cdb274a42270126290a77f1", size = 27174, upload-time = "2025-04-23T16:31:19.191Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/5c/59/62e1fe2f11790d04cf6c54d1872444eab70ae4bad948277ed9f8532a7dcd/caio-0.9.24-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:d80322126a97ba572412b17b2f086ff95195de2c4261deb19db6bfcdc9ef7540", size = 42066, upload-time = "2025-04-23T16:31:01.306Z" },
-    { url = "https://files.pythonhosted.org/packages/66/fb/134f5014937c454571c2510685ace79c5c1bb399446b3d2acd21e85930fc/caio-0.9.24-cp310-cp310-manylinux_2_34_aarch64.whl", hash = "sha256:37bc172349686139e8dc97fff7662c67b1837e18a67b99e8ef25585f2893d013", size = 79534, upload-time = "2025-04-23T16:31:03.111Z" },
-    { url = "https://files.pythonhosted.org/packages/85/dc/222f6c525f8e23850315ea82ad3ca01721ef9628d63daf98a3b6736efa75/caio-0.9.24-cp310-cp310-manylinux_2_34_x86_64.whl", hash = "sha256:ad7f0902bf952237e120606252c14ab3cb05995c9f79f39154b5248744864832", size = 77712, upload-time = "2025-04-23T16:31:04.468Z" },
-    { url = "https://files.pythonhosted.org/packages/f8/9d/4f9f58ef6b708e0bf67c6af0c1b3d21d4b1b6dc1a4c2d741793cf4ac8e5d/caio-0.9.24-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:925b9e3748ce1a79386dfb921c0aee450e43225534551abd1398b1c08f9ba29f", size = 42073, upload-time = "2025-04-23T16:31:05.853Z" },
-    { url = "https://files.pythonhosted.org/packages/57/89/6e6830c4920f47c0aabffd920893777595893eef9577a965e7511566a214/caio-0.9.24-cp311-cp311-manylinux_2_34_aarch64.whl", hash = "sha256:3b4dc0a8fb9a58ab40f967ad5a8a858cc0bfb2348a580b4142595849457f9c9a", size = 80116, upload-time = "2025-04-23T16:31:06.671Z" },
-    { url = "https://files.pythonhosted.org/packages/d5/58/25e43b2a46a802da39efa6d5e98a8dd9e2b92ec997d6c2ea1de216bf3f35/caio-0.9.24-cp311-cp311-manylinux_2_34_x86_64.whl", hash = "sha256:fa74d111b3b165bfad2e333367976bdf118bcf505a1cb44d3bcddea2849e3297", size = 78274, upload-time = "2025-04-23T16:31:07.553Z" },
-    { url = "https://files.pythonhosted.org/packages/5f/76/b33a89dc2516aae045ef509cf2febe7ffb2a36c4eebb8f301a7ef2093385/caio-0.9.24-cp312-cp312-macosx_10_9_universal2.whl", hash = "sha256:7ae3566228383175265a7583107f21a7cb044a752ea29ba84fce7c1a49a05903", size = 42212, upload-time = "2025-04-23T16:31:08.457Z" },
-    { url = "https://files.pythonhosted.org/packages/a9/8c/cb62483e69309bbad503c2ace29c4ac3466558a20e9aed840d313e1dcacd/caio-0.9.24-cp312-cp312-manylinux_2_34_aarch64.whl", hash = "sha256:a306b0dda91cb4ca3170f066c114597f8ea41b3da578574a9d2b54f86963de68", size = 81517, upload-time = "2025-04-23T16:31:09.686Z" },
-    { url = "https://files.pythonhosted.org/packages/64/80/8a8cdfd4b47e06d1e9de6d5431c2603e0741282fa06f757f10c04e619d8f/caio-0.9.24-cp312-cp312-manylinux_2_34_x86_64.whl", hash = "sha256:8ee158e56128d865fb7d57a9c9c22fca4e8aa8d8664859c977a36fff3ccb3609", size = 80216, upload-time = "2025-04-23T16:31:10.98Z" },
-    { url = "https://files.pythonhosted.org/packages/66/35/06e77837fc5455d330c5502460fc3743989d4ff840b61aa79af3a7ec5b19/caio-0.9.24-cp313-cp313-macosx_10_13_universal2.whl", hash = "sha256:1d47ef8d76aca74c17cb07339a441c5530fc4b8dd9222dfb1e1abd7f9f9b814f", size = 42214, upload-time = "2025-04-23T16:31:12.272Z" },
-    { url = "https://files.pythonhosted.org/packages/e0/e2/c16aeaea4b2103e04fdc2e7088ede6313e1971704c87fcd681b58ab1c6b4/caio-0.9.24-cp313-cp313-manylinux_2_34_aarch64.whl", hash = "sha256:d15fc746c4bf0077d75df05939d1e97c07ccaa8e580681a77021d6929f65d9f4", size = 81557, upload-time = "2025-04-23T16:31:13.526Z" },
-    { url = "https://files.pythonhosted.org/packages/78/3b/adeb0cffe98dbe60661f316ec0060037a5209a5ed8be38ac8e79fdbc856d/caio-0.9.24-cp313-cp313-manylinux_2_34_x86_64.whl", hash = "sha256:9368eae0a9badd5f31264896c51b47431d96c0d46f1979018fb1d20c49f56156", size = 80242, upload-time = "2025-04-23T16:31:14.365Z" },
 ]
 
 [[package]]
@@ -392,8 +313,7 @@ name = "httpx"
 version = "0.28.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "anyio", version = "3.7.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "anyio", version = "4.10.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "anyio" },
     { name = "certifi" },
     { name = "httpcore" },
     { name = "idna" },
@@ -790,10 +710,7 @@ name = "spellcheck-microservice"
 version = "4.0.0"
 source = { editable = "." }
 dependencies = [
-    { name = "aiopath", version = "0.6.11", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "aiopath", version = "0.7.7", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-    { name = "anyio", version = "3.7.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "anyio", version = "4.10.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "anyio" },
     { name = "fastapi" },
     { name = "gunicorn" },
     { name = "pydantic-settings" },
@@ -824,8 +741,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "aiopath" },
-    { name = "anyio" },
+    { name = "anyio", specifier = ">=4" },
     { name = "fastapi" },
     { name = "gunicorn" },
     { name = "pydantic-settings" },
@@ -859,8 +775,7 @@ name = "starlette"
 version = "0.47.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "anyio", version = "3.7.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "anyio", version = "4.10.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "anyio" },
     { name = "typing-extensions", marker = "python_full_version < '3.13'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/04/57/d062573f391d062710d4088fa1369428c38d51460ab6fedff920efef932e/starlette-0.47.2.tar.gz", hash = "sha256:6ae9aa5db235e4846decc1e7b79c4f346adf41e9777aebeb49dfd09bbd7023d8", size = 2583948, upload-time = "2025-07-20T17:31:58.522Z" }

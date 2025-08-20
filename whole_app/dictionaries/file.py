@@ -1,6 +1,6 @@
 import typing
 
-import aiopath
+from anyio import Path as AsyncPath
 
 from whole_app.settings import SETTINGS
 
@@ -13,10 +13,10 @@ def init_storage() -> None:
 
 
 class FileProvider:
-    _user_dict_path: aiopath.AsyncPath
+    _user_dict_path: AsyncPath
 
     def prepare(self: "FileProvider", user_name: str) -> "FileProvider":
-        self._user_dict_path = aiopath.AsyncPath(SETTINGS.dictionaries_path / user_name)
+        self._user_dict_path = AsyncPath(SETTINGS.dictionaries_path / user_name)
         return self
 
     async def _store_lines(self: "FileProvider", lines: list[str]) -> None:
