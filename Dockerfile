@@ -23,7 +23,7 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 RUN apt-get install -y build-essential libssl-dev enchant-2 hunspell-ru hunspell-es hunspell-de-de hunspell-fr hunspell-pt-pt
 RUN pip install -U pip uv
 # install necessary packages from lockfile
-RUN uv sync --locked --no-install-project --no-dev
+RUN uv sync --locked --no-install-project
 # massive cleanup
 RUN rm uv.lock
 RUN uv cache clean
