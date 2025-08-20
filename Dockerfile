@@ -28,7 +28,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked --no-install-project
 # massive cleanup
 RUN uv cache clean
-RUN pip uninstall -y pip setuptools
+RUN pip uninstall -y uv pip setuptools
 RUN rustup self uninstall -y
 RUN apt-get remove -y build-essential libssl-dev gcc curl
 RUN apt-get clean autoclean
