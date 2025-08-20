@@ -9,7 +9,7 @@ def init_storage() -> None:
     SETTINGS.dictionaries_path.mkdir(
         parents=True,
         exist_ok=True,
-    )  # pylint: disable=no-member
+    )
 
 
 class FileProvider:
@@ -25,13 +25,13 @@ class FileProvider:
     async def save_record(self: "FileProvider", exception_word: str) -> None:
         await self._user_dict_path.touch()
         clean_word: typing.Final = exception_word.strip().lower()
-        file_content = await self.fetch_records()
+        file_content: typing.Final = await self.fetch_records()
         if clean_word not in file_content:
             file_content.append(clean_word)
             await self._store_lines(file_content)
 
     async def remove_record(self: "FileProvider", exception_word: str) -> None:
-        file_content = await self.fetch_records()
+        file_content: typing.Final = await self.fetch_records()
         if exception_word in file_content:
             file_content.remove(exception_word)
             await self._store_lines(file_content)

@@ -1,5 +1,3 @@
-"""All project end-points lie here."""
-
 import typing
 
 import fastapi
@@ -39,7 +37,6 @@ if SETTINGS.sentry_dsn:
 
 @SPELL_APP.on_event("startup")
 def startup() -> None:
-    """Initialize storage."""
     dictionaries.init_storage()
     misc_helpers.init_logger()
     LOGGER_OBJ.info("Current settings: %s", SETTINGS)
