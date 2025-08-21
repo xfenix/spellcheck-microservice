@@ -83,13 +83,8 @@ You cand find it here https://github.com/xfenix/spellcheck-microservice/releases
 - For Debian/Ubuntu `apt-get install -y enchant-2 hunspell-ru`
 - `uv sync --group dev`
 - `source .venv/bin/activate`
-- Run `touch .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit`
-- Paste following contents in file `.git/hooks/pre-commit`:
-  ```sh
-  uv run make update-readme
-  git add README.md
-  ```
 - Execute `make` command to run local development server
+- README is automatically updated in the CI pipeline for each commit
 
 ### Notes
 
