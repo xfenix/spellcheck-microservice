@@ -560,12 +560,12 @@ wheels = [
 ]
 
 [[package]]
-name = "pylru"
-version = "1.2.1"
+name = "cachebox"
+version = "5.0.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/95/8e/2a0d3426738db0b41d69d36243bdd00420ad231e802d09dad8db02005d13/pylru-1.2.1.tar.gz", hash = "sha256:47ad140a63ab9389648dadfbb4330700e0ffeeb28ec04664ee47d37ed133b0f4", size = 16923, upload-time = "2022-03-06T20:17:07.947Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/dc/97/345f643ada89d66aa383aa222ea79ba65d694caaaf5e3a7c1aeb87452b4d/cachebox-5.0.1.tar.gz", hash = "sha256:990d719958037907671a97998739db60494fc4ffd5e506c48e7ea164015af3fb", size = 63456, upload-time = "2025-04-25T08:29:55.853388Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2e/0d/0bfa25457d7bb1cc771c7073e05f254142e560d951f9c9d1c953c2324bac/pylru-1.2.1-py3-none-any.whl", hash = "sha256:b7c75b0676e2fbae647823bc209e23998772867d3679f1583c7350a9b02a59f0", size = 16338, upload-time = "2022-03-06T20:17:06.733Z" },
+    { url = "https://files.pythonhosted.org/packages/da/e3/9a2fe670f6ff690676bca6e788d9468c9aa2f6dbddedbaaadb7637ff46de/cachebox-5.0.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:043fbf1389e6747ae9185b319cbac58e2d45303ad873791ce16b2cd941867501", size = 351483, upload-time = "2025-04-25T08:28:07.294678Z" },
 ]
 
 [[package]]
@@ -707,7 +707,7 @@ dependencies = [
     { name = "gunicorn" },
     { name = "pydantic-settings" },
     { name = "pyenchant" },
-    { name = "pylru" },
+    { name = "cachebox" },
     { name = "sentry-sdk" },
     { name = "structlog" },
     { name = "toml" },
@@ -738,7 +738,7 @@ requires-dist = [
     { name = "gunicorn" },
     { name = "pydantic-settings" },
     { name = "pyenchant" },
-    { name = "pylru" },
+    { name = "cachebox" },
     { name = "sentry-sdk" },
     { name = "structlog" },
     { name = "toml" },
