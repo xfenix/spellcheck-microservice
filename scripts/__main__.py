@@ -18,7 +18,6 @@ COVERAGE_XML_PATH: typing.Final = pathlib.Path("coverage.xml")
 BADGE_JSON_PATH: typing.Final = pathlib.Path(".github/badges/coverage.json")
 LOW_BOUNDARY: typing.Final[float] = 60
 HIGH_BOUNDARY: typing.Final[float] = 80
-RETRY_ATTEMPTS: typing.Final[int] = 3
 
 
 def _update_dockerhub_readme() -> None:
