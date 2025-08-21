@@ -15,7 +15,7 @@ Also it supports feature called «user dictionaries» — user can add his own w
 
 ## Quickstart
 
-- `docker run -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:4.1.0`
+- `docker run -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:4.2.0`
 - check http://localhost:10113/docs/ for full REST documentation
 - main REST endpoint you will be needed is http://localhost:10113/api/check/ (this will be available without authorization)
 
@@ -24,23 +24,23 @@ Also it supports feature called «user dictionaries» — user can add his own w
 ### Config options
 
 You can change config of the service by changing the environment variables. Here is a list of them:
-
-- `SPELLCHECK_SENTRY_DSN` Sentry DSN for integration. Empty field disables integration. Default value is empty string.
-- `SPELLCHECK_API_KEY` define api key for users dictionaries mostly. Please, provide, if you want to enable user dictionaries API. Default value is empty string.
-- `SPELLCHECK_ENABLE_CORS` enable CORS for all endpoints. In docker container this option is disabled. Default value is `True`.
-- `SPELLCHECK_STRUCTURED_LOGGING` enables structured (json) logging. Default value is `True`.
-- `SPELLCHECK_WORKERS` define application server workers count. If you plan to use k8s and only scale with replica sets, you might want to reduce this value to `1`. Default value is `8`. Restrictions: `Gt(gt=0)`, `Lt(lt=301)`
-- `SPELLCHECK_PORT` binding port. Default value is `10113`. Restrictions: `Gt(gt=1023)`, `Lt(lt=65536)`
-- `SPELLCHECK_CACHE_SIZE` define LRU cache size for misspelled word/suggestions cache. Any value less than `1` makes the cache size unlimited, so be careful with this option. Default value is `10000`.
-- `SPELLCHECK_API_PREFIX` define all API's URL prefix. Default value is `/api/`.
-- `SPELLCHECK_DOCS_URL` define documentation (swagger) URL prefix. Default value is `/docs/`.
-- `SPELLCHECK_MAX_SUGGESTIONS` defines how many maximum suggestions for each word will be available. 0 means unlimitied. Default value is `0`. Restrictions: `Ge(ge=0)`
-- `SPELLCHECK_DICTIONARIES_PATH` define directory where user dicts is stored. This is inner directory in the docker image, please map it to volume as it shown in the quickstart part of this readme. Default value is `/data`.
-- `SPELLCHECK_DICTIONARIES_STORAGE_PROVIDER` define wich engine will store user dictionaries. Default value is `StorageProviders.FILE`.
-- `SPELLCHECK_DICTIONARIES_DISABLED` switches off user dictionaries API no matter what. Default value is `False`.
-- `SPELLCHECK_USERNAME_MIN_LENGTH` minimum length of username. Default value is `3`.
-- `SPELLCHECK_USERNAME_MAX_LENGTH` maximum length of username. Default value is `60`.
-- `SPELLCHECK_EXCLUSION_WORDS_STR` String with list of words which will be ignored in /api/check endpoint each request. Example: `'foo, bar'`. Default value is empty string.
+* `SPELLCHECK_SENTRY_DSN` Sentry DSN for integration. Empty field disables integration. Default value is empty string.
+* `SPELLCHECK_API_KEY` define api key for users dictionaries mostly. Please, provide, if you want to enable user dictionaries API. Default value is empty string.
+* `SPELLCHECK_ENABLE_CORS` enable CORS for all endpoints. In docker container this option is disabled. Default value is `True`.
+* `SPELLCHECK_STRUCTURED_LOGGING` enables structured (json) logging. Default value is `True`.
+* `SPELLCHECK_WORKERS` define application server workers count. If you plan to use k8s and only scale with replica sets, you might want to reduce this value to `1`. Default value is `8`. Restrictions: `Gt(gt=0)`, `Lt(lt=301)`
+* `SPELLCHECK_SERVER_ADDRESS` binding address, default value suitable for docker. Default value is `0.0.0.0`.
+* `SPELLCHECK_PORT` binding port. Default value is `10113`. Restrictions: `Gt(gt=1023)`, `Lt(lt=65536)`
+* `SPELLCHECK_CACHE_SIZE` define LRU cache size for misspelled word/suggestions cache. Any value less than `1` makes the cache size unlimited, so be careful with this option. Default value is `10000`.
+* `SPELLCHECK_API_PREFIX` define all API's URL prefix. Default value is `/api/`.
+* `SPELLCHECK_DOCS_URL` define documentation (swagger) URL prefix. Default value is `/docs/`.
+* `SPELLCHECK_MAX_SUGGESTIONS` defines how many maximum suggestions for each word will be available. 0 means unlimitied. Default value is `0`. Restrictions: `Ge(ge=0)`
+* `SPELLCHECK_DICTIONARIES_PATH` define directory where user dicts is stored. This is inner directory in the docker image, please map it to volume as it shown in the quickstart part of this readme. Default value is `/data`.
+* `SPELLCHECK_DICTIONARIES_STORAGE_PROVIDER` define wich engine will store user dictionaries. Default value is `StorageProviders.FILE`.
+* `SPELLCHECK_DICTIONARIES_DISABLED` switches off user dictionaries API no matter what. Default value is `False`.
+* `SPELLCHECK_USERNAME_MIN_LENGTH` minimum length of username. Default value is `3`.
+* `SPELLCHECK_USERNAME_MAX_LENGTH` maximum length of username. Default value is `60`.
+* `SPELLCHECK_EXCLUSION_WORDS_STR` String with list of words which will be ignored in /api/check endpoint each request. Example: `'foo, bar'`. Default value is empty string.
 
 ### Deployment
 
@@ -48,7 +48,7 @@ Note: all docker & docker-compose variants use named volumes to store user dicti
 
 #### Plain docker
 
-`docker run  -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:4.1.0`
+`docker run  -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:4.2.0`
 
 #### Docker-compose
 
@@ -58,7 +58,7 @@ Note: all docker & docker-compose variants use named volumes to store user dicti
 version: "3.9"
 services:
   spellcheck:
-    image: xfenix/spellcheck-microservice:4.1.0
+    image: xfenix/spellcheck-microservice:4.2.0
     ports:
       - "10113:10113"
     volumes:
