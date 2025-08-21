@@ -30,7 +30,7 @@ jobs:
   submit-coverage:
     runs-on: ubuntu-latest
     container:
-      image: python:3.10.12-slim
+      image: python:3.12-slim
     steps:
       - uses: actions/checkout@v3
       - run: |
@@ -82,7 +82,7 @@ jobs:
     needs: [build-and-publish]
     runs-on: ubuntu-latest
     container:
-      image: python:3.10.12-slim
+      image: python:3.12-slim
     steps:
       - uses: actions/checkout@v3
       - run: |
