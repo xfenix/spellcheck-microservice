@@ -15,7 +15,7 @@ Also it supports feature called «user dictionaries» — user can add his own w
 
 ## Quickstart
 
-- `docker run -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:4.2.0`
+- `docker run -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:main`
 - check http://localhost:10113/docs/ for full REST documentation
 - main REST endpoint you will be needed is http://localhost:10113/api/check/ (this will be available without authorization)
 
@@ -48,7 +48,7 @@ Note: all docker & docker-compose variants use named volumes to store user dicti
 
 #### Plain docker
 
-`docker run  -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:4.2.0`
+`docker run  -p 10113:10113 -t --mount source=spellcheck-dicts,target=/data/ xfenix/spellcheck-microservice:main`
 
 #### Docker-compose
 
@@ -58,7 +58,7 @@ Note: all docker & docker-compose variants use named volumes to store user dicti
 version: "3.9"
 services:
   spellcheck:
-    image: xfenix/spellcheck-microservice:4.2.0
+    image: xfenix/spellcheck-microservice:main
     ports:
       - "10113:10113"
     volumes:
