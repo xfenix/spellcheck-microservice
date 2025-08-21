@@ -117,7 +117,7 @@ class SettingsOfMicroservice(BaseSettings):
             strip_whitespace=True,
         ),
         pydantic.Field(
-            description="binding address",
+            description="binding address, default value suitable for docker",
         ),
     ] = "0.0.0.0"  # noqa: S104
     port: typing.Annotated[
