@@ -30,7 +30,7 @@ jobs:
   submit-coverage:
     runs-on: ubuntu-latest
     container:
-      image: python:3.12-slim
+      image: pypy:3.11-slim
     steps:
       - uses: actions/checkout@v3
       - run: |
@@ -52,8 +52,11 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 'pypy3.11'
       - run: |
-          pip3 install uv
+          pip install uv
           uv version $(python -c "import os; print(os.getenv('GITHUB_REF').lstrip('/').replace('refs/tags/v', ''));")
           python -c "import re, pathlib; _p = pathlib.Path('README.md'); _p.write_text(re.sub(r'\#\# Development.*', r'', _p.read_text(), flags=re.I | re.S).strip())"
       - uses: docker/setup-buildx-action@v2
@@ -82,7 +85,7 @@ jobs:
     needs: [build-and-publish]
     runs-on: ubuntu-latest
     container:
-      image: python:3.12-slim
+      image: pypy:3.11-slim
     steps:
       - uses: actions/checkout@v3
       - run: |
