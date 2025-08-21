@@ -10,6 +10,23 @@ on:
       - v*
 
 jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'branch'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: |
+          sudo apt-get update -y
+          sudo apt-get install -y enchant-2 hunspell-ru hunspell-es hunspell-de-de hunspell-fr hunspell-pt-pt
+          pip install uv
+          uv sync --group dev
+          uv run make update-readme
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "docs: auto-update README"
+          file_pattern: README.md
   py-lint-and-test:
     runs-on: ubuntu-latest
     steps:
@@ -112,7 +129,6 @@ jobs:
           apt-get install make
           pip install uv
           uv sync --group dev
-          uv run make update-readme
           uv run make update-dockerhub-readme
       - uses: peter-evans/dockerhub-description@v3
         with:
