@@ -111,6 +111,15 @@ class SettingsOfMicroservice(BaseSettings):
             ),
         ),
     ] = 8
+    server_address: typing.Annotated[
+        str,
+        pydantic.StringConstraints(
+            strip_whitespace=True,
+        ),
+        pydantic.Field(
+            description="binding address",
+        ),
+    ] = "0.0.0.0"  # noqa: S104
     port: typing.Annotated[
         int,
         pydantic.Field(
