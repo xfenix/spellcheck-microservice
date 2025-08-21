@@ -65,6 +65,7 @@ You cand find it here https://github.com/xfenix/spellcheck-microservice/releases
 ### Quickstart
 * Clone this repo
 * For MacOS X `brew install enchant`
+* For Debian/Ubuntu `apt-get install -y enchant-2 hunspell-ru`
 * `uv sync --group dev`
 * `source .venv/bin/activate`
 * Run `touch .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit`

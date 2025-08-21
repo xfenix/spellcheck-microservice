@@ -1,7 +1,7 @@
 import re
 import typing
 
-import pylru
+import cachebox
 import urlextract
 from enchant.checker import SpellChecker
 
@@ -9,8 +9,12 @@ from . import models
 from .settings import SETTINGS
 
 
-_MISSPELED_CACHE: typing.Final[dict[str, list[str]]] = (
-    pylru.lrucache(SETTINGS.cache_size) if SETTINGS.cache_size > 0 else {}
+_MISSPELED_CACHE: typing.Final[
+    cachebox.LRUCache[str, list[str]] | dict[str, list[str]]
+] = (
+    cachebox.LRUCache[str, list[str]](SETTINGS.cache_size)
+    if SETTINGS.cache_size > 0
+    else typing.cast("dict[str, list[str]]", {})
 )
 
 SEPARATORS_TO_SPLIT_URL_BY_WORDS: typing.Final[re.Pattern[str]] = re.compile(r"\.|\:|\/\/|\/|\?|\&|\=|\+|\#|\-")
