@@ -27,8 +27,12 @@ jobs:
         with:
           failure-threshold: error
 
-  submit-coverage:
+  coverage:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
     container:
       image: pypy:3.11-slim
     steps:
@@ -38,16 +42,33 @@ jobs:
           apt-get install -y enchant-2 hunspell-ru hunspell-es hunspell-de-de hunspell-fr hunspell-pt-pt curl
           pip install uv
           uv sync --group dev
-          uv run pytest -n3 --cov-report=xml
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-          files: coverage.xml
+      - run: uv run pytest -n3 . --cov-report=xml --cov-report=html
+      - run: uv run python -m scripts build-coverage-badge
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "docs: update coverage badge"
+          file_pattern: .github/badges/coverage.json
+      - run: mv htmlcov coverage
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: coverage
+
+  deploy-coverage:
+    needs: coverage
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
 
   # build stage with auto-versioning based on git tags like vX.Y.Z (example: v3.1.2)
   build-and-publish:
-    needs: [py-lint-and-test, docker-lint, submit-coverage]
+    needs: [py-lint-and-test, docker-lint, coverage]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     steps:

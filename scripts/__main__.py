@@ -2,10 +2,16 @@
 """Simple dockerhub readme generator."""
 
 import argparse
+import contextlib
+import json
 import pathlib
+import random
 import re
 import sys
+import time
+import types
 import typing
+import xml.etree.ElementTree as ET
 
 from ._helpers import parse_last_git_tag, replace_tag_in_readme
 from whole_app.settings import SETTINGS
@@ -13,6 +19,11 @@ from whole_app.settings import SETTINGS
 
 PARENT_DIR: typing.Final = pathlib.Path(__file__).parent.parent
 README_PATH: typing.Final = PARENT_DIR / "README.md"
+COVERAGE_XML_PATH: typing.Final = pathlib.Path("coverage.xml")
+BADGE_JSON_PATH: typing.Final = pathlib.Path(".github/badges/coverage.json")
+LOW_BOUNDARY: typing.Final[float] = 60
+HIGH_BOUNDARY: typing.Final[float] = 80
+RETRY_ATTEMPTS: typing.Final[int] = 3
 
 
 def _update_dockerhub_readme() -> None:
@@ -65,6 +76,55 @@ def _update_readme() -> None:
     README_PATH.write_text(new_content)
 
 
+def _fetch_xml_text() -> str:
+    for _attempt_index in range(RETRY_ATTEMPTS):
+        with contextlib.suppress(OSError):
+            return COVERAGE_XML_PATH.read_text()
+        time.sleep(random.uniform(0.1, 0.3))  # noqa: S311
+    error_message: typing.Final = f"Failed to read {COVERAGE_XML_PATH} after {RETRY_ATTEMPTS} attempts"
+    raise OSError(error_message)
+
+
+def _persist_badge_text(badge_text: str) -> None:
+    BADGE_JSON_PATH.parent.mkdir(parents=True, exist_ok=True)
+    for _attempt_index in range(RETRY_ATTEMPTS):
+        with contextlib.suppress(OSError):
+            BADGE_JSON_PATH.write_text(badge_text)
+            return
+        time.sleep(random.uniform(0.1, 0.3))  # noqa: S311
+    error_message: typing.Final = f"Failed to write {BADGE_JSON_PATH} after {RETRY_ATTEMPTS} attempts"
+    raise OSError(error_message)
+
+
+def _build_coverage_badge() -> None:
+    xml_source_text: typing.Final[str] = _fetch_xml_text()
+    root_element: typing.Final[ET.Element] = ET.fromstring(xml_source_text)  # noqa: S314
+    line_rate_text: typing.Final[str | None] = root_element.attrib.get("line-rate")
+    if line_rate_text is None:
+        missing_attr_message: typing.Final[str] = "Missing 'line-rate' attribute in coverage report"
+        raise KeyError(missing_attr_message)
+    coverage_percent: typing.Final[float] = float(line_rate_text) * 100.0
+
+    message_text: typing.Final[str] = f"{coverage_percent:.0f}%"
+    color_text: str
+    if coverage_percent < LOW_BOUNDARY:
+        color_text = "#E63946"
+    elif coverage_percent < HIGH_BOUNDARY:
+        color_text = "#FFB347"
+    else:
+        color_text = "#2A9D8F"
+
+    badge_mapping: typing.Final[typing.Mapping[str, typing.Any]] = types.MappingProxyType(
+        {
+            "schemaVersion": 1,
+            "label": "coverage",
+            "message": message_text,
+            "color": color_text,
+        },
+    )
+    _persist_badge_text(json.dumps(dict(badge_mapping)))
+
+
 if __name__ == "__main__":
     sys.path.append(str(PARENT_DIR.resolve()))
 
@@ -76,5 +136,7 @@ if __name__ == "__main__":
             _update_dockerhub_readme()
         case "update-readme":
             _update_readme()
+        case "build-coverage-badge":
+            _build_coverage_badge()
         case _:
             print("Unknown action")  # noqa: T201
