@@ -7,8 +7,7 @@ authors = [{ name = "Denis Anikin", email = "ad@xfenix.ru" }]
 license = { text = "MIT" }
 requires-python = ">=3.10"
 dependencies = [
-    "gunicorn",
-    "uvicorn",
+    "granian",
     "pyenchant",
     "toml",
     "cachebox",

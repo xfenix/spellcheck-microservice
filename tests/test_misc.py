@@ -4,6 +4,7 @@ import runpy
 import typing
 
 from fastapi.testclient import TestClient
+from granian.constants import Interfaces
 
 from whole_app import views
 from whole_app.settings import SETTINGS, SettingsOfMicroservice
@@ -14,40 +15,42 @@ if typing.TYPE_CHECKING:
 
 
 def test_main_py(monkeypatch: typing.Any) -> None:
-    class FakeGunicorn:
-        def __init__(self: "FakeGunicorn", *_: typing.Any, **__: typing.Any) -> None:
-            """Init."""
+    captured_parameters: dict[str, typing.Any] = {}
 
-        @property
-        def cfg(self: "FakeGunicorn") -> "FakeGunicorn":
-            return self
+    class FakeGranian:
+        def __init__(
+            self: "FakeGranian",
+            target: str,
+            *,
+            address: str,
+            port: int,
+            workers: int,
+            interface: Interfaces,
+        ) -> None:
+            captured_parameters.update(
+                {
+                    "target": target,
+                    "address": address,
+                    "port": port,
+                    "workers": workers,
+                    "interface": interface,
+                },
+            )
 
-        @property
-        def settings(self: "FakeGunicorn") -> dict[str, None | int]:
-            return {
-                "bind": None,
-                "workers": 666_13,
-            }
+        def serve(self: "FakeGranian") -> None:
+            captured_parameters["served"] = True
 
-        def set(
-            self: "FakeGunicorn",
-            _: typing.Any,
-            __: typing.Any,
-        ) -> typing.Any:
-            """Fake setter for «config» object."""
-
-        def load_config(self: "FakeGunicorn") -> None:
-            pass
-
-        def load(self: "FakeGunicorn") -> None:
-            pass
-
-        def run(self: "FakeGunicorn", *_: typing.Any, **__: typing.Any) -> typing.Any:
-            self.load_config()
-            self.load()
-
-    monkeypatch.setattr("gunicorn.app.base.BaseApplication", FakeGunicorn)
+    monkeypatch.setattr("granian.Granian", FakeGranian)
     runpy.run_module("whole_app.__main__", run_name="__main__")
+
+    assert captured_parameters == {
+        "target": "whole_app.views:SPELL_APP",
+        "address": SETTINGS.server_address,
+        "port": SETTINGS.port,
+        "workers": SETTINGS.workers,
+        "interface": Interfaces.ASGI,
+        "served": True,
+    }
 
 
 def test_incorrect_settings(monkeypatch: typing.Any) -> None:
