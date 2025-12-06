@@ -82,6 +82,7 @@ jobs:
           path: coverage
 
   deploy-coverage:
+    if: github.ref_type == 'branch'
     needs: coverage
     runs-on: ubuntu-latest
     permissions:
